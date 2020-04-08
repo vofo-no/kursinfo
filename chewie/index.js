@@ -7,7 +7,7 @@ const han = require("./han");
 const getConfig = (year) => {
   process.stdout.write(`Laster konfigurasjon for ${year}... `);
 
-  const config = JSON.parse(fs.readFileSync(`data/index.json`, "utf-8"));
+  const config = JSON.parse(fs.readFileSync(`data/config.json`, "utf-8"));
   const years = Object.keys(config).sort().reverse();
 
   const result = config[years.find((y) => y <= year)];
