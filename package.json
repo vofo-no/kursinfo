@@ -5,11 +5,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "chewie": "node chewie"
   },
   "dependencies": {
     "next": "9.3.3",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "papaparse": "^5.1.1",
+    "@types/node": "^13.9.8",
+    "@types/react": "^16.9.31",
+    "typescript": "^3.8.3"
   }
 }
