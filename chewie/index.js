@@ -3,6 +3,9 @@ const Papa = require("papaparse");
 const fs = require("fs");
 const klass = require("./klass");
 const han = require("./han");
+const luke = require("./luke");
+
+const mainDataIndex = require("../data/index.json");
 
 const getConfig = (year) => {
   process.stdout.write(`Laster konfigurasjon for ${year}... `);
@@ -73,6 +76,7 @@ async function main() {
   const data = getData(year);
   const municipalities = await klass.getData(year);
 
+  process.stdout.write(`Analyserer... `);
   Object.keys(municipalities).map((key) => {
     const nkey = Number(key);
     const courses = data.filter((row) => row[2] === nkey).length;
@@ -95,7 +99,8 @@ async function main() {
 
     const assocSummary = han.associationSummer(kData);
 
-    output[k] = {
+    output[luke.parameterize(k)] = {
+      name: k,
       courses: kData.length,
       facilitated: han.facilitated(kData),
       hours: han.sumHours(kData),
@@ -115,6 +120,24 @@ async function main() {
   };
 
   Object.keys(config.regions).map(makeStat);
+  console.log("\x1b[1mOK\x1b[0m");
+
+  process.stdout.write(`Lagrer resultater... `);
+  const wstream = fs.createWriteStream(`data/${year}.json`);
+  wstream.write(JSON.stringify(output));
+  wstream.end();
+  console.log("\x1b[1mOK\x1b[0m");
+
+  // Append to main data index
+  process.stdout.write(`Legger til ${year} i indeks... `);
+  mainDataIndex.years = [...new Set([...mainDataIndex.years, year])]
+    .sort()
+    .reverse();
+
+  const istream = fs.createWriteStream(`data/index.json`);
+  istream.write(JSON.stringify(mainDataIndex));
+  istream.end();
+  console.log("\x1b[1mOK\x1b[0m");
 }
 
 main();
