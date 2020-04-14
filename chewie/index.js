@@ -88,7 +88,7 @@ async function main() {
     };
   });
 
-  let output = {};
+  let reports = {};
 
   const makeStat = (k) => {
     const ks = config.regions[k];
@@ -99,8 +99,9 @@ async function main() {
 
     const assocSummary = han.associationSummer(kData);
 
-    output[luke.parameterize(k)] = {
+    reports[luke.parameterize(k)] = {
       name: k,
+      isFuture: config.futureRegions.includes(k),
       courses: kData.length,
       facilitated: han.facilitated(kData),
       hours: han.sumHours(kData),
@@ -124,7 +125,7 @@ async function main() {
 
   process.stdout.write(`Lagrer resultater... `);
   const wstream = fs.createWriteStream(`data/${year}.json`);
-  wstream.write(JSON.stringify(output));
+  wstream.write(JSON.stringify({ municipalities, reports }));
   wstream.end();
   console.log("\x1b[1mOK\x1b[0m");
 
