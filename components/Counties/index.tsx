@@ -19,7 +19,7 @@ function Counties({ counties, year }: CountiesProps) {
           Antall kurs, timer og deltakere pr. fylke etter kurs pr. 1 000
           innbyggere i {year}
         </p>
-        <table>
+        <table className="report-table">
           <thead>
             <tr>
               <td></td>
@@ -61,33 +61,6 @@ function Counties({ counties, year }: CountiesProps) {
           </tbody>
         </table>
         <style jsx>{`
-          th,
-          td {
-            padding: 6px 12px;
-          }
-          table {
-            border-collapse: collapse;
-          }
-          thead th {
-            font-size: smaller;
-            font-weight: normal;
-            text-align: right;
-          }
-          thead th.left {
-            text-align: left;
-          }
-          tbody th,
-          tbody td {
-            border-top: 1px solid #ccc;
-          }
-          tbody th {
-            text-align: left;
-          }
-          tbody td {
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-          }
-
           tr.current {
             background-color: #ffd700;
             border: 2px solid #000;

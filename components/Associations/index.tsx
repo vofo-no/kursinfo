@@ -13,21 +13,22 @@ type AssociationsProps = {
     };
   };
   year: string;
+  name: string;
 };
 
-function Associations({ associations, year }: AssociationsProps) {
+function Associations({ associations, year, name }: AssociationsProps) {
   const associationKeys = Object.keys(associations)
     .sort((a, b) => associations[b].hours - associations[a].hours)
     .filter((key) => associations[key].courses);
   return (
-    <section className="page blue">
+    <section className="page">
       <div className="container">
-        <h2>Studieforbund i fylket</h2>
+        <h2>Studieforbund i {name}</h2>
         <p>
           Antall kurs, timer og deltakere pr. studieforbund etter kurstimer i{" "}
-          {year}
+          {name} {year}
         </p>
-        <table>
+        <table className="report-table">
           <thead>
             <tr>
               <td></td>
@@ -63,48 +64,6 @@ function Associations({ associations, year }: AssociationsProps) {
           associations={associations}
           year={year}
         />
-        <style jsx>{`
-          th,
-          td {
-            padding: 6px 12px;
-          }
-          table {
-            border-collapse: collapse;
-          }
-          thead th {
-            font-size: smaller;
-            font-weight: normal;
-            text-align: right;
-          }
-          thead th.left {
-            text-align: left;
-          }
-          tbody th,
-          tbody td {
-            border-top: 1px solid #ccc;
-          }
-          tbody th {
-            text-align: left;
-          }
-          tbody th small {
-            font-weight: normal;
-          }
-          tbody td {
-            text-align: right;
-            font-variant-numeric: tabular-nums;
-          }
-
-          tr.current {
-            background-color: #ffd700;
-            border: 2px solid #000;
-          }
-
-          tr.current td,
-          tr.current th {
-            border-top: 2px solid #000;
-            border-bottom: 2px solid #000;
-          }
-        `}</style>
       </div>
     </section>
   );

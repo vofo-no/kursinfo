@@ -57,6 +57,9 @@ const Layout = ({ title, children }) => (
       section.yellow {
         background: #fff8dc;
       }
+      section.blue {
+        background: #e0ffff;
+      }
 
       section.page h1 {
         font-size: 3.5rem;
@@ -109,6 +112,35 @@ const Layout = ({ title, children }) => (
         align-items: center;
         min-height: 100vh;
         padding: 2rem;
+      }
+
+      table.report-table {
+        border-collapse: collapse;
+      }
+
+      table.report-table th,
+      table.report-table td {
+        padding: 6px 12px;
+      }
+
+      table.report-table thead th {
+        font-size: smaller;
+        font-weight: normal;
+        text-align: right;
+      }
+      table.report-table thead th.left {
+        text-align: left;
+      }
+      table.report-table tbody th,
+      table.report-table tbody td {
+        border-top: 1px solid #ccc;
+      }
+      table.report-table tbody th {
+        text-align: left;
+      }
+      table.report-table tbody td {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
       }
 
       * {
