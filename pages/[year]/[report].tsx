@@ -1,26 +1,51 @@
 import fs from "fs";
 import path from "path";
 
-import Feather, {
-  Users,
-  Clock,
-  Map,
-  Share2,
-  UserCheck,
-  Layers,
-} from "react-feather";
-
 import Layout from "../../components/Layout";
+import Summary from "../../components/Summary";
 import { years } from "../../data/index.json";
+import Counties from "../../components/Counties";
+import Associations from "../../components/Associations";
+import VofoLogo from "../../components/VofoLogo";
 
 export async function getStaticProps({ params }) {
   const dataPath = path.join(process.cwd(), `data/${params.year}.json`);
   const data = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+  const report = data.reports[params.report];
+
+  const counties = Object.keys(data.reports)
+    .filter((key) => !data.reports[key].isFuture)
+    .map((key) => {
+      const {
+        name,
+        courses,
+        participants,
+        hours,
+        municipalities,
+      } = data.reports[key];
+      const cPop = municipalities.reduce(
+        (acc, ckey) => acc + data.municipalities[ckey].pop,
+        0
+      );
+      return {
+        name: name,
+        courses: courses,
+        participants: participants.males + participants.females,
+        hours: hours,
+        coursesPerCapita: courses / cPop,
+        isCurrent: municipalities.every((m) =>
+          report.municipalities.includes(m)
+        ),
+      };
+    })
+    .sort((a, b) => b.coursesPerCapita - a.coursesPerCapita);
+
   return {
     props: {
       year: params.year,
-      report: data.reports[params.report],
+      report,
       municipalities: data.municipalities,
+      counties,
     },
   };
 }
@@ -37,94 +62,38 @@ export async function getStaticPaths() {
   return { paths, fallback: false };
 }
 
-type CardProps = {
-  Icon: Feather.Icon;
-  children: JSX.Element | string;
-  label: string;
-};
-
-function Card({ Icon, children, label }: CardProps) {
-  return (
-    <div className="card">
-      <Icon size={48} />
-      <big>{children}</big>
-      {label}
-      <style jsx>{`
-        .card {
-          padding: 8px 16px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          flex-basis: 30%;
-          margin-bottom: 18px;
-        }
-
-        .card big {
-          font-weight: bold;
-          font-size: 200%;
-        }
-      `}</style>
-    </div>
-  );
-}
-
-export default function Report({ year, report, municipalities }) {
+export default function Report({ year, report, municipalities, counties }) {
   return (
     <Layout title={`${report.name}: Fylkesstatistikk ${year}`}>
-      <h1>
-        {report.name}
-        <small>Fylkesstatistikk {year}</small>
-      </h1>
-      <div className="cards">
-        <Card Icon={Layers} label="kurs">
-          {report.courses.toLocaleString("nb")}
-        </Card>
-        <Card Icon={UserCheck} label="tilrettelagte kurs">
-          {(report.facilitated.courses / report.courses).toLocaleString("nb", {
-            style: "percent",
-            minimumFractionDigits: 0,
-          })}
-        </Card>
-        <Card Icon={Users} label="deltakere">
-          {(
-            report.participants.males + report.participants.females
-          ).toLocaleString("nb")}
-        </Card>
-        <Card Icon={Clock} label="kurstimer">
-          {report.hours.toLocaleString("nb")}
-        </Card>
-        <Card Icon={Share2} label="frivillige og ideelle organisasjoner">
-          {report.organizations.toLocaleString("nb")}
-        </Card>
-        <Card Icon={Map} label="kommuner med kursvirksomhet">
-          <>
-            {
+      <section className="page">
+        <div className="container">
+          <h1>
+            {report.name}
+            <small>Fylkesstatistikk {year}</small>
+          </h1>
+          <Summary
+            courses={report.courses}
+            facilitatedCourses={report.facilitated.courses}
+            participants={report.participants}
+            hours={report.hours}
+            organizations={report.organizations}
+            activeMunicipalitiesLength={
               report.municipalities.filter(
                 (m: string) => municipalities[m].courses
               ).length
             }
-            <small> av {report.municipalities.length}</small>
-          </>
-        </Card>
-      </div>
+            allMunicipalitiesLength={report.municipalities.length}
+          />
+          <div className="page-footer">
+            <VofoLogo />
+          </div>
+        </div>
+      </section>
+      <Counties counties={counties} year={year} />
+      <Associations associations={report.associations} year={year} />
       <style jsx>{`
-        h1 {
-          font-size: 300%;
-          margin-bottom: 5rem;
-        }
-        h1 small {
-          color: #777;
-          display: block;
-          font-size: 28px;
-        }
-
-        .cards {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-evenly;
-          width: 100%;
+        .page-footer {
+          margin-top: auto;
         }
       `}</style>
     </Layout>

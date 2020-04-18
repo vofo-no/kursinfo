@@ -16,14 +16,18 @@ export async function getStaticProps() {
 export default function Index({ years }) {
   return (
     <Layout title={`Fylkesstatistikk`}>
-      <h1>Fylkesstatistikk</h1>
-      <ul>
-        {years.map((year) => (
-          <li key={year}>
-            <Link href={`/${year}`}>{year}</Link>
-          </li>
-        ))}
-      </ul>
+      <section className="site">
+        <div className="container">
+          <h1>Fylkesstatistikk</h1>
+          <ul>
+            {years.map((year) => (
+              <li key={year}>
+                <Link href={`/${year}`}>{year}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </Layout>
   );
 }

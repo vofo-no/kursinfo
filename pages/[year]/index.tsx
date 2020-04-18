@@ -33,17 +33,21 @@ export async function getStaticPaths() {
 export default function YearIndex({ year, reports }) {
   return (
     <Layout title={`Fylkesstatistikk ${year}`}>
-      <h1>Fylkesstatistikk {year}</h1>
-      <ul>
-        {reports.map(([key, value]) => (
-          <li key={key}>
-            <Link href={`/${year}/${key}`}>{value}</Link>
-          </li>
-        ))}
-      </ul>
-      <p>
-        <Link href="/">Vis alle år</Link>
-      </p>
+      <section className="site">
+        <div className="container">
+          <h1>Fylkesstatistikk {year}</h1>
+          <ul>
+            {reports.map(([key, value]) => (
+              <li key={key}>
+                <Link href={`/${year}/${key}`}>{value}</Link>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <Link href="/">Vis alle år</Link>
+          </p>
+        </div>
+      </section>
     </Layout>
   );
 }

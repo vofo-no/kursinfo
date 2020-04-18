@@ -1,35 +1,23 @@
 import Head from "next/head";
 
+export const COLORS = {
+  brand: "#a31f34",
+  gray: "#878787",
+  grayDark: "#58595c",
+};
+
 const Layout = ({ title, children }) => (
-  <div className="container">
+  <>
     <Head>
       <title>{title}</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <main>{children}</main>
+    {children}
 
     <footer>Voksenopplæringsforbundet</footer>
 
     <style jsx>{`
-      .container {
-        min-height: 100vh;
-        padding: 0 0.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      main {
-        padding: 5rem 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
       footer {
         width: 100%;
         height: 100px;
@@ -59,11 +47,75 @@ const Layout = ({ title, children }) => (
           Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
+      section.site {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      section.yellow {
+        background: #fff8dc;
+      }
+
+      section.page h1 {
+        font-size: 3.5rem;
+        font-weight: 600;
+        margin: auto 0;
+      }
+
+      section.page h1 small {
+        font-size: 2rem;
+        color: #58595c;
+        display: block;
+      }
+
+      section.page h2 {
+        margin: 1rem 0;
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+
+      section.page {
+        page-break-before: always;
+        page-break-after: always;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      @media only print {
+        section.page {
+          justify-content: unset;
+        }
+
+        h1 {
+          align-self: flex-start;
+        }
+      }
+      @media not print {
+        section.page {
+          justify-content: center;
+        }
+        section.page > .container {
+          padding: 3rem 2rem;
+        }
+      }
+
+      section.page > .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
       * {
         box-sizing: border-box;
       }
     `}</style>
-  </div>
+  </>
 );
 
 export default Layout;
