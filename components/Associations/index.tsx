@@ -1,5 +1,6 @@
 import names from "./names.json";
 import Graph from "./Graph";
+import { COLORS } from "../Layout";
 
 type AssociationsProps = {
   associations: {
@@ -65,6 +66,14 @@ function Associations({ associations, year, name }: AssociationsProps) {
           year={year}
         />
       </div>
+      <style jsx>
+        {`
+          th small {
+            font-weight: normal;
+            color: ${COLORS.grayDark};
+          }
+        `}
+      </style>
     </section>
   );
 }
