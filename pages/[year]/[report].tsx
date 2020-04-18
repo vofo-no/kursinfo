@@ -7,6 +7,7 @@ import { years } from "../../data/index.json";
 import Counties from "../../components/Counties";
 import Associations from "../../components/Associations";
 import VofoLogo from "../../components/VofoLogo";
+import Subjects from "../../components/Subjects";
 
 export async function getStaticProps({ params }) {
   const dataPath = path.join(process.cwd(), `data/${params.year}.json`);
@@ -90,7 +91,12 @@ export default function Report({ year, report, municipalities, counties }) {
         </div>
       </section>
       <Counties counties={counties} year={year} />
-      <Associations associations={report.associations} year={year} />
+      <Associations
+        associations={report.associations}
+        year={year}
+        name={report.name}
+      />
+      <Subjects subjects={report.subjects} year={year} name={report.name} />
       <style jsx>{`
         .page-footer {
           margin-top: auto;
