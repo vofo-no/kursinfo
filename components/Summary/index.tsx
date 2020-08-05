@@ -1,5 +1,6 @@
 import { Users, Clock, Map, Share2, UserCheck, Layers } from "react-feather";
 import Card from "./Card";
+import { Container } from "vofo-design";
 
 type SummaryTypes = {
   courses: number;
@@ -25,7 +26,13 @@ function Summary({
 }: SummaryTypes) {
   return (
     <>
-      <div className="cards">
+      <Container
+        display="grid"
+        gridTemplateColumns="repeat(3, 1fr)"
+        gridColumnGap={3}
+        gridRowGap={4}
+        my={4}
+      >
         <Card Icon={Layers} label="kurs">
           {courses.toLocaleString("nb")}
         </Card>
@@ -50,16 +57,7 @@ function Summary({
             <small> av {allMunicipalitiesLength}</small>
           </>
         </Card>
-      </div>
-      <style jsx>{`
-        .cards {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          column-gap: 1rem;
-          row-gap: 2.5rem;
-          margin: 3rem auto;
-        }
-      `}</style>
+      </Container>
     </>
   );
 }

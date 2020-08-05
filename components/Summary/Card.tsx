@@ -1,5 +1,5 @@
 import { Icon as FeatherIcon } from "react-feather";
-import { COLORS } from "../Layout";
+import { Text, Container } from "vofo-design";
 
 type CardProps = {
   Icon: FeatherIcon;
@@ -9,27 +9,29 @@ type CardProps = {
 
 function Card({ Icon, children, label }: CardProps) {
   return (
-    <div className="card">
+    <Container
+      flexDirection="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      display="flex"
+      py={0}
+      px={0}
+      textAlign="center"
+    >
       <Icon size={48} />
-      <big>{children}</big>
-      {label}
-      <style jsx>{`
-        .card {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          text-align: center;
-          color: ${COLORS.grayDark};
-        }
-
-        .card big {
-          font-weight: bold;
-          font-size: 2.5rem;
-          color: ${COLORS.brand};
-        }
-      `}</style>
-    </div>
+      <Text
+        fontSize={5}
+        lineHeight="title"
+        fontWeight="bold"
+        color="brand.primary"
+        textAlign="center"
+      >
+        {children}
+      </Text>
+      <Text textAlign="center" lineHeight="title">
+        {label}
+      </Text>
+    </Container>
   );
 }
 

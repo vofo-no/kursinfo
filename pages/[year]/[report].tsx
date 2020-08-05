@@ -1,13 +1,22 @@
 import fs from "fs";
 import path from "path";
 
+import { Logo } from "vofo-design";
+import styled from "@emotion/styled";
+
 import Layout from "../../components/Layout";
+import ReportHeading from "../../components/ReportHeading";
 import Summary from "../../components/Summary";
 import { years } from "../../data/index.json";
 import Counties from "../../components/Counties";
 import Associations from "../../components/Associations";
-import VofoLogo from "../../components/VofoLogo";
 import Subjects from "../../components/Subjects";
+
+const PageFooter = styled.div`
+  text-align: center;
+  margin: auto 0 0 0;
+  padding: 1rem 0 0;
+`;
 
 export async function getStaticProps({ params }) {
   const dataPath = path.join(process.cwd(), `data/${params.year}.json`);
@@ -68,10 +77,7 @@ export default function Report({ year, report, municipalities, counties }) {
     <Layout title={`${report.name}: Fylkesstatistikk ${year}`}>
       <section className="page">
         <div className="container">
-          <h1>
-            {report.name}
-            <small>Fylkesstatistikk {year}</small>
-          </h1>
+          <ReportHeading name={report.name} year={year} />
           <Summary
             courses={report.courses}
             facilitatedCourses={report.facilitated.courses}
@@ -85,9 +91,20 @@ export default function Report({ year, report, municipalities, counties }) {
             }
             allMunicipalitiesLength={report.municipalities.length}
           />
-          <div className="page-footer">
-            <VofoLogo />
-          </div>
+          <p>
+            Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
+            godkjente studieforbund. Virksomheten måles i antall arrangerte
+            kurs, antall deltakere og antall kurstimer. Denne rapporten viser
+            kurs som er gjennomført i {report.name} i {year}.
+          </p>
+          <p>
+            For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
+            eller kontakt Voksenopplæringsforbundet på{" "}
+            <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
+          </p>
+          <PageFooter>
+            <Logo />
+          </PageFooter>
         </div>
       </section>
       <Counties counties={counties} year={year} />
@@ -96,7 +113,12 @@ export default function Report({ year, report, municipalities, counties }) {
         year={year}
         name={report.name}
       />
-      <Subjects subjects={report.subjects} year={year} name={report.name} />
+      <Subjects
+        subjects={report.subjects}
+        ages={report.participants.ages}
+        year={year}
+        name={report.name}
+      />
       <style jsx>{`
         .page-footer {
           margin-top: auto;

@@ -1,3 +1,4 @@
+import Graph from "./Graph";
 import names from "./names.json";
 
 type SubjectType = {
@@ -13,13 +14,14 @@ type SubjectsProps = {
   };
   year: string;
   name: string;
+  ages: [number];
 };
 
 function p(subject: SubjectType) {
   return subject.participants.females + subject.participants.males;
 }
 
-function Subjects({ subjects, year, name }: SubjectsProps) {
+function Subjects({ subjects, ages, year, name }: SubjectsProps) {
   const subjectKeys = Object.keys(subjects)
     .sort((a, b) => p(subjects[b]) - p(subjects[a]))
     .filter((key) => p(subjects[key]));
@@ -27,8 +29,9 @@ function Subjects({ subjects, year, name }: SubjectsProps) {
     <section className="page blue">
       <div className="container">
         <h2>Deltakere på kursemner</h2>
-        <p>
-          Kursdeltakere, kvinner og menn pr. kursemne i {name} {year}
+        <h3 className="table-label">Deltakere innenfor ulike kursemner</h3>
+        <p className="subtitle">
+          Antall deltakere i {name} {year}, etter hovedemne og kjønn
         </p>
         <table className="report-table">
           <thead>
@@ -57,6 +60,7 @@ function Subjects({ subjects, year, name }: SubjectsProps) {
             })}
           </tbody>
         </table>
+        <Graph year={year} ages={ages} />
       </div>
     </section>
   );

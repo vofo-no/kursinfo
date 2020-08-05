@@ -1,8 +1,7 @@
-import fs from "fs";
-import path from "path";
-
 import Link from "next/link";
+import { Container } from "vofo-design";
 import Layout from "../components/Layout";
+import PageHeading from "../components/PageHeading";
 import { years } from "../data/index.json";
 
 export async function getStaticProps() {
@@ -15,19 +14,19 @@ export async function getStaticProps() {
 
 export default function Index({ years }) {
   return (
-    <Layout title={`Fylkesstatistikk`}>
-      <section className="site">
-        <div className="container">
-          <h1>Fylkesstatistikk</h1>
-          <ul>
-            {years.map((year) => (
-              <li key={year}>
-                <Link href={`/${year}`}>{year}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+    <Layout title={`Fylkesstatistikk`} header>
+      <Container variant="white" my={3} py={3} boxShadow={1}>
+        <PageHeading>Fylkesstatistikk</PageHeading>
+        <ul>
+          {years.map((year) => (
+            <li key={year}>
+              <Link href={`/${year}`}>
+                <a>{year}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
     </Layout>
   );
 }

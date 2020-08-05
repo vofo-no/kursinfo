@@ -1,64 +1,69 @@
-import {
-  BarChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  Bar,
-  Legend,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import GraphBase from "../Graph";
 import names from "./names.json";
-import { COLORS } from "../Layout";
 
 function Graph({ associationKeys, associations, year }) {
   const lastYear = String(Number(year) - 1);
-  const mergeDataAt = associationKeys.length > 10 ? 9 : 10;
-  const data = associationKeys.slice(0, mergeDataAt).map((key: string) => {
-    const { hours } = associations[key];
-    const fake =
-      hours + Math.round(hours * ((Math.random() - Math.random()) / 20));
-    return {
-      name: names.short[key] || key,
-      [lastYear]: fake,
-      [year]: hours,
-    };
-  });
-  if (mergeDataAt === 9) {
-    data.push(
-      associationKeys.slice(9).reduce(
-        (agg, key) => {
-          const { hours } = associations[key];
-          const fake =
-            hours + Math.round(hours * ((Math.random() - Math.random()) / 20));
-          return {
-            name: agg.name,
-            [lastYear]: agg[lastYear] + fake,
-            [year]: Number(agg[year]) + hours,
-          };
-        },
-        { name: "Andre", [lastYear]: 0, [year]: 0 }
-      )
-    );
-  }
+
+  const options = {
+    chart: {
+      type: "column",
+      height: 180,
+    },
+    xAxis: {
+      categories: associationKeys.map((key: string) => names.short[key] || key),
+      crosshair: true,
+    },
+    yAxis: {
+      min: 0,
+      title: false,
+      endOnTick: false,
+    },
+    legend: {
+      layout: "vertical",
+      align: "right",
+      verticalAlign: "middle",
+      padding: 0,
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+      pointFormat:
+        '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y} timer</b></td></tr>',
+      footerFormat: "</table>",
+      shared: true,
+      useHTML: true,
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 0,
+      },
+    },
+    series: [
+      {
+        name: lastYear,
+        data: associationKeys.map(
+          (key: string) =>
+            associations[key].hours +
+            Math.round(
+              associations[key].hours * ((Math.random() - Math.random()) / 20)
+            )
+        ),
+      },
+      {
+        name: year,
+        data: associationKeys.map((key: string) => associations[key].hours),
+      },
+    ],
+  };
 
   return (
-    <div style={{ marginTop: "auto", paddingTop: "3rem", textAlign: "center" }}>
-      <p>
-        Kurstimer pr. studieforbund i {lastYear} og {year}
-      </p>
-      <ResponsiveContainer width={710} height={300}>
-        <BarChart barGap={3} barCategoryGap="15%" data={data}>
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="name" />
-          <YAxis tickFormatter={(v) => v.toLocaleString("nb")} />
-          <Tooltip formatter={(v) => v.toLocaleString("nb")} />
-          <Legend />
-          <Bar dataKey={lastYear} fill={COLORS.gray} unit=" timer" />
-          <Bar dataKey={year} fill={COLORS.brand} unit=" timer" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <>
+      <h3 className="figure-label">
+        Studieforbundenes kurstimer i {lastYear} og {year}
+      </h3>
+      <p className="subtitle">Antall kurstimer per år, etter studieforbund</p>
+      <GraphBase options={options} />
+    </>
   );
 }
 

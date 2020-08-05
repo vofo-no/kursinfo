@@ -2,7 +2,9 @@ import fs from "fs";
 import path from "path";
 
 import Link from "next/link";
+import { Container } from "vofo-design";
 import Layout from "../../components/Layout";
+import PageHeading from "../../components/PageHeading";
 import { years } from "../../data/index.json";
 
 export async function getStaticProps({ params: { year } }) {
@@ -32,22 +34,24 @@ export async function getStaticPaths() {
 
 export default function YearIndex({ year, reports }) {
   return (
-    <Layout title={`Fylkesstatistikk ${year}`}>
-      <section className="site">
-        <div className="container">
-          <h1>Fylkesstatistikk {year}</h1>
-          <ul>
-            {reports.map(([key, value]) => (
-              <li key={key}>
-                <Link href={`/${year}/${key}`}>{value}</Link>
-              </li>
-            ))}
-          </ul>
-          <p>
-            <Link href="/">Vis alle år</Link>
-          </p>
-        </div>
-      </section>
+    <Layout title={`Fylkesstatistikk ${year}`} header>
+      <Container variant="white" my={3} py={3} boxShadow={1}>
+        <PageHeading>Fylkesstatistikk {year}</PageHeading>
+        <ul>
+          {reports.map(([key, value]) => (
+            <li key={key}>
+              <Link href={`/${year}/${key}`}>
+                <a>{value}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p>
+          <Link href="/">
+            <a>Vis alle år</a>
+          </Link>
+        </p>
+      </Container>
     </Layout>
   );
 }

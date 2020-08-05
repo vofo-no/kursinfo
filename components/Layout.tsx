@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { Container } from "vofo-design";
+import Header from "./Header";
 
 export const COLORS = {
   brand: "#a31f34",
@@ -6,148 +8,150 @@ export const COLORS = {
   grayDark: "#58595c",
 };
 
-const Layout = ({ title, children }) => (
-  <>
+const Layout = ({ title, children, header = false }) => {
+  const LayoutHead = (
     <Head>
       <title>{title}</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
+  );
 
-    {children}
+  if (header)
+    return (
+      <>
+        {LayoutHead}
+        <Header />
+        <Container variant="default" px={[0, 2, 3]}>
+          <main>{children}</main>
+        </Container>
 
-    <footer>Voksenopplæringsforbundet</footer>
+        <Container variant="dark" maxWidth={null} display="flex" py={4}>
+          <Container variant="dark">
+            <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
+          </Container>
+        </Container>
+      </>
+    );
 
-    <style jsx>{`
-      footer {
-        width: 100%;
-        height: 100px;
-        border-top: 1px solid #eaeaea;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+  return (
+    <>
+      {LayoutHead}
+      {children}
+      <style jsx global>{`
+        section {
+          background: #ffffff;
+        }
 
-      footer img {
-        margin-left: 0.5rem;
-      }
+        section.yellow {
+          background: #fff8dc;
+        }
+        section.blue {
+          background: #e0ffff;
+        }
 
-      footer a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    `}</style>
+        section.page h2 {
+          margin: 0;
+          font-size: 2.4rem;
+          font-weight: 600;
+          text-align: center;
+        }
 
-    <style jsx global>{`
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-      }
+        p.subtitle {
+          display: block;
+          margin-top: 0 !important;
+          font-size: 14px;
+          font-weigth: 400;
+          color: #666666;
+        }
 
-      section.site {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-
-      section.yellow {
-        background: #fff8dc;
-      }
-      section.blue {
-        background: #e0ffff;
-      }
-
-      section.page h1 {
-        font-size: 3.5rem;
-        font-weight: 600;
-        margin: auto 0;
-      }
-
-      section.page h1 small {
-        font-size: 2rem;
-        color: #58595c;
-        display: block;
-      }
-
-      section.page h2 {
-        margin: 1rem 0;
-        font-size: 2.5rem;
-        font-weight: 600;
-      }
-
-      section.page {
-        page-break-before: always;
-        page-break-after: always;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-
-      @media only print {
         section.page {
-          justify-content: unset;
+          page-break-before: always;
+          page-break-after: always;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          min-height: 100vh;
         }
 
-        h1 {
-          align-self: flex-start;
+        body {
+          counter-reset: tables figures;
         }
-      }
-      @media not print {
-        section.page {
-          justify-content: center;
+
+        section.page h3 {
+          margin-bottom: 6px;
         }
+
+        section.page h3.table-label {
+          counter-increment: tables;
+        }
+
+        section.page h3.figure-label {
+          counter-increment: figures;
+        }
+
+        section.page h3.table-label:before {
+          content: "Tabell " counter(tables) ": ";
+        }
+
+        section.page h3.figure-label:before {
+          content: "Figur " counter(figures) ": ";
+        }
+
+        @media only print {
+          /*
+          section.page {
+            justify-content: unset;
+          }
+
+          h1 {
+            align-self: flex-start;
+          }*/
+        }
+
+        @media not print {
+          section.page {
+            justify-content: center;
+          }
+        }
+
         section.page > .container {
-          padding: 3rem 2rem;
+          display: flex;
+          flex-direction: column;
+          padding: 1rem;
+          min-height: 100vh;
+          box-sizing: border-box;
         }
-      }
 
-      section.page > .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        padding: 2rem;
-      }
+        table.report-table {
+          border-collapse: collapse;
+        }
 
-      table.report-table {
-        border-collapse: collapse;
-      }
+        table.report-table th,
+        table.report-table td {
+          padding: 4px 10px;
+        }
 
-      table.report-table th,
-      table.report-table td {
-        padding: 6px 12px;
-      }
-
-      table.report-table thead th {
-        font-size: smaller;
-        font-weight: normal;
-        text-align: right;
-      }
-      table.report-table thead th.left {
-        text-align: left;
-      }
-      table.report-table tbody th,
-      table.report-table tbody td {
-        border-top: 1px solid #ccc;
-      }
-      table.report-table tbody th {
-        text-align: left;
-      }
-      table.report-table tbody td {
-        text-align: right;
-        font-variant-numeric: tabular-nums;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-    `}</style>
-  </>
-);
-
+        table.report-table thead th {
+          font-size: smaller;
+          font-weight: normal;
+          text-align: right;
+        }
+        table.report-table thead th.left {
+          text-align: left;
+        }
+        table.report-table tbody th,
+        table.report-table tbody td {
+          border-top: 1px solid #ccc;
+        }
+        table.report-table tbody th {
+          text-align: left;
+        }
+        table.report-table tbody td {
+          text-align: right;
+          font-variant-numeric: tabular-nums;
+        }
+      `}</style>
+    </>
+  );
+};
 export default Layout;

@@ -25,9 +25,9 @@ function Associations({ associations, year, name }: AssociationsProps) {
     <section className="page">
       <div className="container">
         <h2>Studieforbund i {name}</h2>
-        <p>
-          Antall kurs, timer og deltakere pr. studieforbund etter kurstimer i{" "}
-          {name} {year}
+        <h3 className="table-label">Kursoversikt for alle studieforbund</h3>
+        <p className="subtitle">
+          Antall kurs, timer og deltakere per studieforbund i {name} {year}
         </p>
         <table className="report-table">
           <thead>

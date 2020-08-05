@@ -9,14 +9,19 @@
     "chewie": "node chewie"
   },
   "dependencies": {
-    "next": "9.3.3",
+    "deepmerge": "^4.2.2",
+    "highcharts": "^8.1.0",
+    "highcharts-react-official": "^3.0.0",
+    "next": "^9.4.4",
+    "next-compose-plugins": "^2.2.0",
+    "next-transpile-modules": "^3.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-feather": "^2.0.4",
-    "recharts": "^1.8.5"
+    "vofo-design": "https://github.com/vofo-no/design"
   },
   "devDependencies": {
-    "@types/node": "^13.9.8",
+    "@types/node": "^14.0.14",
     "@types/react": "^16.9.31",
     "@types/recharts": "^1.8.9",
     "papaparse": "^5.1.1",
