@@ -31,3 +31,4 @@ yarn-error.log*
 
 # raw data files
 /data/raw
+.vercel
