@@ -16,7 +16,6 @@ function Card({ Icon, children, label }: CardProps) {
       display="flex"
       py={0}
       px={0}
-      textAlign="center"
     >
       <Icon size={48} />
       <Text
