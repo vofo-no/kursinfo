@@ -1,30 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+Dette prosjektet lager og viser statistikkrapporter for studieforbundenes kursvirksomhet.
 
-## Getting Started
+## Kom i gang
 
-First, run the development server:
+Programmet kan kjøres lokalt på maskinen din.
 
 ```bash
-npm run dev
-# or
-yarn dev
+$ git clone https://github.com/vofo-no/reg-stat
+$ yarn install
+$ yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Gå til [http://localhost:3000](http://localhost:3000) i nettleseren for å se resultatet.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Oppdatere eller legge til nye data
 
-## Learn More
+Legg inn ny eller manglende datafil fra SSB. Bruk filnavnet `data/raw/g2020.csv` (med riktig årstall).
 
-To learn more about Next.js, take a look at the following resources:
+Deretter analyserer du datafilen og genererer data til aktuelle rapporter ved å kjøre:
+```bash
+$ yarn run chewie [år]
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Endringer lagres i git og publiseres. Rådatafiler skal ikke lagres i git.
 
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
+## Struktur
 
-## Deploy on ZEIT Now
+Prosjektet har følgende deler:
 
-The easiest way to deploy your Next.js app is to use the [ZEIT Now Platform](https://zeit.co/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `chewie` inneholder programmet som analyserer datafiler og henter relevant data fra andre kilder.
+- `components` inneholder felles React-komponenter som brukes i statistikkrapportene.
+- `data` inneholder strukturerte data til statistikkrapportene.
+  - `config.json` definerer endringer i fylkesstruktur og studieforbund over tid (det er ikke nødvendig å definere årstall uten endringer).
+  - `raw` inneholder rådatafiler.
+- `pages` inneholder nettsidene som skal genereres og publiseres.
+- `public` inneholder statiske ressurser til nettsidene.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Du kan lære mer om rammeverket i [dokumentasjonen til Next.js](https://nextjs.org/docs).
