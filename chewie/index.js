@@ -119,7 +119,7 @@ async function main() {
         obj[key] = assocSummary(key);
         return obj;
       }, {}),
-      subjects: han.mainSubjectSums(kData),
+      mainSubjects: han.mainSubjectSums(kData),
     };
   };
 
