@@ -3,6 +3,7 @@ const [M1, M2, M3, M4, M5, M6] = [7, 8, 9, 10, 11, 12];
 const [F1, F2, F3, F4, F5, F6] = [13, 14, 15, 16, 17, 18];
 const [FM, FF] = [19, 20];
 const LA = 0;
+const MU = 2;
 const ORG = 1;
 const SBJ = 4;
 
@@ -70,6 +71,15 @@ const associationSummer = (rows) => (assoc) => {
   };
 };
 
+const municipalitySummer = (rows) => (mun) => {
+  const aData = rows.filter((row) => row[MU] === mun);
+  return {
+    courses: aData.length,
+    participants: participants(aData, false),
+    hours: sumHours(aData),
+  };
+};
+
 module.exports = {
   sumHours,
   participants,
@@ -77,4 +87,5 @@ module.exports = {
   countOrganizations,
   associationSummer,
   mainSubjectSums,
+  municipalitySummer,
 };

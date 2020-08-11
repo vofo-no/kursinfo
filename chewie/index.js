@@ -77,14 +77,17 @@ async function main() {
   const municipalities = await klass.getData(year);
 
   process.stdout.write(`Analyserer... `);
+
+  const municipalitySummary = han.municipalitySummer(data);
+
   Object.keys(municipalities).map((key) => {
     const nkey = Number(key);
-    const courses = data.filter((row) => row[2] === nkey).length;
     const m = municipalities[key];
+    const mData = municipalitySummary(nkey);
     municipalities[key] = {
       ...m,
-      courses,
-      coursesPerCapita: courses / m.pop,
+      ...mData,
+      coursesPerCapita: mData.courses / m.pop,
     };
   });
 
