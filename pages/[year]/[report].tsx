@@ -11,6 +11,7 @@ import { years } from "../../data/index.json";
 import Counties from "../../components/Counties";
 import Associations from "../../components/Associations";
 import Subjects from "../../components/Subjects";
+import Municipalities from "../../components/Municipalities";
 
 const PageFooter = styled.div`
   text-align: center;
@@ -119,11 +120,12 @@ export default function Report({ year, report, municipalities, counties }) {
         year={year}
         name={report.name}
       />
-      <style jsx>{`
-        .page-footer {
-          margin-top: auto;
-        }
-      `}</style>
+      <Municipalities
+        municipalities={municipalities}
+        municipalityKeys={report.municipalities}
+        year={year}
+        name={report.name}
+      />
     </Layout>
   );
 }
