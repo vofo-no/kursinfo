@@ -49,11 +49,8 @@ const Layout = ({ title, children, header = false }) => {
           background: #e0ffff;
         }
 
-        section.page h2 {
+        section.page h2.h1 {
           margin: 0;
-          font-size: 2.3rem;
-          font-weight: 600;
-          text-align: left;
         }
 
         p.subtitle {
@@ -117,7 +114,7 @@ const Layout = ({ title, children, header = false }) => {
         section.page > .container {
           display: flex;
           flex-direction: column;
-          padding: 16px 16px 21px 16px;
+          padding: 24px 16px;
           min-height: 100vh;
           box-sizing: border-box;
           max-width: 100%;

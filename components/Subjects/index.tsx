@@ -50,7 +50,7 @@ function Subjects({
     <>
       <section className="page blue">
         <div className="container">
-          <h2>Deltakere på kursemner</h2>
+          <h2 className="h1">Deltakere på kursemner</h2>
           <h3 className="table-label">Deltakere innenfor ulike kursemner</h3>
           <p className="subtitle">
             Antall deltakere i {name} {year}, etter hovedemne og kjønn

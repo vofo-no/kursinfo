@@ -14,7 +14,7 @@ function Counties({ counties, year }: CountiesProps) {
   return (
     <section className="page yellow">
       <div className="container">
-        <h2>Kurs i hele landet</h2>
+        <h2 className="h1">Kurs i hele landet</h2>
         <h3 className="table-label">Kursoversikt for alle fylker</h3>
         <p className="subtitle">
           Antall kurs, timer og deltakere per fylke etter kurs pr. 1 000
