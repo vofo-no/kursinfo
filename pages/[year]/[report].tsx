@@ -122,12 +122,14 @@ export default function Report({ year, report, municipalities, counties }) {
         year={year}
         name={report.name}
       />
-      <Municipalities
-        municipalities={municipalities}
-        municipalityKeys={report.municipalities}
-        year={year}
-        name={report.name}
-      />
+      {report.municipalities.length > 2 && (
+        <Municipalities
+          municipalities={municipalities}
+          municipalityKeys={report.municipalities}
+          year={year}
+          name={report.name}
+        />
+      )}
     </Layout>
   );
 }
