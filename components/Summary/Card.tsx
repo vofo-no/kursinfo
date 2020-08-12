@@ -18,7 +18,7 @@ function Card({ Icon, children, label }: CardProps) {
       px={0}
     >
       <Icon size={48} />
-      <Text
+      <Text.Block
         fontSize={5}
         lineHeight="title"
         fontWeight="bold"
@@ -26,10 +26,10 @@ function Card({ Icon, children, label }: CardProps) {
         textAlign="center"
       >
         {children}
-      </Text>
-      <Text textAlign="center" lineHeight="title">
+      </Text.Block>
+      <Text.Block textAlign="center" lineHeight="title">
         {label}
-      </Text>
+      </Text.Block>
     </Container>
   );
 }

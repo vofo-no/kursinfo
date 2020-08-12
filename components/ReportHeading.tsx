@@ -11,7 +11,7 @@ const ReportTag = styled(Container)`
   top: 0;
   right: 10px;
 `;
-const ReportTagText = styled(Text)`
+const ReportTagText = styled(Text.Inline)`
   @media (min-width: 725px) {
     writing-mode: vertical-lr;
   }
@@ -21,11 +21,10 @@ const ReportTagText = styled(Text)`
 function ReportHeading({ name, year }) {
   return (
     <Heading>
-      <Text fontSize={4} color="gray">
+      <Text.Block fontSize={4} color="gray" lineHeight="title">
         Studieforbundenes kursvirksomhet i {year}
-        <br />
-      </Text>
-      <Text fontSize={6}>{name}</Text>
+      </Text.Block>
+      <Text.Block fontSize={6}>{name}</Text.Block>
       <ReportTag variant="primary" py={[1, 2, 3]}>
         <ReportTagText fontSize={[1, 2, 3]}>Fylkesstatistikk</ReportTagText>
       </ReportTag>
