@@ -12,6 +12,7 @@ import Counties from "../../components/Counties";
 import Associations from "../../components/Associations";
 import Subjects from "../../components/Subjects";
 import Municipalities from "../../components/Municipalities";
+import ScrollDown from "../../components/ScrollDown";
 
 const PageFooter = styled.div`
   text-align: center;
@@ -105,6 +106,7 @@ export default function Report({ year, report, municipalities, counties }) {
           </p>
           <PageFooter>
             <Logo />
+            <ScrollDown />
           </PageFooter>
         </div>
       </section>
