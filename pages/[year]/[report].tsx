@@ -115,7 +115,9 @@ export default function Report({ year, report, municipalities, counties }) {
         name={report.name}
       />
       <Subjects
-        subjects={report.mainSubjects}
+        mainSubjects={report.mainSubjects}
+        subjects={report.subjects}
+        topSubjects={report.topSubjects}
         ages={report.participants.ages}
         year={year}
         name={report.name}
