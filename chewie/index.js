@@ -101,6 +101,7 @@ async function main() {
     );
 
     const assocSummary = han.associationSummer(kData);
+    const subjectSums = han.subjectSums(kData);
 
     reports[luke.parameterize(k)] = {
       name: k,
@@ -119,6 +120,8 @@ async function main() {
         obj[key] = assocSummary(key);
         return obj;
       }, {}),
+      subjects: subjectSums,
+      topSubjects: han.topAges(subjectSums),
       mainSubjects: han.mainSubjectSums(kData),
     };
   };

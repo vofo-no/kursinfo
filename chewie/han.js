@@ -58,6 +58,32 @@ const mainSubjectSums = (rows) =>
     return obj;
   }, {});
 
+const getSubjects = (rows) => [...new Set(rows.map((row) => row[SBJ]))];
+const subjectSums = (rows) =>
+  getSubjects(rows).reduce((obj, key) => {
+    const sData = rows.filter((row) => row[SBJ] === key);
+    obj[key] = {
+      participants: participants(sData, true),
+    };
+    return obj;
+  }, {});
+
+const topAge = (summed, i, limit = 5) =>
+  Object.keys(summed)
+    .sort(
+      (a, b) => summed[b].participants.ages[i] - summed[a].participants.ages[i]
+    )
+    .slice(0, limit);
+
+const topAges = (summed) => [
+  topAge(summed, 0),
+  topAge(summed, 1),
+  topAge(summed, 2),
+  topAge(summed, 3),
+  topAge(summed, 4),
+  topAge(summed, 5),
+];
+
 const countOrganizations = (rows) =>
   new Set(rows.map((row) => `${row[LA]}:${row[ORG]}`)).size;
 
@@ -87,5 +113,7 @@ module.exports = {
   countOrganizations,
   associationSummer,
   mainSubjectSums,
+  subjectSums,
   municipalitySummer,
+  topAges,
 };
