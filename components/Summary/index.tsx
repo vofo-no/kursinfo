@@ -28,7 +28,7 @@ function Summary({
     <>
       <Container
         display="grid"
-        gridTemplateColumns="repeat(3, 1fr)"
+        gridTemplateColumns={["repeat(2, 1fr)", "repeat(3, 1fr)"]}
         gridColumnGap={3}
         gridRowGap={4}
         my={4}

@@ -37,48 +37,50 @@ function Municipalities({
           Antall kurs, timer og deltakere per kommune etter kurs pr. 1 000
           innbyggere i {name} {year}
         </p>
-        <table className="report-table">
-          <thead>
-            <tr>
-              <td></td>
-              <th className="left">Kommune</th>
-              <th>Kurs</th>
-              <th>Kurstimer</th>
-              <th>Deltakere</th>
-              <th>Kurs pr. 1 000 innbyggere</th>
-            </tr>
-          </thead>
-          <tbody>
-            {municipalityKeysSorted.map((key, i) => {
-              const {
-                name,
-                courses,
-                participants,
-                hours,
-                coursesPerCapita,
-              } = municipalities[key];
-              return (
-                <tr key={key}>
-                  <td>{i + 1}</td>
-                  <th scope="row">{name}</th>
-                  <td>{courses.toLocaleString("nb")}</td>
-                  <td>{hours.toLocaleString("nb")}</td>
-                  <td>
-                    {(participants.males + participants.females).toLocaleString(
-                      "nb"
-                    )}
-                  </td>
-                  <td>
-                    {(coursesPerCapita * 1000).toLocaleString("nb", {
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="responsive-table">
+          <table className="report-table">
+            <thead>
+              <tr>
+                <td></td>
+                <th className="left">Kommune</th>
+                <th>Kurs</th>
+                <th>Kurstimer</th>
+                <th>Deltakere</th>
+                <th>Kurs pr. 1 000 innbyggere</th>
+              </tr>
+            </thead>
+            <tbody>
+              {municipalityKeysSorted.map((key, i) => {
+                const {
+                  name,
+                  courses,
+                  participants,
+                  hours,
+                  coursesPerCapita,
+                } = municipalities[key];
+                return (
+                  <tr key={key}>
+                    <td>{i + 1}</td>
+                    <th scope="row">{name}</th>
+                    <td>{courses.toLocaleString("nb")}</td>
+                    <td>{hours.toLocaleString("nb")}</td>
+                    <td>
+                      {(
+                        participants.males + participants.females
+                      ).toLocaleString("nb")}
+                    </td>
+                    <td>
+                      {(coursesPerCapita * 1000).toLocaleString("nb", {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

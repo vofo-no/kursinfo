@@ -51,9 +51,9 @@ const Layout = ({ title, children, header = false }) => {
 
         section.page h2 {
           margin: 0;
-          font-size: 2.4rem;
+          font-size: 2.3rem;
           font-weight: 600;
-          text-align: center;
+          text-align: left;
         }
 
         p.subtitle {
@@ -117,13 +117,25 @@ const Layout = ({ title, children, header = false }) => {
         section.page > .container {
           display: flex;
           flex-direction: column;
-          padding: 1rem;
+          padding: 16px 16px 21px 16px;
           min-height: 100vh;
           box-sizing: border-box;
+          max-width: 100%;
+        }
+
+        .responsive-table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+        }
+
+        .responsive-table > table {
+          width: 100%;
         }
 
         table.report-table {
           border-collapse: collapse;
+          line-height: 1.2;
         }
 
         table.report-table th,

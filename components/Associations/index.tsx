@@ -29,37 +29,39 @@ function Associations({ associations, year, name }: AssociationsProps) {
         <p className="subtitle">
           Antall kurs, timer og deltakere per studieforbund i {name} {year}
         </p>
-        <table className="report-table">
-          <thead>
-            <tr>
-              <td></td>
-              <th className="left">Studieforbund</th>
-              <th>Kurs</th>
-              <th>Kurstimer</th>
-              <th>Deltakere</th>
-            </tr>
-          </thead>
-          <tbody>
-            {associationKeys.map((key, i) => {
-              const { courses, participants, hours } = associations[key];
-              return (
-                <tr key={key}>
-                  <td>{i + 1}</td>
-                  <th scope="row">
-                    {names[key] || key} <small>({names.short[key]})</small>
-                  </th>
-                  <td>{courses.toLocaleString("nb")}</td>
-                  <td>{hours.toLocaleString("nb")}</td>
-                  <td>
-                    {(participants.males + participants.females).toLocaleString(
-                      "nb"
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="responsive-table">
+          <table className="report-table">
+            <thead>
+              <tr>
+                <td></td>
+                <th className="left">Studieforbund</th>
+                <th>Kurs</th>
+                <th>Kurstimer</th>
+                <th>Deltakere</th>
+              </tr>
+            </thead>
+            <tbody>
+              {associationKeys.map((key, i) => {
+                const { courses, participants, hours } = associations[key];
+                return (
+                  <tr key={key}>
+                    <td>{i + 1}</td>
+                    <th scope="row">
+                      {names[key] || key} <small>({names.short[key]})</small>
+                    </th>
+                    <td>{courses.toLocaleString("nb")}</td>
+                    <td>{hours.toLocaleString("nb")}</td>
+                    <td>
+                      {(
+                        participants.males + participants.females
+                      ).toLocaleString("nb")}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <Graph
           associationKeys={associationKeys}
           associations={associations}

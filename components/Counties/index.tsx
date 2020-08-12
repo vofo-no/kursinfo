@@ -20,47 +20,49 @@ function Counties({ counties, year }: CountiesProps) {
           Antall kurs, timer og deltakere per fylke etter kurs pr. 1 000
           innbyggere i {year}
         </p>
-        <table className="report-table">
-          <thead>
-            <tr>
-              <td></td>
-              <th className="left">Fylke</th>
-              <th>Kurs</th>
-              <th>Kurstimer</th>
-              <th>Deltakere</th>
-              <th>Kurs pr. 1 000 innbyggere</th>
-            </tr>
-          </thead>
-          <tbody>
-            {counties.map(
-              (
-                {
-                  name,
-                  courses,
-                  participants,
-                  hours,
-                  coursesPerCapita,
-                  isCurrent,
-                },
-                i
-              ) => (
-                <tr key={name} className={isCurrent ? "current" : ""}>
-                  <td>{i + 1}</td>
-                  <th scope="row">{name}</th>
-                  <td>{courses.toLocaleString("nb")}</td>
-                  <td>{hours.toLocaleString("nb")}</td>
-                  <td>{participants.toLocaleString("nb")}</td>
-                  <td>
-                    {(coursesPerCapita * 1000).toLocaleString("nb", {
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}
-                  </td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+        <div className="responsive-table">
+          <table className="report-table">
+            <thead>
+              <tr>
+                <td></td>
+                <th className="left">Fylke</th>
+                <th>Kurs</th>
+                <th>Kurstimer</th>
+                <th>Deltakere</th>
+                <th>Kurs pr. 1 000 innbyggere</th>
+              </tr>
+            </thead>
+            <tbody>
+              {counties.map(
+                (
+                  {
+                    name,
+                    courses,
+                    participants,
+                    hours,
+                    coursesPerCapita,
+                    isCurrent,
+                  },
+                  i
+                ) => (
+                  <tr key={name} className={isCurrent ? "current" : ""}>
+                    <td>{i + 1}</td>
+                    <th scope="row">{name}</th>
+                    <td>{courses.toLocaleString("nb")}</td>
+                    <td>{hours.toLocaleString("nb")}</td>
+                    <td>{participants.toLocaleString("nb")}</td>
+                    <td>
+                      {(coursesPerCapita * 1000).toLocaleString("nb", {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      })}
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
         <style jsx>{`
           tr.current {
             background-color: #ffd700;

@@ -3,7 +3,7 @@ import { Container, Text } from "vofo-design";
 
 const Heading = styled.h1`
   align-self: start;
-  margin: auto 0;
+  margin: 40px 0 auto 0;
 `;
 
 const ReportTag = styled(Container)`
