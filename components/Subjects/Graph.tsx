@@ -1,14 +1,16 @@
 import GraphBase from "../Graph";
+import { ageGroupName } from "./";
 
-function Graph({ year, ages }) {
-  const startYear = year - 4;
+type SubjectsGraphProps = {
+  year: number;
+  ages: [[number]];
+};
 
-  const getAgeSeries = (age) =>
-    [...Array(year - startYear + 1)].map(
-      (_, i) =>
-        ages[age] +
-        Math.round(ages[age] * ((Math.random() - Math.random()) / 10))
-    );
+function Graph({ year, ages }: SubjectsGraphProps) {
+  const minStartYear = year - 4;
+  const calcStartYear = year + 1 - ages[0].length;
+  const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
+
   const options = {
     chart: {
       height: 300,
@@ -21,6 +23,9 @@ function Graph({ year, ages }) {
       accessibility: {
         rangeDescription: `Årstall fra ${startYear} til ${year}`,
       },
+      categories: Array(year - startYear + 1).map((_, i) =>
+        String(startYear + i)
+      ),
     },
     legend: {
       layout: "vertical",
@@ -37,32 +42,10 @@ function Graph({ year, ages }) {
       },
     },
 
-    series: [
-      {
-        name: "14-19 år",
-        data: getAgeSeries(0),
-      },
-      {
-        name: "20-29 år",
-        data: getAgeSeries(1),
-      },
-      {
-        name: "30-39 år",
-        data: getAgeSeries(2),
-      },
-      {
-        name: "40-49 år",
-        data: getAgeSeries(3),
-      },
-      {
-        name: "50-59 år",
-        data: getAgeSeries(4),
-      },
-      {
-        name: "60-> år",
-        data: getAgeSeries(5),
-      },
-    ],
+    series: ages.map((age, i) => ({
+      name: ageGroupName[i],
+      data: age,
+    })),
   };
 
   return (

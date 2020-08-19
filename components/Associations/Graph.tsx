@@ -42,11 +42,7 @@ function Graph({ associationKeys, associations, year }) {
       {
         name: lastYear,
         data: associationKeys.map(
-          (key: string) =>
-            associations[key].hours +
-            Math.round(
-              associations[key].hours * ((Math.random() - Math.random()) / 20)
-            )
+          (key: string) => associations[key].lastYearHours
         ),
       },
       {

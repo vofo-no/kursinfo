@@ -20,14 +20,14 @@ type SubjectsProps = {
   topSubjects: [[string]];
   year: string;
   name: string;
-  ages: [number];
+  ages: [[number]];
 };
 
 function p(subject: SubjectType) {
   return subject.participants.females + subject.participants.males;
 }
 
-const ageGroupName = [
+export const ageGroupName = [
   "14-19 år",
   "20-29 år",
   "30-39 år",
@@ -85,7 +85,7 @@ function Subjects({
               </tbody>
             </table>
           </div>
-          <Graph year={year} ages={ages} />
+          <Graph year={Number(year)} ages={ages} />
         </div>
       </section>
       <section className="page">
