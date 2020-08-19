@@ -7,6 +7,8 @@ const luke = require("./luke");
 
 const mainDataIndex = require("../data/index.json");
 
+const MAX_HISTORY_YEARS = 5;
+
 const getConfig = (year) => {
   process.stdout.write(`Laster konfigurasjon for ${year}... `);
 
@@ -24,6 +26,10 @@ const getConfig = (year) => {
   console.log("\x1b[1mOK\x1b[0m");
 
   return result;
+};
+
+const hasData = (year) => {
+  return fs.existsSync(`data/raw/g${year}.csv`);
 };
 
 const getData = (year) => {
@@ -76,6 +82,22 @@ async function main() {
   const data = getData(year);
   const municipalities = await klass.getData(year);
 
+  console.log(`Ser etter historiske data ${MAX_HISTORY_YEARS} år tilbake... `);
+
+  const dataHistory = {};
+  for (
+    let historyYear = year - 1;
+    historyYear > year - MAX_HISTORY_YEARS;
+    historyYear--
+  ) {
+    if (hasData(historyYear)) {
+      dataHistory[historyYear] = getData(historyYear);
+    } else {
+      console.log(`Finner ikke data for ${historyYear}. `);
+      break;
+    }
+  }
+
   process.stdout.write(`Analyserer... `);
 
   const municipalitySummary = han.municipalitySummer(data);
@@ -95,12 +117,16 @@ async function main() {
 
   const makeStat = (k) => {
     const ks = config.regions[k];
-    const kData = data.filter((row) => ks.includes(Math.floor(row[2] / 100)));
+    const ksFilter = (row) => ks.includes(Math.floor(row[2] / 100));
+    const kData = data.filter(ksFilter);
+    const kDataHistory = Object.keys(dataHistory).map((key) =>
+      dataHistory[key].filter(ksFilter)
+    );
     const kMunicipalities = Object.keys(municipalities).filter((key) =>
       ks.includes(Math.floor(key / 100))
     );
 
-    const assocSummary = han.associationSummer(kData);
+    const assocSummary = han.associationSummer(kData, kDataHistory[0]);
     const subjectSums = han.subjectSums(kData);
 
     reports[luke.parameterize(k)] = {
@@ -109,7 +135,12 @@ async function main() {
       courses: kData.length,
       facilitated: han.facilitated(kData),
       hours: han.sumHours(kData),
-      participants: han.participants(kData, true),
+      historical: han.historical([kData, ...kDataHistory]),
+      historicalAll: han.historical([data, ...Object.values(dataHistory)]),
+      participants: han.participantsWithHistory([
+        kData,
+        ...Object.values(kDataHistory),
+      ]),
       municipalities: kMunicipalities,
       organizations: han.countOrganizations(kData),
       population: kMunicipalities.reduce(

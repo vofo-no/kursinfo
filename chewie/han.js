@@ -12,6 +12,9 @@ const COL = {
 
 const AGEINDEX = [0, 1, 2, 3, 4, 5];
 
+const associationFilter = (association) => (row) =>
+  row[COL.ASSOCIATION] === association;
+
 const sumCols = (rows, ...cols) =>
   rows.reduce(
     (acc, row) => acc + cols.reduce((acc2, col) => acc2 + row[col], 0),
@@ -21,9 +24,20 @@ const sumCols = (rows, ...cols) =>
 const sumHours = (rows) => sumCols(rows, COL.HOURS);
 const sumMales = (rows) => sumCols(rows, ...COL.MALES);
 const sumFemales = (rows) => sumCols(rows, ...COL.FEMALES);
+const sumParticipants = (rows) => sumCols(rows, ...COL.MALES, ...COL.FEMALES);
 
 const sumAges = (rows) =>
   AGEINDEX.map((i) => sumCols(rows, COL.MALES[i], COL.FEMALES[i]));
+
+const sumHistoryAges = (rowset) =>
+  AGEINDEX.map((i) =>
+    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i]))
+  );
+
+const participantsWithHistory = (rowset) => ({
+  ...participants(rowset[0]),
+  ages: sumHistoryAges(rowset),
+});
 
 const participants = (rows, rich = false) => ({
   males: sumMales(rows),
@@ -79,12 +93,14 @@ const countOrganizations = (rows) =>
   new Set(rows.map((row) => `${row[COL.ASSOCIATION]}:${row[COL.ORGANIZATION]}`))
     .size;
 
-const associationSummer = (rows) => (assoc) => {
-  const aData = rows.filter((row) => row[COL.ASSOCIATION] === assoc);
+const associationSummer = (rows, lastYearRows = [[]]) => (assoc) => {
+  const aData = rows.filter(associationFilter(assoc));
+  const bData = lastYearRows.filter(associationFilter(assoc));
   return {
     courses: aData.length,
     participants: participants(aData),
     hours: sumHours(aData),
+    lastYearHours: sumHours(bData),
     facilitated: facilitated(aData),
   };
 };
@@ -98,9 +114,17 @@ const municipalitySummer = (rows) => (mun) => {
   };
 };
 
+const historical = (rowset) => ({
+  courses: rowset.map((rows) => rows.length),
+  hours: rowset.map(sumHours),
+  participants: rowset.map(sumParticipants),
+});
+
 module.exports = {
   sumHours,
+  historical,
   participants,
+  participantsWithHistory,
   facilitated,
   countOrganizations,
   associationSummer,
