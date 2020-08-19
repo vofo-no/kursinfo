@@ -110,7 +110,13 @@ export default function Report({ year, report, municipalities, counties }) {
           </PageFooter>
         </div>
       </section>
-      <Counties counties={counties} year={year} />
+      <Counties
+        counties={counties}
+        year={year}
+        name={report.name}
+        historical={report.historical}
+        historicalAll={report.historicalAll}
+      />
       <Associations
         associations={report.associations}
         year={year}

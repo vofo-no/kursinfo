@@ -1,3 +1,11 @@
+import Graph from "./Graph";
+
+type Historical = {
+  courses: [number];
+  participants: [number];
+  hours: [number];
+};
+
 type CountiesProps = {
   counties: {
     name: string;
@@ -7,10 +15,19 @@ type CountiesProps = {
     coursesPerCapita: number;
     isCurrent: boolean;
   }[];
+  historical: Historical;
+  historicalAll: Historical;
   year: string;
+  name: string;
 };
 
-function Counties({ counties, year }: CountiesProps) {
+function Counties({
+  counties,
+  year,
+  name,
+  historical,
+  historicalAll,
+}: CountiesProps) {
   return (
     <section className="page yellow">
       <div className="container">
@@ -75,6 +92,27 @@ function Counties({ counties, year }: CountiesProps) {
             border-bottom: 2px solid #000;
           }
         `}</style>
+        <Graph
+          year={Number(year)}
+          county={name}
+          type="Timer"
+          values={historical.hours}
+          nationalValues={historicalAll.hours}
+        />
+        <Graph
+          year={Number(year)}
+          county={name}
+          type="Kurs"
+          values={historical.courses}
+          nationalValues={historicalAll.courses}
+        />
+        <Graph
+          year={Number(year)}
+          county={name}
+          type="Deltakere"
+          values={historical.participants}
+          nationalValues={historicalAll.participants}
+        />
       </div>
     </section>
   );
