@@ -5,7 +5,9 @@ function parameterize(str) {
     .toLowerCase()
     .replace(PATH_REGEX, "")
     .replace(/\s+/g, "-")
-    .replace(/\-+/g, "-");
+    .replace(/\-+/g, "-")
+    .replace(/[æå]/g, "a")
+    .replace(/ø/g, "o");
 }
 
 module.exports = { parameterize };
