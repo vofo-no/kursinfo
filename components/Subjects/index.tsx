@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Graph from "./Graph";
 import names from "./names.json";
 
@@ -90,7 +91,7 @@ function Subjects({
       <section className="page">
         <div className="container">
           {[0, 1, 2, 3, 4, 5].map((age) => (
-            <>
+            <Fragment key={`ag-tab-${age}`}>
               <h3 className="table-label">
                 Topp 5 kursemner for deltakere {ageGroupName[age]}
               </h3>
@@ -123,7 +124,7 @@ function Subjects({
                   </tbody>
                 </table>
               </div>
-            </>
+            </Fragment>
           ))}
         </div>
       </section>
