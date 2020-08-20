@@ -95,14 +95,10 @@ const Layout = ({ title, children, header = false }) => {
         }
 
         @media only print {
-          /*
-          section.page {
-            justify-content: unset;
+          section.page,
+          section.page > .container {
+            width: 100%;
           }
-
-          h1 {
-            align-self: flex-start;
-          }*/
         }
 
         @media not print {

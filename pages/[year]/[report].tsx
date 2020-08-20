@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import fs from "fs";
 import path from "path";
 
@@ -13,6 +14,7 @@ import Associations from "../../components/Associations";
 import Subjects from "../../components/Subjects";
 import Municipalities from "../../components/Municipalities";
 import ScrollDown from "../../components/ScrollDown";
+import { initialize as initializeGraphs } from "../../components/Graph";
 
 const PageFooter = styled.div`
   text-align: center;
@@ -75,6 +77,9 @@ export async function getStaticPaths() {
 }
 
 export default function Report({ year, report, municipalities, counties }) {
+  useEffect(() => {
+    initializeGraphs();
+  }, []);
   return (
     <Layout title={`${report.name}: Fylkesstatistikk ${year}`}>
       <section className="page">
