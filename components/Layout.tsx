@@ -27,6 +27,7 @@ const Layout = ({ title, children, header = false }) => {
 
         <Container variant="dark" maxWidth={null} display="flex" py={4}>
           <Container variant="dark">
+            Statistikkbank for{" "}
             <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
           </Container>
         </Container>
