@@ -32,7 +32,7 @@ const Layout = ({ title, children, header = false }) => {
               <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
             </Text.Block>
             <Container py={3} display="flex" justifyContent="center">
-              <a href="https://vercel.com/?utm_source=vofo-kursinfo">
+              <a href="https://vercel.com/?utm_source=vofo-kursinfo&utm_campaign=oss">
                 <img src="/powered-by-vercel.svg" alt="Powered by Vercel" />
               </a>
             </Container>
