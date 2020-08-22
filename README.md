@@ -36,3 +36,10 @@ Prosjektet har følgende deler:
 - `public` inneholder statiske ressurser til nettsidene.
 
 Du kan lære mer om rammeverket i [dokumentasjonen til Next.js](https://nextjs.org/docs).
+
+## Takk til
+
+[![Powered by Vercel][vercel]][vercel-url]
+
+[vercel]: ./public/powered-by-vercel.svg
+[vercel-url]: https://vercel.com/?utm_source=vofo-kursinfo
