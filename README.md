@@ -17,6 +17,7 @@ Gå til [http://localhost:3000](http://localhost:3000) i nettleseren for å se r
 Legg inn ny eller manglende datafil fra SSB. Bruk filnavnet `data/raw/g2020.csv` (med riktig årstall).
 
 Deretter analyserer du datafilen og genererer data til aktuelle rapporter ved å kjøre:
+
 ```bash
 $ yarn run chewie [år]
 ```
@@ -36,3 +37,10 @@ Prosjektet har følgende deler:
 - `public` inneholder statiske ressurser til nettsidene.
 
 Du kan lære mer om rammeverket i [dokumentasjonen til Next.js](https://nextjs.org/docs).
+
+## Takk til
+
+[![Powered by Vercel][vercel]][vercel-url]
+
+[vercel]: ./public/powered-by-vercel.svg
+[vercel-url]: https://vercel.com/?utm_source=vofo-kursinfo&utm_campaign=oss

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Container } from "vofo-design";
+import { Container, Text } from "vofo-design";
 import Header from "./Header";
 
 export const COLORS = {
@@ -27,8 +27,15 @@ const Layout = ({ title, children, header = false }) => {
 
         <Container variant="dark" maxWidth={null} display="flex" py={4}>
           <Container variant="dark">
-            Statistikkbank for{" "}
-            <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
+            <Text.Block textAlign="center">
+              Statistikkbank for{" "}
+              <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
+            </Text.Block>
+            <Container py={3} display="flex" justifyContent="center">
+              <a href="https://vercel.com/?utm_source=vofo-kursinfo&utm_campaign=oss">
+                <img src="/powered-by-vercel.svg" alt="Powered by Vercel" />
+              </a>
+            </Container>
           </Container>
         </Container>
       </>
