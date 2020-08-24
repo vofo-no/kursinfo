@@ -1,5 +1,8 @@
 Dette prosjektet lager og viser statistikkrapporter for studieforbundenes kursvirksomhet.
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/vofo-no/kursinfo.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vofo-no/kursinfo/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/vofo-no/kursinfo.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/vofo-no/kursinfo/context:javascript)
+
 ## Kom i gang
 
 Programmet kan kjøres lokalt på maskinen din.
