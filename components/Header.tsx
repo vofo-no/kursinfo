@@ -10,16 +10,6 @@ const LogoHeading = styled.h1`
   padding: 0 !important;
 `;
 
-const InnerHeading = styled.h2`
-    margin: 0 !important;
-    padding 0 !important;
-    font-size: 24px !important;
-`;
-
-const MarginlessMenu = styled(Menu)`
-  margin-top: 0;
-`;
-
 const Header = () => {
   const [menu, toggleMenu] = useState(false);
   return (
