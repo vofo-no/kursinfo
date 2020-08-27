@@ -61,14 +61,14 @@ const getData = (year) => {
 const getDataHistory = (year) => {
   console.log(`Ser etter historiske data ${MAX_HISTORY_YEARS} år tilbake... `);
 
-  const dataHistory = {};
+  const dataHistory = [];
   for (
     let historyYear = year - 1;
     historyYear > year - MAX_HISTORY_YEARS;
     historyYear--
   ) {
     if (hasData(historyYear)) {
-      dataHistory[historyYear] = getData(historyYear);
+      dataHistory.push(getData(historyYear));
     } else {
       console.log(`Finner ikke data for ${historyYear}. `);
       break;
