@@ -31,7 +31,7 @@ const sumAges = (rows) =>
 
 const sumHistoryAges = (rowset) =>
   AGEINDEX.map((i) =>
-    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i]))
+    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i])).reverse()
   );
 
 const participantsWithHistory = (rowset) => ({
@@ -115,9 +115,9 @@ const municipalitySummer = (rows) => (mun) => {
 };
 
 const historical = (rowset) => ({
-  courses: rowset.map((rows) => rows.length),
-  hours: rowset.map(sumHours),
-  participants: rowset.map(sumParticipants),
+  courses: rowset.map((rows) => rows.length).reverse(),
+  hours: rowset.map(sumHours).reverse(),
+  participants: rowset.map(sumParticipants).reverse(),
 });
 
 module.exports = {
@@ -132,4 +132,5 @@ module.exports = {
   subjectSums,
   municipalitySummer,
   topAges,
+  COL,
 };
