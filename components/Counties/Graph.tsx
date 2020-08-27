@@ -4,8 +4,8 @@ type CountiesGraphProps = {
   year: number;
   type: "Kurs" | "Timer" | "Deltakere";
   county: string;
-  values: [number];
-  nationalValues: [number];
+  values: number[];
+  nationalValues: number[];
 };
 
 function Graph({

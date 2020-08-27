@@ -1,9 +1,9 @@
 import Graph from "./Graph";
 
 type Historical = {
-  courses: [number];
-  participants: [number];
-  hours: [number];
+  courses: number[];
+  participants: number[];
+  hours: number[];
 };
 
 type CountiesProps = {

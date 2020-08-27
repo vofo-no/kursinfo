@@ -13,7 +13,7 @@ type MunicipalitiesProps = {
   municipalities: {
     [key: string]: MunicipalityType;
   };
-  municipalityKeys: [string];
+  municipalityKeys: string[];
   year: string;
   name: string;
 };

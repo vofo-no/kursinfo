@@ -3,7 +3,7 @@ import { ageGroupName } from "./";
 
 type SubjectsGraphProps = {
   year: number;
-  ages: [[number]];
+  ages: number[][];
 };
 
 function Graph({ year, ages }: SubjectsGraphProps) {
