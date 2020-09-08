@@ -6,15 +6,25 @@ import {
   AssociationReportProps,
   ReportProps,
   ASSOCIATION,
+  INamed,
+  Dictionary,
 } from "../../types";
 
-type ParamType = {
+interface ParamType {
   year: string;
   report: string;
-};
+}
 
-type StaticDataProps = {
+interface StaticDataProps {
   props: RegionReportProps | AssociationReportProps;
+}
+
+const getOrgNames = (sf: string): Dictionary<INamed> => {
+  const namePath = path.join(process.cwd(), `data/names/orgs/${sf}.json`);
+
+  if (!fs.existsSync(namePath)) return {};
+
+  return JSON.parse(fs.readFileSync(namePath, "utf-8"));
 };
 
 export const getReportStaticData = async ({
@@ -33,13 +43,6 @@ export const getReportStaticData = async ({
     municipalities: ReportProps["municipalities"];
   } = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];
-
-  if (!reportData.municipalities) {
-    reportData.municipalities = [];
-  }
-  if (!reportData.associations) {
-    reportData.associations = {};
-  }
 
   const counties: ReportProps["counties"] = data.regions
     .filter((key) => !data.reports[key].isFuture)
@@ -78,14 +81,20 @@ export const getReportStaticData = async ({
     })
     .sort((a, b) => b.coursesPerCapita - a.coursesPerCapita);
 
+  const props = {
+    year,
+    type: reportData.type,
+    report: reportData,
+    municipalities: data.municipalities,
+    counties,
+  };
+
+  if (reportData.type === ASSOCIATION) {
+    props["orgNames"] = getOrgNames(reportData.key);
+  }
+
   return {
-    props: {
-      year,
-      type: reportData.type,
-      report: reportData,
-      municipalities: data.municipalities,
-      counties,
-    },
+    props,
   };
 };
 

@@ -1,27 +1,52 @@
 export const ASSOCIATION = "ASSOCIATION";
 export const REGION = "REGION";
 
-type Participants = {
+export interface INamed {
+  name: string;
+  short?: string;
+}
+
+export interface Dictionary<T> {
+  [key: string]: T;
+}
+
+interface IParticipants {
   males: number;
   females: number;
   ages?: number[];
-};
+}
 
-type Sums = {
+interface ISums {
   courses: number;
-  participants: Participants;
+  participants: IParticipants;
   hours: number;
-};
+}
 
-type Historical = {
+interface Historical {
   courses: number[];
   participants: number[];
   hours: number[];
-};
+}
 
-export type ReportProps = {
+export type ReportKindType = typeof ASSOCIATION | typeof REGION;
+
+interface ISubject {
+  participants: IParticipants;
+}
+
+interface IMunicipality extends ISums {
+  name: string;
+  pop: number;
+  coursesPerCapita: number;
+}
+
+export interface IAssociation extends ISums {
+  lastYearHours?: number;
+}
+
+export interface ReportProps {
   year: string;
-  type: typeof ASSOCIATION | typeof REGION;
+  type: ReportKindType;
   report: {
     name: string;
     courses: number;
@@ -31,35 +56,20 @@ export type ReportProps = {
       ages?: number[][];
     };
     hours: number;
-    facilitated: Sums;
+    facilitated: ISums;
     organizations: number;
     population?: number;
-    associations: {
-      [key: string]: Sums & {};
-    };
+    associations: Dictionary<IAssociation>;
     municipalities: string[];
     isFuture?: boolean;
     historical: Historical;
     historicalAll: Historical;
-    mainSubjects: {
-      [key: string]: {
-        participants: Participants;
-      };
-    };
+    mainSubjects: Dictionary<ISubject>;
     topSubjects: string[][];
-    subjects: {
-      [key: string]: {
-        participants: Participants;
-      };
-    };
+    subjects: Dictionary<ISubject>;
   };
-  municipalities: {
-    [key: string]: Sums & {
-      name: string;
-      pop: number;
-      coursesPerCapita: number;
-    };
-  };
+  municipalities: Dictionary<IMunicipality>;
+
   counties: {
     name: string;
     courses: number;
@@ -68,7 +78,9 @@ export type ReportProps = {
     coursesPerCapita: number;
     isCurrent: boolean;
   }[];
-};
+}
 
 export interface RegionReportProps extends ReportProps {}
-export interface AssociationReportProps extends ReportProps {}
+export interface AssociationReportProps extends ReportProps {
+  orgNames?: Dictionary<INamed>;
+}
