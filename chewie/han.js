@@ -12,8 +12,8 @@ const COL = {
 
 const AGEINDEX = [0, 1, 2, 3, 4, 5];
 
-const associationFilter = (association) => (row) =>
-  row[COL.ASSOCIATION] === association;
+const associationFilter = (val) => (row) => row[COL.ASSOCIATION] === val;
+const organizationFilter = (val) => (row) => row[COL.ORGANIZATION] === val;
 
 const sumCols = (rows, ...cols) =>
   rows.reduce(
@@ -105,6 +105,18 @@ const associationSummer = (rows, lastYearRows = [[]]) => (assoc) => {
   };
 };
 
+const organizationSummer = (rows, lastYearRows = [[]]) => (org) => {
+  const aData = rows.filter(organizationFilter(org));
+  const bData = lastYearRows.filter(organizationFilter(org));
+  return {
+    courses: aData.length,
+    participants: participants(aData),
+    hours: sumHours(aData),
+    lastYearHours: sumHours(bData),
+    facilitated: facilitated(aData),
+  };
+};
+
 const municipalitySummer = (rows) => (mun) => {
   const aData = rows.filter((row) => row[COL.MUNICIPALITY] === mun);
   return {
@@ -128,6 +140,7 @@ module.exports = {
   facilitated,
   countOrganizations,
   associationSummer,
+  organizationSummer,
   mainSubjectSums,
   subjectSums,
   municipalitySummer,

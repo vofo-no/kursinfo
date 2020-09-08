@@ -93,7 +93,20 @@ async function main() {
       yearData.filter(aRowFilter)
     );
 
+    const orgSummary = han.organizationSummer(aData, aDataHistory[0]);
     const subjectSums = han.subjectSums(aData);
+
+    const orgs = Array.from(
+      new Set(
+        [...aData, ...(aDataHistory[0] || [])].map(
+          (row) => row[han.COL.ORGANIZATION]
+        )
+      )
+    );
+
+    const municipalitiesSet = new Set(
+      aData.map((row) => row[han.COL.MUNICIPALITY])
+    );
 
     const paramName = luke.parameterize(aNames.short[String(a)]);
     associations.push(paramName);
@@ -107,7 +120,14 @@ async function main() {
       historical: han.historical([aData, ...aDataHistory]),
       historicalAll: han.historical([data, ...dataHistory]),
       participants: han.participantsWithHistory([aData, ...aDataHistory]),
+      municipalities: Object.keys(municipalities).filter((value) =>
+        municipalitiesSet.has(Number(value))
+      ),
       organizations: han.countOrganizations(aData),
+      associations: orgs.reduce((obj, key) => {
+        obj[key] = orgSummary(key);
+        return obj;
+      }, {}),
       subjects: subjectSums,
       topSubjects: han.topAges(subjectSums),
       mainSubjects: han.mainSubjectSums(aData),
