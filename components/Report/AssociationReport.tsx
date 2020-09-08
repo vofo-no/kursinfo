@@ -7,13 +7,13 @@ import Layout from "../../components/Layout";
 import ReportHeading from "../../components/ReportHeading";
 import Summary from "../../components/Summary";
 import Counties from "../../components/Counties";
-import Associations from "../../components/Associations";
 import Subjects from "../../components/Subjects";
 import Municipalities from "../../components/Municipalities";
 import ScrollDown from "../../components/ScrollDown";
 import { initialize as initializeGraphs } from "../../components/Graph";
 
 import { AssociationReportProps } from "../../types";
+import Organizations from "../Organizations";
 
 const PageFooter = styled.div`
   text-align: center;
@@ -26,6 +26,7 @@ export default function AssociationReport({
   report,
   municipalities,
   counties,
+  orgNames = {},
 }: AssociationReportProps) {
   useEffect(() => {
     initializeGraphs();
@@ -46,7 +47,7 @@ export default function AssociationReport({
                 (m: string) => municipalities[m].courses
               ).length
             }
-            allMunicipalitiesLength={report.municipalities.length}
+            allMunicipalitiesLength={Object.keys(municipalities).length}
           />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -72,8 +73,9 @@ export default function AssociationReport({
         historical={report.historical}
         historicalAll={report.historicalAll}
       />
-      <Associations
-        associations={report.associations}
+      <Organizations
+        items={report.associations}
+        names={orgNames}
         year={year}
         name={report.name}
       />

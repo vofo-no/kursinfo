@@ -47,7 +47,8 @@ function Associations({ associations, year, name }: AssociationsProps) {
                   <tr key={key}>
                     <td>{i + 1}</td>
                     <th scope="row">
-                      {names[key] || key} <small>({names.short[key]})</small>
+                      {names[key] || key}{" "}
+                      {names.short[key] && <small>({names.short[key]})</small>}
                     </th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
