@@ -85,6 +85,49 @@ async function main() {
 
   Object.keys(config.regions).map(makeRegStat);
 
+  const makeComboStat = (k) => {
+    const cKeys = config.combos[k];
+    const cFilter = (value) => cKeys.includes(value);
+    const cRowFilter = (row) => cFilter(row[han.COL.ASSOCIATION]);
+    const cData = data.filter(cRowFilter);
+    const cDataHistory = dataHistory.map((yearData) =>
+      yearData.filter(cRowFilter)
+    );
+
+    const municipalitiesSet = new Set(
+      cData.map((row) => row[han.COL.MUNICIPALITY])
+    );
+
+    const assocSummary = han.associationSummer(cData, cDataHistory[0]);
+    const subjectSums = han.subjectSums(cData);
+
+    const paramName = luke.parameterize(k);
+    //regions.push(paramName);
+    reports[paramName] = {
+      name: k,
+      type: "TOTAL",
+      key: cKeys.map(String),
+      courses: cData.length,
+      facilitated: han.facilitated(cData),
+      hours: han.sumHours(cData),
+      historical: han.historical([cData, ...cDataHistory]),
+      participants: han.participantsWithHistory([cData, ...cDataHistory]),
+      municipalities: Object.keys(municipalities).filter((value) =>
+        municipalitiesSet.has(Number(value))
+      ),
+      organizations: han.countOrganizations(cData),
+      associations: config.associations.reduce((obj, key) => {
+        obj[key] = assocSummary(key);
+        return obj;
+      }, {}),
+      subjects: subjectSums,
+      topSubjects: han.topAges(subjectSums),
+      mainSubjects: han.mainSubjectSums(cData),
+    };
+  };
+
+  Object.keys(config.combos).map(makeComboStat);
+
   const makeAssociationStat = (a) => {
     const aFilter = (value) => value === a;
     const aRowFilter = (row) => aFilter(row[han.COL.ASSOCIATION]);
