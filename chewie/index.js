@@ -126,7 +126,7 @@ async function main() {
     };
   };
 
-  Object.keys(config.combos).map(makeComboStat);
+  config.combos && Object.keys(config.combos).map(makeComboStat);
 
   const makeAssociationStat = (a) => {
     const aFilter = (value) => value === a;
