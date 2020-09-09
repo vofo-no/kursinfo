@@ -2,7 +2,7 @@
 const klass = require("./klass");
 const han = require("./han");
 const luke = require("./luke");
-const aNames = require("../components/Associations/names.json");
+const aNames = require("../data/names/associations.json");
 
 console.log(`               __
               / _)
@@ -108,10 +108,10 @@ async function main() {
       aData.map((row) => row[han.COL.MUNICIPALITY])
     );
 
-    const paramName = luke.parameterize(aNames.short[String(a)]);
+    const paramName = luke.parameterize(aNames[String(a)].short);
     associations.push(paramName);
     reports[paramName] = {
-      name: aNames[String(a)],
+      name: aNames[String(a)].name,
       type: "ASSOCIATION",
       key: String(a),
       courses: aData.length,
