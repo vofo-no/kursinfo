@@ -73,7 +73,7 @@ export default function RegionReport({
         historicalAll={report.historicalAll}
       />
       <Associations
-        associations={report.associations}
+        items={report.associations}
         year={year}
         name={report.name}
       />

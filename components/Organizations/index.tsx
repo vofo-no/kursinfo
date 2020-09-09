@@ -1,26 +1,13 @@
-import Graph from "./Graph";
+import GraphOrgs from "../GraphOrgs";
 import { COLORS } from "../Layout";
 import { Dictionary, IAssociation, INamed } from "../../types";
+import { showName } from "../../utils/names";
 
 interface PropTypes {
   items: Dictionary<IAssociation>;
   names: Dictionary<INamed>;
   name: string;
   year: string;
-}
-
-function showName(item: INamed | string): JSX.Element | string {
-  if (typeof item === "string") {
-    return item;
-  }
-  if (item.short) {
-    return (
-      <>
-        {item.name} <small>({item.short})</small>
-      </>
-    );
-  }
-  return item.name;
 }
 
 function Organizations({ items, year, name, names }: PropTypes) {
@@ -34,7 +21,7 @@ function Organizations({ items, year, name, names }: PropTypes) {
   return (
     <section className="page">
       <div className="container">
-        <h2 className="h1">Organisasjoner i {name}</h2>
+        <h2 className="h1">Organisasjoner i studieforbundet</h2>
         <h3 className="table-label">
           Kursoversikt for {limit ? `topp ${limit} ` : "alle "}
           organisasjoner
@@ -73,11 +60,12 @@ function Organizations({ items, year, name, names }: PropTypes) {
             </tbody>
           </table>
         </div>
-        <Graph
+        <GraphOrgs
           keys={organizationKeys}
           items={items}
           names={names}
           year={year}
+          unit="Organisasjon"
         />
       </div>
       <style jsx>

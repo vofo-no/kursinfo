@@ -1,26 +1,19 @@
-import names from "./names.json";
-import Graph from "./Graph";
+import names from "../../data/names/associations.json";
+import GraphOrgs from "../GraphOrgs";
 import { COLORS } from "../Layout";
+import { Dictionary, IAssociation } from "../../types";
+import { showName } from "../../utils/names";
 
-type AssociationsProps = {
-  associations: {
-    [key: string]: {
-      courses: number;
-      participants: {
-        males: number;
-        females: number;
-      };
-      hours: number;
-    };
-  };
-  year: string;
+interface PropTypes {
+  items: Dictionary<IAssociation>;
   name: string;
-};
+  year: string;
+}
 
-function Associations({ associations, year, name }: AssociationsProps) {
-  const associationKeys = Object.keys(associations)
-    .sort((a, b) => associations[b].hours - associations[a].hours)
-    .filter((key) => associations[key].courses);
+function Associations({ items, year, name }: PropTypes) {
+  const associationKeys = Object.keys(items)
+    .sort((a, b) => items[b].hours - items[a].hours)
+    .filter((key) => items[key].courses);
   return (
     <section className="page">
       <div className="container">
@@ -42,14 +35,11 @@ function Associations({ associations, year, name }: AssociationsProps) {
             </thead>
             <tbody>
               {associationKeys.map((key, i) => {
-                const { courses, participants, hours } = associations[key];
+                const { courses, participants, hours } = items[key];
                 return (
                   <tr key={key}>
                     <td>{i + 1}</td>
-                    <th scope="row">
-                      {names[key] || key}{" "}
-                      {names.short[key] && <small>({names.short[key]})</small>}
-                    </th>
+                    <th scope="row">{showName(names[key] || key)}</th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
                     <td>
@@ -63,10 +53,12 @@ function Associations({ associations, year, name }: AssociationsProps) {
             </tbody>
           </table>
         </div>
-        <Graph
-          associationKeys={associationKeys}
-          associations={associations}
+        <GraphOrgs
+          keys={associationKeys}
+          items={items}
+          names={names}
           year={year}
+          unit="Studieforbund"
         />
       </div>
       <style jsx>
