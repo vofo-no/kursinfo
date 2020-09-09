@@ -1,0 +1,18 @@
+{
+  "2501": { "name": "Studieforbundet AOF Norge", "short": "AOF" },
+  "2503": { "name": "Studieforbundet næring og samfunn", "short": "SNS" },
+  "2504": { "name": "Kristelig studieforbund", "short": "K-stud" },
+  "2508": { "name": "Studieforbundet Funkis", "short": "Funkis" },
+  "2510": { "name": "Studieforbundet kultur og tradisjon", "short": "SKT" },
+  "2521": { "name": "Idrettens studieforbund", "short": "ISF" },
+  "2525": { "name": "Musikkens studieforbund", "short": "MSF" },
+  "2534": { "name": "Samisk studieforbund", "short": "SOL" },
+  "2535": { "name": "Senterpartiets Studieforbund", "short": "SpS" },
+  "2536": { "name": "Studieforbundet Solidaritet", "short": "SO" },
+  "2537": { "name": "Sosialistisk Venstrepartis Studieforbund", "short": "SV" },
+  "2538": { "name": "Studieforbundet Folkeuniversitetet", "short": "FU" },
+  "2539": { "name": "Studieforbundet natur og miljø", "short": "N&M" },
+  "2542": { "name": "Venstres studieforbund", "short": "VS" },
+  "2545": { "name": "Akademisk Studieforbund", "short": "AKS" },
+  "2551": { "name": "Studieforbundet KOR", "short": "SfK" }
+}
