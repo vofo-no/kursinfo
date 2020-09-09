@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Container, Text } from "vofo-design";
-import { ReportProps, ASSOCIATION } from "../types";
+import { ReportProps, ASSOCIATION, REGION, TOTAL } from "../types";
 
 const Heading = styled.h1`
   align-self: start;
@@ -19,6 +19,12 @@ const ReportTagText = styled(Text.Inline)`
   position: relative;
 `;
 
+const typeName = {
+  [ASSOCIATION]: "Studieforbundstatistikk",
+  [REGION]: "Fylkesstatistikk",
+  [TOTAL]: "Kursstatistikk",
+};
+
 function ReportHeading({
   name,
   year,
@@ -35,11 +41,7 @@ function ReportHeading({
       </Text.Block>
       <Text.Block fontSize={6}>{name}</Text.Block>
       <ReportTag variant="primary" py={[1, 2, 3]}>
-        <ReportTagText fontSize={[1, 2, 3]}>
-          {type === ASSOCIATION
-            ? "Studieforbundstatistikk"
-            : "Fylkesstatistikk"}
-        </ReportTagText>
+        <ReportTagText fontSize={[1, 2, 3]}>{typeName[type]}</ReportTagText>
       </ReportTag>
     </Heading>
   );

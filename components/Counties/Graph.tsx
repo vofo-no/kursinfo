@@ -1,52 +1,76 @@
 import GraphBase from "../Graph";
 
-type CountiesGraphProps = {
+interface PropTypes {
   year: number;
   type: "Kurs" | "Timer" | "Deltakere";
-  county: string;
+  unit: string;
   values: number[];
-  nationalValues: number[];
-};
+  totalUnit?: "hele landet" | "alle studieforbund";
+  totalValues?: number[];
+}
 
 function Graph({
   year,
   type,
-  county,
+  unit,
   values,
-  nationalValues,
-}: CountiesGraphProps) {
+  totalUnit,
+  totalValues,
+}: PropTypes) {
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - values.length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
+
+  const yAxis = [
+    {
+      endOnTick: false,
+      title: {
+        text: `${type} i ${unit}`,
+      },
+    },
+  ] as [any];
+
+  const series = [
+    {
+      name: `${type} i ${unit}`,
+      data: values,
+      yAxis: 0,
+      zIndex: 1,
+    },
+  ] as [any];
+
+  if (totalValues) {
+    yAxis.push({
+      gridLineWidth: 0,
+      endOnTick: false,
+      title: {
+        text: `${type} i ${totalUnit}`,
+        style: {
+          color: "rgb(144, 237, 125)",
+        },
+      },
+      labels: {
+        style: {
+          color: "rgb(144, 237, 125)",
+        },
+      },
+      opposite: true,
+    });
+
+    series.push({
+      name: `${type} i ${totalUnit}`,
+      data: totalValues,
+      yAxis: 1,
+      color: "rgb(144, 237, 125)",
+      zIndex: 0,
+    });
+  }
 
   const options = {
     chart: {
       height: 200,
     },
-    yAxis: [
-      {
-        endOnTick: false,
-        title: {
-          text: `${type} i ${county}`,
-        },
-      },
-      {
-        gridLineWidth: 0,
-        endOnTick: false,
-        title: {
-          text: `${type} i hele landet`,
-          style: {
-            color: "rgb(144, 237, 125)",
-          },
-        },
-        labels: {
-          style: {
-            color: "rgb(144, 237, 125)",
-          },
-        },
-        opposite: true,
-      },
-    ],
+    yAxis,
     xAxis: {
       accessibility: {
         rangeDescription: `Årstall fra ${startYear} til ${year}`,
@@ -59,7 +83,6 @@ function Graph({
       enabled: false,
     },
     tooltip: { shared: true },
-
     plotOptions: {
       series: {
         label: {
@@ -68,22 +91,7 @@ function Graph({
         pointStart: startYear,
       },
     },
-
-    series: [
-      {
-        name: `${type} i ${county}`,
-        data: values,
-        yAxis: 0,
-        zIndex: 1,
-      },
-      {
-        name: `${type} i hele landet`,
-        data: nationalValues,
-        yAxis: 1,
-        color: "rgb(144, 237, 125)",
-        zIndex: 0,
-      },
-    ],
+    series,
   };
 
   return (
@@ -92,7 +100,8 @@ function Graph({
         {type} i perioden fra {startYear} til {year}
       </h3>
       <p className="subtitle">
-        Antall {type.toLowerCase()} per år, i {county} og hele landet
+        Antall {type.toLowerCase()} per år, i {unit}
+        {totalValues && ` og ${totalUnit}`}
       </p>
       <GraphBase options={options} />
     </>

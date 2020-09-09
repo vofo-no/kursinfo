@@ -72,6 +72,7 @@ export default function AssociationReport({
         name={report.name}
         historical={report.historical}
         historicalAll={report.historicalAll}
+        totalUnit="alle studieforbund"
       />
       <Organizations
         items={report.associations}

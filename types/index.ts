@@ -1,5 +1,6 @@
 export const ASSOCIATION = "ASSOCIATION";
 export const REGION = "REGION";
+export const TOTAL = "TOTAL";
 
 export interface INamed {
   name: string;
@@ -28,7 +29,7 @@ interface Historical {
   hours: number[];
 }
 
-export type ReportKindType = typeof ASSOCIATION | typeof REGION;
+export type ReportKindType = typeof ASSOCIATION | typeof REGION | typeof TOTAL;
 
 interface ISubject {
   participants: IParticipants;
@@ -63,7 +64,7 @@ export interface ReportProps {
     municipalities: string[];
     isFuture?: boolean;
     historical: Historical;
-    historicalAll: Historical;
+    historicalAll?: Historical;
     mainSubjects: Dictionary<ISubject>;
     topSubjects: string[][];
     subjects: Dictionary<ISubject>;
@@ -84,3 +85,4 @@ export interface RegionReportProps extends ReportProps {}
 export interface AssociationReportProps extends ReportProps {
   orgNames?: Dictionary<INamed>;
 }
+export interface TotalReportProps extends ReportProps {}

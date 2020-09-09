@@ -6,7 +6,7 @@ type Historical = {
   hours: number[];
 };
 
-type CountiesProps = {
+interface PropTypes {
   counties: {
     name: string;
     courses: number;
@@ -16,10 +16,11 @@ type CountiesProps = {
     isCurrent: boolean;
   }[];
   historical: Historical;
-  historicalAll: Historical;
+  historicalAll?: Historical;
   year: string;
   name: string;
-};
+  totalUnit?: "hele landet" | "alle studieforbund";
+}
 
 function Counties({
   counties,
@@ -27,7 +28,8 @@ function Counties({
   name,
   historical,
   historicalAll,
-}: CountiesProps) {
+  totalUnit,
+}: PropTypes) {
   return (
     <>
       <section className="page yellow">
@@ -103,24 +105,27 @@ function Counties({
         <div className="container">
           <Graph
             year={Number(year)}
-            county={name}
+            unit={name}
             type="Timer"
             values={historical.hours}
-            nationalValues={historicalAll.hours}
+            totalUnit={totalUnit}
+            totalValues={historicalAll && historicalAll.hours}
           />
           <Graph
             year={Number(year)}
-            county={name}
+            unit={name}
             type="Kurs"
             values={historical.courses}
-            nationalValues={historicalAll.courses}
+            totalUnit={totalUnit}
+            totalValues={historicalAll && historicalAll.courses}
           />
           <Graph
             year={Number(year)}
-            county={name}
+            unit={name}
             type="Deltakere"
             values={historical.participants}
-            nationalValues={historicalAll.participants}
+            totalUnit={totalUnit}
+            totalValues={historicalAll && historicalAll.participants}
           />
         </div>
       </section>

@@ -13,7 +13,7 @@ import Municipalities from "../../components/Municipalities";
 import ScrollDown from "../../components/ScrollDown";
 import { initialize as initializeGraphs } from "../../components/Graph";
 
-import { RegionReportProps } from "../../types";
+import { TotalReportProps } from "../../types";
 
 const PageFooter = styled.div`
   text-align: center;
@@ -21,12 +21,12 @@ const PageFooter = styled.div`
   padding: 1rem 0 0;
 `;
 
-export default function RegionReport({
+export default function TotalReport({
   year,
   report,
   municipalities,
   counties,
-}: RegionReportProps) {
+}: TotalReportProps) {
   useEffect(() => {
     initializeGraphs();
   }, []);
@@ -46,7 +46,7 @@ export default function RegionReport({
                 (m: string) => municipalities[m].courses
               ).length
             }
-            allMunicipalitiesLength={report.municipalities.length}
+            allMunicipalitiesLength={Object.keys(municipalities).length}
           />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -70,8 +70,6 @@ export default function RegionReport({
         year={year}
         name={report.name}
         historical={report.historical}
-        historicalAll={report.historicalAll}
-        totalUnit="hele landet"
       />
       <Associations
         items={report.associations}

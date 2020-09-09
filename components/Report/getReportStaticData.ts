@@ -2,12 +2,15 @@ import fs from "fs";
 import path from "path";
 
 import {
-  RegionReportProps,
-  AssociationReportProps,
   ReportProps,
   ASSOCIATION,
   INamed,
   Dictionary,
+  AssociationReportProps,
+  RegionReportProps,
+  TotalReportProps,
+  REGION,
+  TOTAL,
 } from "../../types";
 
 interface ParamType {
@@ -16,7 +19,7 @@ interface ParamType {
 }
 
 interface StaticDataProps {
-  props: RegionReportProps | AssociationReportProps;
+  props: RegionReportProps | AssociationReportProps | TotalReportProps;
 }
 
 const getOrgNames = (sf: string): Dictionary<INamed> => {
@@ -36,7 +39,7 @@ export const getReportStaticData = async ({
     reports: {
       [key: string]: ReportProps["report"] & {
         type: ReportProps["type"];
-        key?: string;
+        key?: string | string[];
       };
     };
     regions: string[];
@@ -56,28 +59,54 @@ export const getReportStaticData = async ({
         population,
         municipalities = [],
       } = data.reports[key];
-      if (reportData.type === ASSOCIATION) {
-        const association = associations[reportData.key];
-        return {
-          name: name,
-          courses: association.courses,
-          participants:
-            association.participants.males + association.participants.females,
-          hours: association.hours,
-          coursesPerCapita: association.courses / population,
-          isCurrent: false,
-        };
+      switch (reportData.type) {
+        case ASSOCIATION:
+          if ((reportData.key as string) !== reportData.key)
+            throw new Error("Unexpected association key");
+          const association = associations[reportData.key];
+          return {
+            name: name,
+            courses: association.courses,
+            participants:
+              association.participants.males + association.participants.females,
+            hours: association.hours,
+            coursesPerCapita: association.courses / population,
+            isCurrent: false,
+          };
+        case TOTAL:
+          if ((reportData.key as string[]) !== reportData.key)
+            throw new Error("Unexpected combo key");
+          const aKeys = Object.keys(associations).filter((a) =>
+            reportData.key.includes(a)
+          );
+          return {
+            name: name,
+            courses: aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
+            participants: aKeys.reduce(
+              (sum, a) =>
+                sum +
+                associations[a].participants.males +
+                associations[a].participants.females,
+              0
+            ),
+            hours: aKeys.reduce((sum, a) => sum + associations[a].hours, 0),
+            coursesPerCapita:
+              aKeys.reduce((sum, a) => sum + associations[a].courses, 0) /
+              population,
+            isCurrent: false,
+          };
+        case REGION:
+          return {
+            name: name,
+            courses: courses,
+            participants: participants.males + participants.females,
+            hours: hours,
+            coursesPerCapita: courses / population,
+            isCurrent: municipalities.every((m) =>
+              reportData.municipalities.includes(m)
+            ),
+          };
       }
-      return {
-        name: name,
-        courses: courses,
-        participants: participants.males + participants.females,
-        hours: hours,
-        coursesPerCapita: courses / population,
-        isCurrent: municipalities.every((m) =>
-          reportData.municipalities.includes(m)
-        ),
-      };
     })
     .sort((a, b) => b.coursesPerCapita - a.coursesPerCapita);
 
@@ -90,7 +119,7 @@ export const getReportStaticData = async ({
   };
 
   if (reportData.type === ASSOCIATION) {
-    props["orgNames"] = getOrgNames(reportData.key);
+    props["orgNames"] = getOrgNames(reportData.key as string);
   }
 
   return {
