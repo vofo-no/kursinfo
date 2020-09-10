@@ -44,7 +44,7 @@ const Layout = ({ title, children, header = false }) => {
   return (
     <>
       {LayoutHead}
-      {children}
+      <main>{children}</main>
       <style jsx global>{`
         section {
           background: #ffffff;
@@ -110,7 +110,13 @@ const Layout = ({ title, children, header = false }) => {
         }
 
         @media not print {
+          main {
+            max-height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y proximity;
+          }
           section.page {
+            scroll-snap-align: start;
             justify-content: center;
           }
         }
@@ -119,7 +125,6 @@ const Layout = ({ title, children, header = false }) => {
           display: flex;
           flex-direction: column;
           padding: 24px 16px;
-          min-height: 100vh;
           box-sizing: border-box;
           max-width: 100%;
         }
