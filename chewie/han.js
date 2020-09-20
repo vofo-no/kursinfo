@@ -117,13 +117,24 @@ const organizationSummer = (rows, lastYearRows = [[]]) => (org) => {
   };
 };
 
-const municipalitySummer = (rows) => (mun) => {
-  const aData = rows.filter((row) => row[COL.MUNICIPALITY] === mun);
-  return {
-    courses: aData.length,
-    participants: participants(aData, false),
-    hours: sumHours(aData),
-  };
+const getCompactMunicipalityData = (rows, municipalities) => {
+  const municipalitiesSet = new Set(rows.map((row) => row[COL.MUNICIPALITY]));
+  const output = {};
+
+  Object.keys(municipalities)
+    .filter((value) => municipalitiesSet.has(Number(value)))
+    .map((mun) => {
+      const aData = rows.filter((row) => row[COL.MUNICIPALITY] === Number(mun));
+      const pp = participants(aData, false);
+      output[mun] = [
+        aData.length,
+        sumHours(aData),
+        pp.males + pp.females,
+        aData.length / municipalities[mun].pop,
+      ];
+    });
+
+  return output;
 };
 
 const historical = (rowset) => ({
@@ -143,7 +154,7 @@ module.exports = {
   organizationSummer,
   mainSubjectSums,
   subjectSums,
-  municipalitySummer,
   topAges,
+  getCompactMunicipalityData,
   COL,
 };
