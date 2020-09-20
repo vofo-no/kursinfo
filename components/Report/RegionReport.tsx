@@ -24,7 +24,7 @@ const PageFooter = styled.div`
 export default function RegionReport({
   year,
   report,
-  municipalities,
+  municipalityNames,
   counties,
 }: RegionReportProps) {
   useEffect(() => {
@@ -42,9 +42,7 @@ export default function RegionReport({
             hours={report.hours}
             organizations={report.organizations}
             activeMunicipalitiesLength={
-              report.municipalities.filter(
-                (m: string) => municipalities[m].courses
-              ).length
+              Object.keys(report.municipalityValues).length
             }
             allMunicipalitiesLength={report.municipalities.length}
           />
@@ -88,8 +86,9 @@ export default function RegionReport({
       />
       {report.municipalities.length > 2 && (
         <Municipalities
-          municipalities={municipalities}
-          municipalityKeys={report.municipalities}
+          items={report.municipalityValues}
+          names={municipalityNames}
+          keys={report.municipalities}
           year={year}
           name={report.name}
         />

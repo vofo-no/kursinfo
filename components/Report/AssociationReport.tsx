@@ -24,7 +24,7 @@ const PageFooter = styled.div`
 export default function AssociationReport({
   year,
   report,
-  municipalities,
+  municipalityNames,
   counties,
   orgNames = {},
 }: AssociationReportProps) {
@@ -43,11 +43,9 @@ export default function AssociationReport({
             hours={report.hours}
             organizations={report.organizations}
             activeMunicipalitiesLength={
-              report.municipalities.filter(
-                (m: string) => municipalities[m].courses
-              ).length
+              Object.keys(report.municipalityValues).length
             }
-            allMunicipalitiesLength={Object.keys(municipalities).length}
+            allMunicipalitiesLength={Object.keys(municipalityNames).length}
           />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -88,14 +86,12 @@ export default function AssociationReport({
         year={year}
         name={report.name}
       />
-      {report.municipalities.length > 2 && (
-        <Municipalities
-          municipalities={municipalities}
-          municipalityKeys={report.municipalities}
-          year={year}
-          name={report.name}
-        />
-      )}
+      <Municipalities
+        items={report.municipalityValues}
+        names={municipalityNames}
+        year={year}
+        name={report.name}
+      />
     </Layout>
   );
 }

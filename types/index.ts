@@ -61,7 +61,8 @@ export interface ReportProps {
     organizations: number;
     population?: number;
     associations: Dictionary<IAssociation>;
-    municipalities: string[];
+    municipalities?: string[];
+    municipalityValues: Record<string, CompactValues>;
     isFuture?: boolean;
     historical: Historical;
     historicalAll?: Historical;
@@ -70,6 +71,7 @@ export interface ReportProps {
     subjects: Dictionary<ISubject>;
   };
   municipalities: Dictionary<IMunicipality>;
+  municipalityNames: Record<string, string>;
 
   counties: {
     name: string;
@@ -81,8 +83,15 @@ export interface ReportProps {
   }[];
 }
 
+/** CompactValues is an array of courses, hours and participants --
+ * in that order.
+ */
+export type CompactValues = [number, number, number, number];
+
 export interface RegionReportProps extends ReportProps {}
 export interface AssociationReportProps extends ReportProps {
   orgNames?: Dictionary<INamed>;
 }
-export interface TotalReportProps extends ReportProps {}
+export interface TotalReportProps extends ReportProps {
+  municipalityNames: Record<string, string>;
+}

@@ -11,17 +11,17 @@ import {
   TotalReportProps,
 } from "../../types";
 
-const components = {
-  [ASSOCIATION]: AssociationReport,
-  [REGION]: RegionReport,
-  [TOTAL]: TotalReport,
-};
-
 const Report = (
   props: RegionReportProps | AssociationReportProps | TotalReportProps
 ) => {
-  const ReportComponent = components[props.type];
-  return <ReportComponent {...props} />;
+  switch (props.type) {
+    case ASSOCIATION:
+      return <AssociationReport {...(props as AssociationReportProps)} />;
+    case REGION:
+      return <RegionReport {...(props as RegionReportProps)} />;
+    case TOTAL:
+      return <TotalReport {...(props as TotalReportProps)} />;
+  }
 };
 
 export default Report;

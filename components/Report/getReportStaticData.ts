@@ -116,6 +116,10 @@ export const getReportStaticData = async ({
     report: reportData,
     municipalities: data.municipalities,
     counties,
+    municipalityNames: Object.keys(data.municipalities).reduce((obj, key) => {
+      obj[key] = data.municipalities[key].name;
+      return obj;
+    }, {}),
   };
 
   if (reportData.type === ASSOCIATION) {

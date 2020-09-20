@@ -1,32 +1,20 @@
-type MunicipalityType = {
-  name: string;
-  courses: number;
-  participants: {
-    males: number;
-    females: number;
-  };
-  hours: number;
-  coursesPerCapita: number;
-};
+import { CompactValues } from "../../types";
 
-type MunicipalitiesProps = {
-  municipalities: {
-    [key: string]: MunicipalityType;
-  };
-  municipalityKeys: string[];
+interface PropTypes {
+  names: Record<string, string>;
+  items: Record<string, CompactValues>;
+  keys?: string[];
   year: string;
   name: string;
-};
+}
 
-function Municipalities({
-  municipalities,
-  year,
-  name,
-  municipalityKeys,
-}: MunicipalitiesProps) {
-  const municipalityKeysSorted = municipalityKeys.sort(
-    (a, b) =>
-      municipalities[b].coursesPerCapita - municipalities[a].coursesPerCapita
+function perCapita(item?: Array<number>) {
+  return (item && item[3]) || 0;
+}
+
+function Municipalities({ names, year, name, items, keys }: PropTypes) {
+  const municipalityKeysSorted = (keys || Object.keys(items)).sort(
+    (a, b) => perCapita(items[b]) - perCapita(items[a])
   );
   return (
     <section className="page yellow">
@@ -51,24 +39,19 @@ function Municipalities({
             </thead>
             <tbody>
               {municipalityKeysSorted.map((key, i) => {
-                const {
-                  name,
-                  courses,
-                  participants,
-                  hours,
-                  coursesPerCapita,
-                } = municipalities[key];
+                const [
+                  courses = 0,
+                  hours = 0,
+                  participants = 0,
+                  coursesPerCapita = 0,
+                ] = items[key] || [];
                 return (
                   <tr key={key}>
                     <td>{i + 1}</td>
-                    <th scope="row">{name}</th>
+                    <th scope="row">{names[key]}</th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
-                    <td>
-                      {(
-                        participants.males + participants.females
-                      ).toLocaleString("nb")}
-                    </td>
+                    <td>{participants.toLocaleString("nb")}</td>
                     <td>
                       {(coursesPerCapita * 1000).toLocaleString("nb", {
                         minimumFractionDigits: 1,

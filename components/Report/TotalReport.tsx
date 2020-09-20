@@ -24,7 +24,7 @@ const PageFooter = styled.div`
 export default function TotalReport({
   year,
   report,
-  municipalities,
+  municipalityNames,
   counties,
 }: TotalReportProps) {
   useEffect(() => {
@@ -42,11 +42,9 @@ export default function TotalReport({
             hours={report.hours}
             organizations={report.organizations}
             activeMunicipalitiesLength={
-              report.municipalities.filter(
-                (m: string) => municipalities[m].courses
-              ).length
+              Object.keys(report.municipalityValues).length
             }
-            allMunicipalitiesLength={Object.keys(municipalities).length}
+            allMunicipalitiesLength={Object.keys(municipalityNames).length}
           />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -84,14 +82,12 @@ export default function TotalReport({
         year={year}
         name={report.name}
       />
-      {report.municipalities.length > 2 && (
-        <Municipalities
-          municipalities={municipalities}
-          municipalityKeys={report.municipalities}
-          year={year}
-          name={report.name}
-        />
-      )}
+      <Municipalities
+        names={municipalityNames}
+        items={report.municipalityValues}
+        year={year}
+        name={report.name}
+      />
     </Layout>
   );
 }
