@@ -35,6 +35,7 @@ Prosjektet har følgende deler:
 - `components` inneholder felles React-komponenter som brukes i statistikkrapportene.
 - `data` inneholder strukturerte data til statistikkrapportene.
   - `config.json` definerer endringer i fylkesstruktur og studieforbund over tid (det er ikke nødvendig å definere årstall uten endringer).
+  - `names` inneholder navn på studieforbund og organisasjoner
   - `raw` inneholder rådatafiler.
 - `pages` inneholder nettsidene som skal genereres og publiseres.
 - `public` inneholder statiske ressurser til nettsidene.
