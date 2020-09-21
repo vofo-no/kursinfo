@@ -34,7 +34,7 @@ export default function TotalReport({
     <Layout title={`${report.name}: Kursstatistikk ${year}`}>
       <section className="page">
         <div className="container">
-          <ReportHeading name={report.name} year={year} type="REGION" />
+          <ReportHeading name={report.name} year={year} type="TOTAL" />
           <Summary
             courses={report.courses}
             facilitatedCourses={report.facilitated.courses}
