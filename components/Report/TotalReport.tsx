@@ -31,7 +31,7 @@ export default function TotalReport({
     initializeGraphs();
   }, []);
   return (
-    <Layout title={`${report.name}: Fylkesstatistikk ${year}`}>
+    <Layout title={`${report.name}: Kursstatistikk ${year}`}>
       <section className="page">
         <div className="container">
           <ReportHeading name={report.name} year={year} type="REGION" />

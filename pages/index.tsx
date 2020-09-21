@@ -14,9 +14,9 @@ export async function getStaticProps() {
 
 export default function Index({ years }) {
   return (
-    <Layout title={`Fylkesstatistikk`} header>
+    <Layout title={`Statistikk`} header>
       <Container variant="white" my={3} py={3} boxShadow={1}>
-        <PageHeading>Fylkesstatistikk</PageHeading>
+        <PageHeading>Statistikk</PageHeading>
         <ul>
           {years.map((year) => (
             <li key={year}>

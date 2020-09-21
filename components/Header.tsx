@@ -26,7 +26,7 @@ const Header = () => {
           <MenuButton open={menu} onClick={() => toggleMenu(!menu)} />
           <Menu open={menu}>
             <Link href="/">
-              <a>Fylkesstatistikk</a>
+              <a>Statistikk</a>
             </Link>
           </Menu>
           <Menu variant="top" open={menu}>
