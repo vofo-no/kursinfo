@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CompactValues } from "../../types";
 
 interface PropTypes {
@@ -13,6 +14,7 @@ function perCapita(item?: Array<number>) {
 }
 
 function Municipalities({ names, year, name, items, keys }: PropTypes) {
+  const [limit, setLimit] = useState(keys ? keys.length : 25);
   const municipalityKeysSorted = (keys || Object.keys(items)).sort(
     (a, b) => perCapita(items[b]) - perCapita(items[a])
   );
@@ -20,7 +22,13 @@ function Municipalities({ names, year, name, items, keys }: PropTypes) {
     <section className="page yellow">
       <div className="container">
         <h2 className="h1">Kommuner i {name}</h2>
-        <h3 className="table-label">Kursoversikt for alle kommuner</h3>
+        <h3 className="table-label">
+          Kursoversikt for{" "}
+          {limit < municipalityKeysSorted.length
+            ? `topp ${limit} av ${municipalityKeysSorted.length}`
+            : "alle"}{" "}
+          kommuner
+        </h3>
         <p className="subtitle">
           Antall kurs, timer og deltakere per kommune etter kurs pr. 1 000
           innbyggere i {name} {year}
@@ -38,7 +46,7 @@ function Municipalities({ names, year, name, items, keys }: PropTypes) {
               </tr>
             </thead>
             <tbody>
-              {municipalityKeysSorted.map((key, i) => {
+              {municipalityKeysSorted.slice(0, limit).map((key, i) => {
                 const [
                   courses = 0,
                   hours = 0,
@@ -64,6 +72,14 @@ function Municipalities({ names, year, name, items, keys }: PropTypes) {
             </tbody>
           </table>
         </div>
+        {limit < municipalityKeysSorted.length && (
+          <p className="no-print">
+            <button onClick={() => setLimit(limit + 25)}>Vis flere</button>{" "}
+            <button onClick={() => setLimit(municipalityKeysSorted.length)}>
+              Vis alle
+            </button>
+          </p>
+        )}
       </div>
     </section>
   );

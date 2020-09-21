@@ -107,6 +107,10 @@ const Layout = ({ title, children, header = false }) => {
           section.page > .container {
             width: 100%;
           }
+
+          .no-print {
+            display: none;
+          }
         }
 
         @media not print {
