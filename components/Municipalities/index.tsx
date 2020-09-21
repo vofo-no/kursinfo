@@ -1,38 +1,34 @@
-type MunicipalityType = {
-  name: string;
-  courses: number;
-  participants: {
-    males: number;
-    females: number;
-  };
-  hours: number;
-  coursesPerCapita: number;
-};
+import { useState } from "react";
+import { CompactValues } from "../../types";
 
-type MunicipalitiesProps = {
-  municipalities: {
-    [key: string]: MunicipalityType;
-  };
-  municipalityKeys: [string];
+interface PropTypes {
+  names: Record<string, string>;
+  items: Record<string, CompactValues>;
+  keys?: string[];
   year: string;
   name: string;
-};
+}
 
-function Municipalities({
-  municipalities,
-  year,
-  name,
-  municipalityKeys,
-}: MunicipalitiesProps) {
-  const municipalityKeysSorted = municipalityKeys.sort(
-    (a, b) =>
-      municipalities[b].coursesPerCapita - municipalities[a].coursesPerCapita
+function perCapita(item?: Array<number>) {
+  return (item && item[3]) || 0;
+}
+
+function Municipalities({ names, year, name, items, keys }: PropTypes) {
+  const [limit, setLimit] = useState(keys ? keys.length : 25);
+  const municipalityKeysSorted = (keys || Object.keys(items)).sort(
+    (a, b) => perCapita(items[b]) - perCapita(items[a])
   );
   return (
     <section className="page yellow">
       <div className="container">
         <h2 className="h1">Kommuner i {name}</h2>
-        <h3 className="table-label">Kursoversikt for alle kommuner</h3>
+        <h3 className="table-label">
+          Kursoversikt for{" "}
+          {limit < municipalityKeysSorted.length
+            ? `topp ${limit} av ${municipalityKeysSorted.length}`
+            : "alle"}{" "}
+          kommuner
+        </h3>
         <p className="subtitle">
           Antall kurs, timer og deltakere per kommune etter kurs pr. 1 000
           innbyggere i {name} {year}
@@ -50,25 +46,20 @@ function Municipalities({
               </tr>
             </thead>
             <tbody>
-              {municipalityKeysSorted.map((key, i) => {
-                const {
-                  name,
-                  courses,
-                  participants,
-                  hours,
-                  coursesPerCapita,
-                } = municipalities[key];
+              {municipalityKeysSorted.slice(0, limit).map((key, i) => {
+                const [
+                  courses = 0,
+                  hours = 0,
+                  participants = 0,
+                  coursesPerCapita = 0,
+                ] = items[key] || [];
                 return (
                   <tr key={key}>
                     <td>{i + 1}</td>
-                    <th scope="row">{name}</th>
+                    <th scope="row">{names[key]}</th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
-                    <td>
-                      {(
-                        participants.males + participants.females
-                      ).toLocaleString("nb")}
-                    </td>
+                    <td>{participants.toLocaleString("nb")}</td>
                     <td>
                       {(coursesPerCapita * 1000).toLocaleString("nb", {
                         minimumFractionDigits: 1,
@@ -81,6 +72,14 @@ function Municipalities({
             </tbody>
           </table>
         </div>
+        {limit < municipalityKeysSorted.length && (
+          <p className="no-print">
+            <button onClick={() => setLimit(limit + 25)}>Vis flere</button>{" "}
+            <button onClick={() => setLimit(municipalityKeysSorted.length)}>
+              Vis alle
+            </button>
+          </p>
+        )}
       </div>
     </section>
   );

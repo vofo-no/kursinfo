@@ -12,8 +12,8 @@ const COL = {
 
 const AGEINDEX = [0, 1, 2, 3, 4, 5];
 
-const associationFilter = (association) => (row) =>
-  row[COL.ASSOCIATION] === association;
+const associationFilter = (val) => (row) => row[COL.ASSOCIATION] === val;
+const organizationFilter = (val) => (row) => row[COL.ORGANIZATION] === val;
 
 const sumCols = (rows, ...cols) =>
   rows.reduce(
@@ -31,7 +31,7 @@ const sumAges = (rows) =>
 
 const sumHistoryAges = (rowset) =>
   AGEINDEX.map((i) =>
-    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i]))
+    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i])).reverse()
   );
 
 const participantsWithHistory = (rowset) => ({
@@ -105,19 +105,42 @@ const associationSummer = (rows, lastYearRows = [[]]) => (assoc) => {
   };
 };
 
-const municipalitySummer = (rows) => (mun) => {
-  const aData = rows.filter((row) => row[COL.MUNICIPALITY] === mun);
+const organizationSummer = (rows, lastYearRows = [[]]) => (org) => {
+  const aData = rows.filter(organizationFilter(org));
+  const bData = lastYearRows.filter(organizationFilter(org));
   return {
     courses: aData.length,
-    participants: participants(aData, false),
+    participants: participants(aData),
     hours: sumHours(aData),
+    lastYearHours: sumHours(bData),
+    facilitated: facilitated(aData),
   };
 };
 
+const getCompactMunicipalityData = (rows, municipalities) => {
+  const municipalitiesSet = new Set(rows.map((row) => row[COL.MUNICIPALITY]));
+  const output = {};
+
+  Object.keys(municipalities)
+    .filter((value) => municipalitiesSet.has(Number(value)))
+    .map((mun) => {
+      const aData = rows.filter((row) => row[COL.MUNICIPALITY] === Number(mun));
+      const pp = participants(aData, false);
+      output[mun] = [
+        aData.length,
+        sumHours(aData),
+        pp.males + pp.females,
+        aData.length / municipalities[mun].pop,
+      ];
+    });
+
+  return output;
+};
+
 const historical = (rowset) => ({
-  courses: rowset.map((rows) => rows.length),
-  hours: rowset.map(sumHours),
-  participants: rowset.map(sumParticipants),
+  courses: rowset.map((rows) => rows.length).reverse(),
+  hours: rowset.map(sumHours).reverse(),
+  participants: rowset.map(sumParticipants).reverse(),
 });
 
 module.exports = {
@@ -128,8 +151,10 @@ module.exports = {
   facilitated,
   countOrganizations,
   associationSummer,
+  organizationSummer,
   mainSubjectSums,
   subjectSums,
-  municipalitySummer,
   topAges,
+  getCompactMunicipalityData,
+  COL,
 };

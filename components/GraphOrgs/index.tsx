@@ -1,7 +1,17 @@
 import GraphBase from "../Graph";
-import names from "./names.json";
+import { Dictionary, IAssociation, INamed } from "../../types";
 
-function Graph({ associationKeys, associations, year }) {
+interface PropTypes {
+  keys: string[];
+  items: Dictionary<IAssociation>;
+  names: Dictionary<INamed>;
+  year: string;
+  unit: "Studieforbund" | "Organisasjon";
+}
+
+const shortOrName = (item: INamed) => item.short ?? item.name;
+
+function Graph({ keys, items, names, year, unit }: PropTypes) {
   const lastYear = String(Number(year) - 1);
 
   const options = {
@@ -10,7 +20,9 @@ function Graph({ associationKeys, associations, year }) {
       height: 180,
     },
     xAxis: {
-      categories: associationKeys.map((key: string) => names.short[key] || key),
+      categories: keys.map((key: string) =>
+        key in names ? shortOrName(names[key]) : key
+      ),
       crosshair: true,
     },
     yAxis: {
@@ -41,13 +53,11 @@ function Graph({ associationKeys, associations, year }) {
     series: [
       {
         name: lastYear,
-        data: associationKeys.map(
-          (key: string) => associations[key].lastYearHours
-        ),
+        data: keys.map((key: string) => items[key].lastYearHours),
       },
       {
         name: year,
-        data: associationKeys.map((key: string) => associations[key].hours),
+        data: keys.map((key: string) => items[key].hours),
       },
     ],
   };
@@ -55,9 +65,11 @@ function Graph({ associationKeys, associations, year }) {
   return (
     <>
       <h3 className="figure-label">
-        Studieforbundenes kurstimer i {lastYear} og {year}
+        {unit}enes kurstimer i {lastYear} og {year}
       </h3>
-      <p className="subtitle">Antall kurstimer per år, etter studieforbund</p>
+      <p className="subtitle">
+        Antall kurstimer per år, etter {unit.toLowerCase()}
+      </p>
       <GraphBase options={options} />
     </>
   );

@@ -6,7 +6,7 @@ type SubjectType = {
   participants: {
     males: number;
     females: number;
-    ages?: [number];
+    ages?: number[];
   };
 };
 
@@ -17,10 +17,10 @@ type SubjectsProps = {
   subjects: {
     [key: string]: SubjectType;
   };
-  topSubjects: [[string]];
+  topSubjects: string[][];
   year: string;
   name: string;
-  ages: [[number]];
+  ages: number[][];
 };
 
 function p(subject: SubjectType) {

@@ -34,9 +34,9 @@ export async function getStaticPaths() {
 
 export default function YearIndex({ year, reports }) {
   return (
-    <Layout title={`Fylkesstatistikk ${year}`} header>
+    <Layout title={`Statistikk ${year}`} header>
       <Container variant="white" my={3} py={3} boxShadow={1}>
-        <PageHeading>Fylkesstatistikk {year}</PageHeading>
+        <PageHeading>Statistikk {year}</PageHeading>
         <ul>
           {reports.map(([key, value]) => (
             <li key={key}>

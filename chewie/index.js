@@ -1,66 +1,8 @@
 "use strict";
-const Papa = require("papaparse");
-const fs = require("fs");
 const klass = require("./klass");
 const han = require("./han");
 const luke = require("./luke");
-
-const mainDataIndex = require("../data/index.json");
-
-const MAX_HISTORY_YEARS = 5;
-
-const getConfig = (year) => {
-  process.stdout.write(`Laster konfigurasjon for ${year}... `);
-
-  const config = JSON.parse(fs.readFileSync(`data/config.json`, "utf-8"));
-  const years = Object.keys(config).sort().reverse();
-
-  const result = config[years.find((y) => y <= year)];
-
-  if (!result) {
-    console.log("\x1b[31m\x1b[1mFeil\x1b[0m");
-    console.log("Finner ingen konfigurasjon for dette året.");
-    process.exit();
-  }
-
-  console.log("\x1b[1mOK\x1b[0m");
-
-  return result;
-};
-
-const hasData = (year) => {
-  return fs.existsSync(`data/raw/g${year}.csv`);
-};
-
-const getData = (year) => {
-  process.stdout.write(`Laster data for ${year}... `);
-
-  const localFile = fs.readFileSync(`data/raw/g${year}.csv`, "utf-8");
-  const file = Papa.parse(localFile, { dynamicTyping: true });
-
-  if (file.errors.length) {
-    console.log("\x1b[31m\x1b[1mFeil\x1b[0m");
-    console.log(file.errors);
-    process.exit();
-  }
-
-  console.log("\x1b[1mOK\x1b[0m");
-
-  const hours = file.data.reduce((acc, row) => acc + row[23], 0);
-
-  console.log(
-    "\x1b[2m",
-    hours.toLocaleString().padStart(10, " "),
-    "timer\x1b[0m"
-  );
-  console.log(
-    "\x1b[2m",
-    file.data.length.toLocaleString().padStart(10, " "),
-    "kurs\x1b[0m"
-  );
-
-  return file.data;
-};
+const aNames = require("../data/names/associations.json");
 
 console.log(`               __
               / _)
@@ -78,70 +20,42 @@ if (!year || !year.match(/^\d{4}$/)) {
 }
 
 async function main() {
-  const config = getConfig(year);
-  const data = getData(year);
+  const config = luke.getConfig(year);
+  const data = luke.getData(year);
   const municipalities = await klass.getData(year);
-
-  console.log(`Ser etter historiske data ${MAX_HISTORY_YEARS} år tilbake... `);
-
-  const dataHistory = {};
-  for (
-    let historyYear = year - 1;
-    historyYear > year - MAX_HISTORY_YEARS;
-    historyYear--
-  ) {
-    if (hasData(historyYear)) {
-      dataHistory[historyYear] = getData(historyYear);
-    } else {
-      console.log(`Finner ikke data for ${historyYear}. `);
-      break;
-    }
-  }
+  const dataHistory = luke.getDataHistory(year);
 
   process.stdout.write(`Analyserer... `);
 
-  const municipalitySummary = han.municipalitySummer(data);
+  const reports = {};
+  const regions = [];
+  const associations = [];
 
-  Object.keys(municipalities).map((key) => {
-    const nkey = Number(key);
-    const m = municipalities[key];
-    const mData = municipalitySummary(nkey);
-    municipalities[key] = {
-      ...m,
-      ...mData,
-      coursesPerCapita: mData.courses / m.pop,
-    };
-  });
-
-  let reports = {};
-
-  const makeStat = (k) => {
+  const makeRegStat = (k) => {
     const ks = config.regions[k];
-    const ksFilter = (row) => ks.includes(Math.floor(row[2] / 100));
-    const kData = data.filter(ksFilter);
-    const kDataHistory = Object.keys(dataHistory).map((key) =>
-      dataHistory[key].filter(ksFilter)
-    );
-    const kMunicipalities = Object.keys(municipalities).filter((key) =>
-      ks.includes(Math.floor(key / 100))
-    );
+    const ksFilter = (value) => ks.includes(Math.floor(value / 100));
+    const ksRowFilter = (row) => ksFilter(row[han.COL.MUNICIPALITY]);
+    const kData = data.filter(ksRowFilter);
+    const kDataHistory = dataHistory.map((item) => item.filter(ksRowFilter));
+    const kMunicipalities = Object.keys(municipalities).filter(ksFilter);
 
     const assocSummary = han.associationSummer(kData, kDataHistory[0]);
     const subjectSums = han.subjectSums(kData);
 
-    reports[luke.parameterize(k)] = {
+    const paramName = luke.parameterize(k);
+    regions.push(paramName);
+    reports[paramName] = {
       name: k,
+      type: "REGION",
       isFuture: config.futureRegions.includes(k),
       courses: kData.length,
       facilitated: han.facilitated(kData),
       hours: han.sumHours(kData),
       historical: han.historical([kData, ...kDataHistory]),
-      historicalAll: han.historical([data, ...Object.values(dataHistory)]),
-      participants: han.participantsWithHistory([
-        kData,
-        ...Object.values(kDataHistory),
-      ]),
+      historicalAll: han.historical([data, ...dataHistory]),
+      participants: han.participantsWithHistory([kData, ...kDataHistory]),
       municipalities: kMunicipalities,
+      municipalityValues: han.getCompactMunicipalityData(kData, municipalities),
       organizations: han.countOrganizations(kData),
       population: kMunicipalities.reduce(
         (acc, key) => acc + municipalities[key].pop,
@@ -157,25 +71,93 @@ async function main() {
     };
   };
 
-  Object.keys(config.regions).map(makeStat);
+  Object.keys(config.regions).map(makeRegStat);
+
+  const makeComboStat = (k) => {
+    const cKeys = config.combos[k];
+    const cFilter = (value) => cKeys.includes(value);
+    const cRowFilter = (row) => cFilter(row[han.COL.ASSOCIATION]);
+    const cData = data.filter(cRowFilter);
+    const cDataHistory = dataHistory.map((yearData) =>
+      yearData.filter(cRowFilter)
+    );
+
+    const assocSummary = han.associationSummer(cData, cDataHistory[0]);
+    const subjectSums = han.subjectSums(cData);
+
+    const paramName = luke.parameterize(k);
+    reports[paramName] = {
+      name: k,
+      type: "TOTAL",
+      key: cKeys.map(String),
+      courses: cData.length,
+      facilitated: han.facilitated(cData),
+      hours: han.sumHours(cData),
+      historical: han.historical([cData, ...cDataHistory]),
+      participants: han.participantsWithHistory([cData, ...cDataHistory]),
+      municipalityValues: han.getCompactMunicipalityData(cData, municipalities),
+      organizations: han.countOrganizations(cData),
+      associations: config.associations.reduce((obj, key) => {
+        obj[key] = assocSummary(key);
+        return obj;
+      }, {}),
+      subjects: subjectSums,
+      topSubjects: han.topAges(subjectSums),
+      mainSubjects: han.mainSubjectSums(cData),
+    };
+  };
+
+  config.combos && Object.keys(config.combos).map(makeComboStat);
+
+  const makeAssociationStat = (a) => {
+    const aFilter = (value) => value === a;
+    const aRowFilter = (row) => aFilter(row[han.COL.ASSOCIATION]);
+    const aData = data.filter(aRowFilter);
+    const aDataHistory = dataHistory.map((yearData) =>
+      yearData.filter(aRowFilter)
+    );
+
+    const orgSummary = han.organizationSummer(aData, aDataHistory[0]);
+    const subjectSums = han.subjectSums(aData);
+
+    const orgs = Array.from(
+      new Set(
+        [...aData, ...(aDataHistory[0] || [])].map(
+          (row) => row[han.COL.ORGANIZATION]
+        )
+      )
+    );
+
+    const paramName = luke.parameterize(aNames[String(a)].short);
+    associations.push(paramName);
+    reports[paramName] = {
+      name: aNames[String(a)].name,
+      type: "ASSOCIATION",
+      key: String(a),
+      courses: aData.length,
+      facilitated: han.facilitated(aData),
+      hours: han.sumHours(aData),
+      historical: han.historical([aData, ...aDataHistory]),
+      historicalAll: han.historical([data, ...dataHistory]),
+      participants: han.participantsWithHistory([aData, ...aDataHistory]),
+      municipalityValues: han.getCompactMunicipalityData(aData, municipalities),
+      organizations: han.countOrganizations(aData),
+      associations: orgs.reduce((obj, key) => {
+        obj[key] = orgSummary(key);
+        return obj;
+      }, {}),
+      subjects: subjectSums,
+      topSubjects: han.topAges(subjectSums),
+      mainSubjects: han.mainSubjectSums(aData),
+    };
+  };
+
+  config.associations.map(makeAssociationStat);
+
   console.log("\x1b[1mOK\x1b[0m");
 
-  process.stdout.write(`Lagrer resultater... `);
-  const wstream = fs.createWriteStream(`data/${year}.json`);
-  wstream.write(JSON.stringify({ municipalities, reports }));
-  wstream.end();
-  console.log("\x1b[1mOK\x1b[0m");
-
-  // Append to main data index
-  process.stdout.write(`Legger til ${year} i indeks... `);
-  mainDataIndex.years = [...new Set([...mainDataIndex.years, year])]
-    .sort()
-    .reverse();
-
-  const istream = fs.createWriteStream(`data/index.json`);
-  istream.write(JSON.stringify(mainDataIndex));
-  istream.end();
-  console.log("\x1b[1mOK\x1b[0m");
+  // Save results
+  luke.useTheForce(year, { municipalities, reports, regions, associations });
 }
 
 main();
