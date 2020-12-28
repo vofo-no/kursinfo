@@ -30,8 +30,8 @@ function Summary({
         display="grid"
         gridTemplateColumns={["repeat(2, 1fr)", "repeat(3, 1fr)"]}
         gridColumnGap={3}
-        gridRowGap={4}
-        my={4}
+        gridRowGap={5}
+        my={6}
       >
         <Card Icon={Layers} label="kurs">
           {courses.toLocaleString("nb")}
