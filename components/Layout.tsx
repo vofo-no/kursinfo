@@ -1,12 +1,6 @@
 import Head from "next/head";
-import { Container, Text } from "vofo-design";
+import { Box, Text } from "@vofo-no/design";
 import Header from "./Header";
-
-export const COLORS = {
-  brand: "#a31f34",
-  gray: "#878787",
-  grayDark: "#58595c",
-};
 
 const Layout = ({ title, children, header = false }) => {
   const LayoutHead = (
@@ -21,23 +15,23 @@ const Layout = ({ title, children, header = false }) => {
       <>
         {LayoutHead}
         <Header />
-        <Container variant="default" px={[0, 2, 3]}>
-          <main>{children}</main>
-        </Container>
+        <Box my={2} container>
+          {children}
+        </Box>
 
-        <Container variant="dark" maxWidth={null} display="flex" py={4}>
-          <Container variant="dark">
-            <Text.Block textAlign="center">
+        <Box variant="dark" py={4}>
+          <Box container>
+            <Text textAlign="center" mx="auto">
               Statistikkbank for{" "}
               <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
-            </Text.Block>
-            <Container py={3} display="flex" justifyContent="center">
+            </Text>
+            <Text textAlign="center" mx="auto">
               <a href="https://vercel.com/?utm_source=vofo-kursinfo&utm_campaign=oss">
                 <img src="/powered-by-vercel.svg" alt="Powered by Vercel" />
               </a>
-            </Container>
-          </Container>
-        </Container>
+            </Text>
+          </Box>
+        </Box>
       </>
     );
 

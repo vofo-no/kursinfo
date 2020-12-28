@@ -1,23 +1,5 @@
-import styled from "@emotion/styled";
-import { Container, Text } from "vofo-design";
+import { Box, Text } from "@vofo-no/design";
 import { ReportProps, ASSOCIATION, REGION, TOTAL } from "../types";
-
-const Heading = styled.h1`
-  align-self: start;
-  margin: 40px 0 auto 0;
-`;
-
-const ReportTag = styled(Container)`
-  position: absolute;
-  top: 0;
-  right: 10px;
-`;
-const ReportTagText = styled(Text.Inline)`
-  @media (min-width: 725px) {
-    writing-mode: vertical-lr;
-  }
-  position: relative;
-`;
 
 const typeName = {
   [ASSOCIATION]: "Studieforbundstatistikk",
@@ -35,15 +17,24 @@ function ReportHeading({
   type: ReportProps["type"];
 }) {
   return (
-    <Heading>
-      <Text.Block fontSize={4} color="gray" lineHeight="title">
+    <Box alignSelf="start" margin="40px 0 auto 0" as="h1">
+      <Text fontSize={4} color="gray" lineHeight="heading">
         Studieforbundenes kursvirksomhet i {year}
-      </Text.Block>
-      <Text.Block fontSize={6}>{name}</Text.Block>
-      <ReportTag variant="primary" py={[1, 2, 3]}>
-        <ReportTagText fontSize={[1, 2, 3]}>{typeName[type]}</ReportTagText>
-      </ReportTag>
-    </Heading>
+      </Text>
+      <Text fontSize={6}>{name}</Text>
+      <Box
+        variant="primary"
+        py={[1, 2, 3]}
+        px={[3, 3, 2]}
+        position="absolute"
+        top={0}
+        right="10px"
+      >
+        <Text as="span" fontSize={[1, 2, 3]} vertical="responsive">
+          {typeName[type]}
+        </Text>
+      </Box>
+    </Box>
   );
 }
 

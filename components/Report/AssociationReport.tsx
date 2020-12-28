@@ -1,25 +1,16 @@
 import { useEffect } from "react";
 
-import { Logo } from "vofo-design";
-import styled from "@emotion/styled";
-
 import Layout from "../../components/Layout";
 import ReportHeading from "../../components/ReportHeading";
 import Summary from "../../components/Summary";
 import Counties from "../../components/Counties";
 import Subjects from "../../components/Subjects";
 import Municipalities from "../../components/Municipalities";
-import ScrollDown from "../../components/ScrollDown";
 import { initialize as initializeGraphs } from "../../components/Graph";
+import Footer from "./Footer";
 
 import { AssociationReportProps } from "../../types";
 import Organizations from "../Organizations";
-
-const PageFooter = styled.div`
-  text-align: center;
-  margin: auto 0 0 0;
-  padding: 1rem 0 0;
-`;
 
 export default function AssociationReport({
   year,
@@ -58,10 +49,7 @@ export default function AssociationReport({
             eller kontakt Voksenopplæringsforbundet på{" "}
             <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
           </p>
-          <PageFooter>
-            <Logo />
-            <ScrollDown />
-          </PageFooter>
+          <Footer />
         </div>
       </section>
       <Counties

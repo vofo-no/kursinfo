@@ -1,4 +1,5 @@
 import { INamed } from "../types";
+import { Text } from "@vofo-no/design";
 
 function isNamed(item: any): item is INamed {
   return (item as INamed).name !== undefined;
@@ -9,7 +10,13 @@ export function showName(item: string | INamed) {
     return (
       <>
         {item.name}
-        {item.short && <small>{` (${item.short})`}</small>}
+        {item.short && (
+          <Text
+            as="small"
+            color="gray"
+            fontSize="small"
+          >{` (${item.short})`}</Text>
+        )}
       </>
     );
   }

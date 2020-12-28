@@ -1,6 +1,5 @@
 import names from "../../data/names/associations.json";
 import GraphOrgs from "../GraphOrgs";
-import { COLORS } from "../Layout";
 import { Dictionary, IAssociation } from "../../types";
 import { showName } from "../../utils/names";
 
@@ -61,14 +60,6 @@ function Associations({ items, year, name }: PropTypes) {
           unit="Studieforbund"
         />
       </div>
-      <style jsx>
-        {`
-          th small {
-            font-weight: normal;
-            color: ${COLORS.grayDark};
-          }
-        `}
-      </style>
     </section>
   );
 }

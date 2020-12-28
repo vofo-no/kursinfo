@@ -1,10 +1,10 @@
-import { Theme } from "vofo-design";
+import { BaseStyles } from "@vofo-no/design";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Theme>
+    <BaseStyles>
       <Component {...pageProps} />
-    </Theme>
+    </BaseStyles>
   );
 }
 

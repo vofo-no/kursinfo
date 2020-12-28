@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import Link from "next/link";
-import { Container } from "vofo-design";
+import { Box } from "@vofo-no/design";
 import Layout from "../../components/Layout";
 import PageHeading from "../../components/PageHeading";
 import { years } from "../../data/index.json";
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
 export default function YearIndex({ year, reports }) {
   return (
     <Layout title={`Statistikk ${year}`} header>
-      <Container variant="white" my={3} py={3} boxShadow={1}>
+      <Box variant="light" p={3} boxShadow={1}>
         <PageHeading>Statistikk {year}</PageHeading>
         <ul>
           {reports.map(([key, value]) => (
@@ -51,7 +51,7 @@ export default function YearIndex({ year, reports }) {
             <a>Vis alle år</a>
           </Link>
         </p>
-      </Container>
+      </Box>
     </Layout>
   );
 }

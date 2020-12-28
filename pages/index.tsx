@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Container } from "vofo-design";
+import { Box } from "@vofo-no/design";
 import Layout from "../components/Layout";
 import PageHeading from "../components/PageHeading";
 import { years } from "../data/index.json";
@@ -15,7 +15,7 @@ export async function getStaticProps() {
 export default function Index({ years }) {
   return (
     <Layout title={`Statistikk`} header>
-      <Container variant="white" my={3} py={3} boxShadow={1}>
+      <Box variant="light" p={3} boxShadow="small">
         <PageHeading>Statistikk</PageHeading>
         <ul>
           {years.map((year) => (
@@ -26,7 +26,7 @@ export default function Index({ years }) {
             </li>
           ))}
         </ul>
-      </Container>
+      </Box>
     </Layout>
   );
 }
