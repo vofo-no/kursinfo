@@ -1,12 +1,11 @@
 /**
  * Set up plugins
  */
-const withTM = require("next-transpile-modules")(["@vofo-no/design"]);
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
-const plugins = [withTM, withBundleAnalyzer];
+const plugins = [withBundleAnalyzer];
 
 /**
  * Set up Next.js configuration
