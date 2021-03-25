@@ -63,7 +63,7 @@ function headerA11yProps(
   };
 }
 
-function Table(props: TableOptions<object>) {
+const Table: FC<TableOptions<object>> = (props) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -210,6 +210,6 @@ function Table(props: TableOptions<object>) {
       `}</style>
     </>
   );
-}
+};
 
 export default Table;

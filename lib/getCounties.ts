@@ -1,9 +1,15 @@
-const parameterize = require("./parameterize");
-const config = require("../data/config.json");
+import config from "../data/config.json";
+import parameterize from "./parameterize";
 
-function getCounties(year) {
+function getCounties(
+  year: string
+): Array<{
+  region: string;
+  param: string;
+  keys: Set<unknown>;
+}> {
   const configYear = Object.keys(config)
-    .sort((a, b) => b - a)
+    .sort((a, b) => a.localeCompare(b))
     .find((key) => Number(key) <= Number(year));
   const configItem = config[configYear];
 
@@ -24,4 +30,4 @@ function getCounties(year) {
   }));
 }
 
-module.exports = getCounties;
+export default getCounties;

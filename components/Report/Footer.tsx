@@ -1,6 +1,7 @@
 import { Box, Logo, ScrollDown } from "@vofo-no/design";
+import { FC } from "react";
 
-const PageFooter = (props) => (
+const PageFooter: FC = (props) => (
   <Box
     margin="auto 0 0 0"
     paddingTop={3}

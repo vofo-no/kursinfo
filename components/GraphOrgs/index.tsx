@@ -1,5 +1,7 @@
-import GraphBase from "../Graph";
+import { FC } from "react";
+
 import { Dictionary, IAssociation, INamed } from "../../types";
+import GraphBase from "../Graph";
 
 interface PropTypes {
   keys: string[];
@@ -11,7 +13,7 @@ interface PropTypes {
 
 const shortOrName = (item: INamed) => item.short ?? item.name;
 
-function Graph({ keys, items, names, year, unit }: PropTypes) {
+const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
   const lastYear = String(Number(year) - 1);
 
   const options = {
@@ -73,6 +75,6 @@ function Graph({ keys, items, names, year, unit }: PropTypes) {
       <GraphBase options={options} />
     </>
   );
-}
+};
 
 export default Graph;

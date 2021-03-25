@@ -1,56 +1,22 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { Box, Text } from "@vofo-no/design";
 import { useRouter } from "next/router";
+import { FC, useCallback, useMemo, useState } from "react";
+import { Info } from "react-feather";
+
+import { CoursesParams } from "../../types/courses";
+import AlertDialog from "../AlertDialog";
+import Table from "../Table";
 import {
-  CoursesParams,
+  CoursesProps,
   GroupType,
-  IAggregatedData,
-  ICoursesBaseProps,
   isDefaultCounty,
   isDefaultOrganization,
 } from "./constants";
-import Table from "../Table";
-import { Box, Text } from "@vofo-no/design";
-import ExportSchema from "./ExportSchema";
-import AlertDialog from "../AlertDialog";
-import { Info } from "react-feather";
 import Filter from "./Filter";
 import GroupTabs from "./GroupTabs";
+import Item from "./Item";
 
-interface CoursesProps extends ICoursesBaseProps {
-  group: GroupType;
-  counties: string[];
-  curriculums: string[];
-  organizers: string[];
-  items: any[];
-  reportSchema?: string;
-  tabular?: IAggregatedData;
-}
-
-const CourseItem = ({ course, reportSchema }) => (
-  <Text as="section">
-    <dl>
-      <dt>Tittel</dt>
-      <dd>{course.courseTitle}</dd>
-      <dt>Saksnummer</dt>
-      <dd>{course.caseNumber}</dd>
-      <dt>Kursperiode</dt>
-      <dd>
-        {course.startDate}–{course.endDate}
-      </dd>
-      <dt>Arrangør</dt>
-      <dd>{course.organizer}</dd>
-      <dt>Studieplan</dt>
-      <dd>{course.curriculum}</dd>
-    </dl>
-    {course.reportSchema && (
-      <p>
-        <ExportSchema reportSchema={reportSchema} course={course} />
-      </p>
-    )}
-  </Text>
-);
-
-function remixISODate(str: any, fullYear = false) {
+function remixISODate(str: unknown, fullYear = false) {
   if (typeof str !== "string") return "";
   const parts = str.split("-");
   return `${parts[2]}.${parts[1]}.${
@@ -58,7 +24,11 @@ function remixISODate(str: any, fullYear = false) {
   }`;
 }
 
-function makeTitle(year, county, countyOptions) {
+function makeTitle(
+  year: string,
+  county: string,
+  countyOptions: Array<Array<string>>
+) {
   const parts = [
     `Kursstatistikk ${year}`,
     (countyOptions.slice(1).find((el) => el[0] === county) || [])[1],
@@ -167,6 +137,7 @@ const Courses: FC<CoursesProps> = ({
         Header: "",
         accessor: "caseNumber",
         disableSortBy: true,
+        // eslint-disable-next-line react/display-name
         Cell: ({ row, value }) => {
           if (row.isGrouped) return null;
           return (
@@ -296,7 +267,7 @@ const Courses: FC<CoursesProps> = ({
             open={!!modal.length}
             close={() => setModal("")}
           >
-            <CourseItem reportSchema={reportSchema} course={getModalCourse()} />
+            <Item reportSchema={reportSchema} course={getModalCourse()} />
           </AlertDialog>
           {group === "organisasjoner" && JSON.stringify(rest.tabular)}
           <style jsx global>

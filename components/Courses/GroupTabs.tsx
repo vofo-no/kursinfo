@@ -1,7 +1,9 @@
-import { Dispatch, FC } from "react";
-import { GroupType, isDefaultCounty, isDefaultOrganization } from "./constants";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+
+import { Dispatch, FC } from "react";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+
+import { GroupType, isDefaultCounty, isDefaultOrganization } from "./constants";
 
 const tabs: GroupType[] = [
   "organisasjoner",

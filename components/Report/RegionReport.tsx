@@ -1,23 +1,22 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 
-import Layout from "../../components/Layout";
-import ReportHeading from "../../components/ReportHeading";
-import Summary from "../../components/Summary";
-import Counties from "../../components/Counties";
 import Associations from "../../components/Associations";
-import Subjects from "../../components/Subjects";
-import Municipalities from "../../components/Municipalities";
+import Counties from "../../components/Counties";
 import { initialize as initializeGraphs } from "../../components/Graph";
+import Layout from "../../components/Layout";
+import Municipalities from "../../components/Municipalities";
+import ReportHeading from "../../components/ReportHeading";
+import Subjects from "../../components/Subjects";
+import Summary from "../../components/Summary";
+import { RegionReportProps } from "../../types";
 import Footer from "./Footer";
 
-import { RegionReportProps } from "../../types";
-
-export default function RegionReport({
+const RegionReport: FC<RegionReportProps> = ({
   year,
   report,
   municipalityNames,
   counties,
-}: RegionReportProps) {
+}) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
@@ -83,4 +82,6 @@ export default function RegionReport({
       )}
     </Layout>
   );
-}
+};
+
+export default RegionReport;

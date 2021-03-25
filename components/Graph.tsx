@@ -1,14 +1,14 @@
-import { useState } from "react";
+import merge from "deepmerge";
 import Highcharts from "highcharts";
 import HCSeriesLabel from "highcharts/modules/series-label";
 import HighchartsReact from "highcharts-react-official";
-import merge from "deepmerge";
+import { useState } from "react";
 
 if (typeof Highcharts === "object") {
   HCSeriesLabel(Highcharts);
 }
 
-function Graph({ options }) {
+function Graph({ options }): JSX.Element {
   const [chartOptions] = useState(
     merge(
       {
@@ -34,8 +34,8 @@ function Graph({ options }) {
   return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 }
 
-export const initialize = () => {
-  var beforePrint = function () {
+export const initialize = (): void => {
+  const beforePrint = function () {
     Highcharts.charts.forEach((chart) => {
       if (chart) {
         chart.setSize(650, chart.chartHeight, false);
@@ -43,7 +43,7 @@ export const initialize = () => {
       }
     });
   };
-  var afterPrint = function () {
+  const afterPrint = function () {
     Highcharts.charts.forEach((chart) => {
       if (chart) {
         chart.setSize(null, chart.chartHeight, false);
@@ -53,9 +53,9 @@ export const initialize = () => {
   };
 
   if (window.matchMedia) {
-    var mediaQueryList = window.matchMedia("print");
-    mediaQueryList.addListener(function (mql) {
-      if (mql.matches) {
+    const mediaQueryList = window.matchMedia("print");
+    mediaQueryList.addEventListener("change", (e) => {
+      if (e.matches) {
         beforePrint();
       } else {
         afterPrint();

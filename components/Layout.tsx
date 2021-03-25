@@ -1,8 +1,15 @@
-import Head from "next/head";
 import { Box, Text } from "@vofo-no/design";
+import Head from "next/head";
+import { FC } from "react";
+
 import Header from "./Header";
 
-const Layout = ({ title, children, header = false }) => {
+interface LayoutProps {
+  title: string;
+  header?: boolean;
+}
+
+const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
   const LayoutHead = (
     <Head>
       <title>{title}</title>

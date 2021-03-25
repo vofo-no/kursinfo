@@ -1,4 +1,5 @@
-import { Fragment } from "react";
+import { FC, Fragment } from "react";
+
 import Graph from "./Graph";
 import names from "./names.json";
 
@@ -10,7 +11,7 @@ type SubjectType = {
   };
 };
 
-type SubjectsProps = {
+interface SubjectsProps {
   mainSubjects: {
     [key: string]: SubjectType;
   };
@@ -21,7 +22,7 @@ type SubjectsProps = {
   year: string;
   name: string;
   ages: number[][];
-};
+}
 
 function p(subject: SubjectType) {
   return subject.participants.females + subject.participants.males;
@@ -36,14 +37,14 @@ export const ageGroupName = [
   "60+ år",
 ];
 
-function Subjects({
+const Subjects: FC<SubjectsProps> = ({
   mainSubjects,
   subjects,
   topSubjects,
   ages,
   year,
   name,
-}: SubjectsProps) {
+}) => {
   const subjectKeys = Object.keys(mainSubjects)
     .sort((a, b) => p(mainSubjects[b]) - p(mainSubjects[a]))
     .filter((key) => p(mainSubjects[key]));
@@ -130,6 +131,6 @@ function Subjects({
       </section>
     </>
   );
-}
+};
 
 export default Subjects;

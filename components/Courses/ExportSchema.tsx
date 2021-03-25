@@ -1,6 +1,6 @@
 import * as FileSaver from "file-saver";
-import { Download } from "react-feather";
 import { FC } from "react";
+import { Download } from "react-feather";
 
 interface ExportSchemaProps {
   course: {
@@ -51,7 +51,6 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
 
   return (
     <button
-      role="button"
       style={{ cursor: "pointer" }}
       tabIndex={0}
       onClick={() => exportToCSV(caseNumber)}

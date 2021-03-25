@@ -1,25 +1,18 @@
 import getCounties from "../../lib/getCounties";
 import getTenantData from "../../lib/getTenantData";
 import getTenantYears from "../../lib/getTenantYears";
+import { CoursesParams, ICourseItem } from "../../types/courses";
 import {
   ALL_COUNTIES_OPTION,
   ALL_ORGANIZATIONS_OPTION,
-  CoursesParams,
-  GroupType,
+  CoursesProps,
   IAggregatedData,
 } from "./constants";
 
-/**
- * Aggregates data.
- * @param data
- * @param key to group by
- * @param getName function to get name by data item
- * @returns
- */
 const aggregate = (
-  data: Array<any>,
+  data: Array<ICourseItem>,
   key: string,
-  getName: (item: any) => string
+  getName: (item: ICourseItem) => string
 ) => {
   return Object.values(
     data.reduce<{ [key: string]: IAggregatedData }>((rv, add) => {
@@ -49,16 +42,7 @@ const aggregate = (
 };
 
 interface StaticDataProps {
-  props: {
-    county: string;
-    countyOptions: string[][];
-    data: any;
-    group: GroupType;
-    organization: string;
-    organizationOptions: string[];
-    year: string;
-    yearOptions: string[];
-  };
+  props: CoursesProps;
 }
 
 const getStaticData = async (
@@ -85,21 +69,13 @@ const getStaticData = async (
     );
   }
 
-  if (group === "organisasjoner") {
-    data.tabular = aggregate(
-      data.items,
-      "organizationId",
-      ({ organizationIndex }) => data.organizers[organizationIndex]
-    );
-  }
-
-  const props = {
+  const props: CoursesProps = {
+    ...data,
     county,
     countyOptions: [
       ALL_COUNTIES_OPTION,
       ...counties.map((c) => [c.param, c.region]),
     ],
-    ...data,
     group,
     organization,
     organizationOptions: [
@@ -109,6 +85,14 @@ const getStaticData = async (
     year,
     yearOptions,
   };
+
+  if (group === "organisasjoner") {
+    props.tabular = aggregate(
+      data.items,
+      "organizationId",
+      ({ organizationIndex }) => data.organizers[organizationIndex]
+    );
+  }
 
   return {
     props,

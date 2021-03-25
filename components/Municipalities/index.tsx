@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { FC, useState } from "react";
+
 import { CompactValues } from "../../types";
 
 interface PropTypes {
@@ -13,7 +14,7 @@ function perCapita(item?: Array<number>) {
   return (item && item[3]) || 0;
 }
 
-function Municipalities({ names, year, name, items, keys }: PropTypes) {
+const Municipalities: FC<PropTypes> = ({ names, year, name, items, keys }) => {
   const [limit, setLimit] = useState(keys ? keys.length : 25);
   const municipalityKeysSorted = (keys || Object.keys(items)).sort(
     (a, b) => perCapita(items[b]) - perCapita(items[a])
@@ -83,6 +84,6 @@ function Municipalities({ names, year, name, items, keys }: PropTypes) {
       </div>
     </section>
   );
-}
+};
 
 export default Municipalities;

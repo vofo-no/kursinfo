@@ -1,24 +1,23 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 
-import Layout from "../../components/Layout";
-import ReportHeading from "../../components/ReportHeading";
-import Summary from "../../components/Summary";
 import Counties from "../../components/Counties";
-import Subjects from "../../components/Subjects";
-import Municipalities from "../../components/Municipalities";
 import { initialize as initializeGraphs } from "../../components/Graph";
-import Footer from "./Footer";
-
+import Layout from "../../components/Layout";
+import Municipalities from "../../components/Municipalities";
+import ReportHeading from "../../components/ReportHeading";
+import Subjects from "../../components/Subjects";
+import Summary from "../../components/Summary";
 import { AssociationReportProps } from "../../types";
 import Organizations from "../Organizations";
+import Footer from "./Footer";
 
-export default function AssociationReport({
+const AssociationReport: FC<AssociationReportProps> = ({
   year,
   report,
   municipalityNames,
   counties,
   orgNames = {},
-}: AssociationReportProps) {
+}) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
@@ -82,4 +81,6 @@ export default function AssociationReport({
       />
     </Layout>
   );
-}
+};
+
+export default AssociationReport;

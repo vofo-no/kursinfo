@@ -1,12 +1,14 @@
+import { FC } from "react";
+
 import GraphBase from "../Graph";
 import { ageGroupName } from "./";
 
-type SubjectsGraphProps = {
+interface SubjectsGraphProps {
   year: number;
   ages: number[][];
-};
+}
 
-function Graph({ year, ages }: SubjectsGraphProps) {
+const Graph: FC<SubjectsGraphProps> = ({ year, ages }) => {
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - ages[0].length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
@@ -59,6 +61,6 @@ function Graph({ year, ages }: SubjectsGraphProps) {
       <GraphBase options={options} />
     </>
   );
-}
+};
 
 export default Graph;

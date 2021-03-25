@@ -1,7 +1,9 @@
+import { FC } from "react";
+
 import names from "../../data/names/associations.json";
-import GraphOrgs from "../GraphOrgs";
 import { Dictionary, IAssociation } from "../../types";
 import { showName } from "../../utils/names";
+import GraphOrgs from "../GraphOrgs";
 
 interface PropTypes {
   items: Dictionary<IAssociation>;
@@ -9,7 +11,7 @@ interface PropTypes {
   year: string;
 }
 
-function Associations({ items, year, name }: PropTypes) {
+const Associations: FC<PropTypes> = ({ items, year, name }) => {
   const associationKeys = Object.keys(items)
     .sort((a, b) => items[b].hours - items[a].hours)
     .filter((key) => items[key].courses);
@@ -62,6 +64,6 @@ function Associations({ items, year, name }: PropTypes) {
       </div>
     </section>
   );
-}
+};
 
 export default Associations;

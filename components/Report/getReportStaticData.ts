@@ -2,15 +2,15 @@ import fs from "fs";
 import path from "path";
 
 import {
-  ReportProps,
   ASSOCIATION,
-  INamed,
-  Dictionary,
   AssociationReportProps,
-  RegionReportProps,
-  TotalReportProps,
+  Dictionary,
+  INamed,
   REGION,
+  RegionReportProps,
+  ReportProps,
   TOTAL,
+  TotalReportProps,
 } from "../../types";
 
 interface ParamType {
@@ -60,7 +60,7 @@ export const getReportStaticData = async ({
         municipalities = [],
       } = data.reports[key];
       switch (reportData.type) {
-        case ASSOCIATION:
+        case ASSOCIATION: {
           if ((reportData.key as string) !== reportData.key)
             throw new Error("Unexpected association key");
           const association = associations[reportData.key];
@@ -73,7 +73,8 @@ export const getReportStaticData = async ({
             coursesPerCapita: association.courses / population,
             isCurrent: false,
           };
-        case TOTAL:
+        }
+        case TOTAL: {
           if ((reportData.key as string[]) !== reportData.key)
             throw new Error("Unexpected combo key");
           const aKeys = Object.keys(associations).filter((a) =>
@@ -95,7 +96,8 @@ export const getReportStaticData = async ({
               population,
             isCurrent: false,
           };
-        case REGION:
+        }
+        case REGION: {
           return {
             name: name,
             courses: courses,
@@ -106,6 +108,7 @@ export const getReportStaticData = async ({
               reportData.municipalities.includes(m)
             ),
           };
+        }
       }
     })
     .sort((a, b) => b.coursesPerCapita - a.coursesPerCapita);

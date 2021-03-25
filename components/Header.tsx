@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { Box, Logo, Menu, MenuButton, MenuContainer } from "@vofo-no/design";
 import Link from "next/link";
+import { FC, useState } from "react";
 import React from "react";
 
-import { Logo, Menu, MenuContainer, MenuButton, Box } from "@vofo-no/design";
-
-const Header = () => {
+const Header: FC = () => {
   const [menu, toggleMenu] = useState(false);
   return (
     <Box boxShadow="small" variant="light" px={2} py={1}>

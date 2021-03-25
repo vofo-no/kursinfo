@@ -1,4 +1,5 @@
 import { Dispatch, FC } from "react";
+
 import { ICoursesBaseProps } from "./constants";
 
 interface SelectProps {
@@ -14,6 +15,7 @@ interface FilterProps extends ICoursesBaseProps {
 }
 
 const Select: FC<SelectProps> = ({ options = [], value, callback }) => (
+  // eslint-disable-next-line jsx-a11y/no-onchange
   <select value={value} onChange={(e) => callback(e.target.value)}>
     {options.map((opt) => {
       if (typeof opt === "string") return <option key={opt}>{opt}</option>;

@@ -1,15 +1,19 @@
 import getCounties from "../../lib/getCounties";
-import getTenantYears from "../../lib/getTenantYears";
 import getTenantYearOrganizations from "../../lib/getTenantYearOrganizations";
+import getTenantYears from "../../lib/getTenantYears";
+import { CoursesParams } from "../../types/courses";
 import {
   ALL_COUNTIES_OPTION,
   ALL_ORGANIZATIONS_OPTION,
-  CoursesParams,
   GROUPS,
 } from "./constants";
 
-async function getStaticPaths(tenant: string) {
-  const paths: Array<{ params: CoursesParams }> = [];
+type PathsType = Array<{ params: CoursesParams }>;
+
+async function getStaticPaths(
+  tenant: string
+): Promise<{ paths: PathsType; fallback: boolean }> {
+  const paths: PathsType = [];
   const years = getTenantYears(tenant);
 
   years.map((year) => {
