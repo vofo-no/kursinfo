@@ -81,6 +81,7 @@ function Table(props: TableOptions<object>) {
         [
           "courseTitle",
           "curriculumIndex",
+          "organizationIndex",
           "organizerIndex",
           "countyIndex",
           "startDate",

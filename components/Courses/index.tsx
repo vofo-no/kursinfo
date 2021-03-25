@@ -1,129 +1,30 @@
-import { Dispatch, FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { GroupType } from "./constants";
+import {
+  CoursesParams,
+  GroupType,
+  IAggregatedData,
+  ICoursesBaseProps,
+  isDefaultCounty,
+  isDefaultOrganization,
+} from "./constants";
 import Table from "../Table";
 import { Box, Text } from "@vofo-no/design";
 import ExportSchema from "./ExportSchema";
 import AlertDialog from "../AlertDialog";
 import { Info } from "react-feather";
+import Filter from "./Filter";
+import GroupTabs from "./GroupTabs";
 
-interface CommonProps {
-  county: string;
-  countyOptions: string[][];
-  organizationOptions: string[][];
-  year: string;
-  yearOptions: string[];
-}
-
-interface FilterProps extends CommonProps {
-  setGroup: Dispatch<GroupType>;
-  setYear: Dispatch<string>;
-  setCounty: Dispatch<string>;
-  setOrganization: Dispatch<string>;
-  organization?: string;
-}
-
-interface CoursesProps extends CommonProps {
+interface CoursesProps extends ICoursesBaseProps {
   group: GroupType;
   counties: string[];
   curriculums: string[];
   organizers: string[];
   items: any[];
   reportSchema?: string;
+  tabular?: IAggregatedData;
 }
-
-interface SelectProps {
-  options?: (string[] | string)[];
-  value?: string;
-  callback: Dispatch<string>;
-}
-
-const Select: FC<SelectProps> = ({ options = [], value, callback }) => (
-  <select value={value} onChange={(e) => callback(e.target.value)}>
-    {options.map((opt) => {
-      if (typeof opt === "string") return <option key={opt}>{opt}</option>;
-      return (
-        <option value={opt[0]} key={opt[0]}>
-          {opt[1]}
-        </option>
-      );
-    })}
-  </select>
-);
-
-const Filter: FC<FilterProps> = (props) => (
-  <fieldset>
-    <legend>Filter</legend>
-    <Select
-      aria-label="Velg årstall"
-      value={props.year}
-      options={props.yearOptions}
-      callback={props.setYear}
-    />
-    <Select
-      aria-label="Velg organisasjon"
-      value={props.organization}
-      options={props.organizationOptions}
-      callback={props.setOrganization}
-    />
-    <Select
-      aria-label="Velg fylke"
-      value={props.county}
-      options={props.countyOptions}
-      callback={props.setCounty}
-    />
-  </fieldset>
-);
-
-interface GroupItemProps {
-  value: GroupType;
-  label: string;
-  selected: GroupType;
-  callback: Dispatch<string>;
-}
-
-const GroupItem = ({ value, label, selected, callback }: GroupItemProps) => (
-  <label>
-    <input
-      type="radio"
-      value={value}
-      id={value}
-      checked={value === selected}
-      onChange={(e) => callback(e.target.value)}
-    />
-    <label htmlFor={value}>{label}</label>
-  </label>
-);
-
-const GroupTabs = ({ group, setGroup }) => (
-  <fieldset>
-    <legend>Grupper etter</legend>
-    <GroupItem
-      callback={setGroup}
-      label="(ingen)"
-      selected={group}
-      value={"kurs"}
-    />
-    <GroupItem
-      callback={setGroup}
-      label="Fylke"
-      selected={group}
-      value="fylker"
-    />
-    <GroupItem
-      callback={setGroup}
-      label="Arrangør"
-      selected={group}
-      value="lag"
-    />
-    <GroupItem
-      callback={setGroup}
-      label="Studieplan"
-      selected={group}
-      value="studieplaner"
-    />
-  </fieldset>
-);
 
 const CourseItem = ({ course, reportSchema }) => (
   <Text as="section">
@@ -172,13 +73,36 @@ const Courses: FC<CoursesProps> = ({
   curriculums,
   group,
   items,
+  organization,
+  organizationOptions,
   organizers,
   reportSchema,
   year,
   yearOptions,
+  ...rest
 }) => {
   const router = useRouter();
-  const nav = (query = {}) => {
+  const nav = (query: CoursesParams = {}) => {
+    if (!query.group) {
+      if (
+        query.county &&
+        !isDefaultCounty(query.county) &&
+        group === "fylker"
+      ) {
+        query.group = !isDefaultOrganization(query.organization || organization)
+          ? "lag"
+          : "organisasjoner";
+      }
+      if (
+        query.organization &&
+        !isDefaultOrganization(query.organization) &&
+        group === "organisasjoner"
+      ) {
+        query.group = !isDefaultCounty(query.county || county)
+          ? "lag"
+          : "fylker";
+      }
+    }
     router.push({
       pathname: router.pathname,
       query: { ...router.query, ...query },
@@ -186,13 +110,18 @@ const Courses: FC<CoursesProps> = ({
   };
   const setYear = (year: string) => nav({ year });
   const setCounty = (county: string) => nav({ county });
-  const setGroup = (group: string) => nav({ group });
-  const [organization, setOrganization] = useState(undefined);
+  const setGroup = (group: GroupType) => nav({ group });
+  const setOrganization = (organization: string) => nav({ organization });
   const [modal, setModal] = useState("");
 
   const tableData = useMemo(() => items, [items]);
   const columns = useMemo(() => {
     const cols = [
+      {
+        Header: "Organisasjon",
+        accessor: "organizationIndex",
+        Cell: ({ value }) => organizers[value] || null,
+      },
       {
         Header: "Lokallag",
         accessor: "organizerIndex",
@@ -294,6 +223,8 @@ const Courses: FC<CoursesProps> = ({
 
   const groupBy = useMemo(() => {
     switch (group) {
+      case "organisasjoner":
+        return ["organizationIndex"];
       case "lag":
         return ["organizerIndex"];
       case "fylker":
@@ -307,11 +238,11 @@ const Courses: FC<CoursesProps> = ({
   const sortBy = useMemo(() => {
     switch (group) {
       case "lag":
+      case "studieplaner":
+      case "organisasjoner":
         return [{ id: "hours", desc: true }];
       case "fylker":
         return [{ id: "countyIndex" }];
-      case "studieplaner":
-        return [{ id: "hours", desc: true }];
     }
     return [{ id: "startDate" }];
   }, [group]);
@@ -337,24 +268,29 @@ const Courses: FC<CoursesProps> = ({
           <Filter
             {...{
               county,
+              countyOptions,
               organization,
+              organizationOptions,
               setCounty,
-              setGroup,
               setOrganization,
               setYear,
               year,
               yearOptions,
-              countyOptions,
-              organizationOptions: [],
             }}
           />
-          <GroupTabs group={group} setGroup={setGroup} />
-          <Table
-            data={tableData}
-            columns={columns}
-            initialState={{ groupBy, sortBy }}
-            disableSortRemove
-          />
+          <GroupTabs
+            group={group}
+            setGroup={setGroup}
+            county={county}
+            organization={organization}
+          >
+            <Table
+              data={tableData}
+              columns={columns}
+              initialState={{ groupBy, sortBy }}
+              disableSortRemove
+            />
+          </GroupTabs>
           <AlertDialog
             title="Kursinformasjon"
             open={!!modal.length}
@@ -362,6 +298,7 @@ const Courses: FC<CoursesProps> = ({
           >
             <CourseItem reportSchema={reportSchema} course={getModalCourse()} />
           </AlertDialog>
+          {group === "organisasjoner" && JSON.stringify(rest.tabular)}
           <style jsx global>
             {`
               button.transparent {
