@@ -1,5 +1,5 @@
 import { Box, Text } from "@vofo-no/design";
-import { FC, useCallback, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect } from "react";
 import AriaModal from "react-aria-modal";
 import { X } from "react-feather";
 
@@ -16,7 +16,6 @@ const AlertDialog: FC<AlertDialogProps> = ({
   children,
 }) => {
   if (!open) return null;
-  const r = useRef(null);
 
   const handleUserKeyPress = useCallback(({ keyCode }) => {
     if (keyCode === 27) close();
@@ -56,16 +55,15 @@ const AlertDialog: FC<AlertDialogProps> = ({
             {title}
           </Text>
           {children}
-          <a
+          <button
             className="close"
             tabIndex={0}
-            type="button"
             title="Lukk dialog"
             id="alert-dialog-1-close"
             onClick={close}
           >
             <X />
-          </a>
+          </button>
         </Box>
       </div>
       <style jsx>{`
@@ -102,6 +100,8 @@ const AlertDialog: FC<AlertDialogProps> = ({
           position: absolute;
           top: 0;
           right: 0;
+          border: 0;
+          background: transparent;
         }
       `}</style>
     </AriaModal>
