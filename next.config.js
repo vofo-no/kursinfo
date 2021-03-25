@@ -16,20 +16,24 @@ const SFS = ["nm", "skt"];
 const nextConfiguration = {
   async rewrites() {
     paths = [];
-    const { year, county, group } = defaultParams();
+    const { year, county, organization, group } = defaultParams();
     SFS.map((sf) => {
       paths.push(
         {
           source: `/${sf}`,
-          destination: `/${sf}/${year}/${county}/${group}`,
+          destination: `/${sf}/${year}/${county}/${organization}/${group}`,
         },
         {
           source: `/${sf}/:year`,
-          destination: `/${sf}/:year/${county}/${group}`,
+          destination: `/${sf}/:year/${county}/${organization}/${group}`,
         },
         {
           source: `/${sf}/:year/:county`,
-          destination: `/${sf}/:year/:county/${group}`,
+          destination: `/${sf}/:year/:county/${organization}/${group}`,
+        },
+        {
+          source: `/${sf}/:year/:county/:organization`,
+          destination: `/${sf}/:year/:county/:organization/${group}`,
         }
       );
     });

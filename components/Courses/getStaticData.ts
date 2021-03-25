@@ -1,13 +1,52 @@
 import getCounties from "../../lib/getCounties";
 import getTenantData from "../../lib/getTenantData";
 import getTenantYears from "../../lib/getTenantYears";
-import { ALL_COUNTIES_OPTION, GroupType } from "./constants";
+import {
+  ALL_COUNTIES_OPTION,
+  ALL_ORGANIZATIONS_OPTION,
+  CoursesParams,
+  GroupType,
+  IAggregatedData,
+} from "./constants";
 
-interface ParamType {
-  year: string;
-  county: string;
-  group: GroupType;
-}
+/**
+ * Aggregates data.
+ * @param data
+ * @param key to group by
+ * @param getName function to get name by data item
+ * @returns
+ */
+const aggregate = (
+  data: Array<any>,
+  key: string,
+  getName: (item: any) => string
+) => {
+  return Object.values(
+    data.reduce<{ [key: string]: IAggregatedData }>((rv, add) => {
+      const item: IAggregatedData = rv[add[key]] || {
+        id: add[key],
+        name: getName(add),
+        plannedCourses: 0,
+        plannedHours: 0,
+        courses: 0,
+        hours: 0,
+        participants: 0,
+        grant: 0,
+      };
+      if (add.planned) {
+        item.plannedCourses += 1;
+        item.plannedHours += add.hours || 0;
+      } else {
+        item.courses += 1;
+        item.hours += add.hours || 0;
+        item.participants += add.participantCountTotal || 0;
+        item.grant += add.totalGrantActual || 0;
+      }
+      rv[add[key]] = item;
+      return rv;
+    }, {})
+  );
+};
 
 interface StaticDataProps {
   props: {
@@ -15,12 +54,15 @@ interface StaticDataProps {
     countyOptions: string[][];
     data: any;
     group: GroupType;
+    organization: string;
+    organizationOptions: string[];
     year: string;
+    yearOptions: string[];
   };
 }
 
 const getStaticData = async (
-  { year, county, group }: ParamType,
+  { year, county, group, organization }: CoursesParams,
   tenant: string
 ): Promise<StaticDataProps> => {
   const yearOptions = getTenantYears(tenant);
@@ -37,6 +79,20 @@ const getStaticData = async (
     }
   }
 
+  if (organization && organization !== ALL_ORGANIZATIONS_OPTION[0]) {
+    data.items = data.items.filter(
+      ({ organizationId }) => organizationId === organization
+    );
+  }
+
+  if (group === "organisasjoner") {
+    data.tabular = aggregate(
+      data.items,
+      "organizationId",
+      ({ organizationIndex }) => data.organizers[organizationIndex]
+    );
+  }
+
   const props = {
     county,
     countyOptions: [
@@ -45,6 +101,11 @@ const getStaticData = async (
     ],
     ...data,
     group,
+    organization,
+    organizationOptions: [
+      ALL_ORGANIZATIONS_OPTION,
+      ...data.organizationParams.map((item) => [item, item]),
+    ],
     year,
     yearOptions,
   };
