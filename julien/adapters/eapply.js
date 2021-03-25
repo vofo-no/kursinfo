@@ -25,8 +25,7 @@ EapplyAdapter.get = async function (tenantId, year) {
     headers,
   };
 
-  // TODO: Filter by year in url (not supported yet)
-  const url = `${process.env.EAPPLY_URL}/api/v1/courses?limit=99999&tenantId=${tenantId}`;
+  const url = `${process.env.EAPPLY_URL}/api/v1/courses?limit=99999&tenantId=${tenantId}&endDateFrom=01.01.${year}&endDateTo=31.12.${year}`;
 
   return fetch(url, options)
     .then(checkStatus)

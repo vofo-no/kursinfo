@@ -1,3 +1,4 @@
+const chalk = require("chalk");
 const settings = require("./settings.json");
 const fs = require("fs");
 const getCounties = require("../lib/getCounties");
@@ -12,21 +13,28 @@ const Adapter = require("./adapters");
 const adapters = { eapply };
 
 /** Sync last year's data until the end of this month. */
-const LAST_YEAR_UNTIL_MONTH = 2;
+const LAST_YEAR_UNTIL_MONTH = 3;
 
 const stripISODate = (raw) => {
   if (typeof raw !== "string") return raw;
   return raw.split("T", 2)[0];
 };
 
+/**
+ * 
+ * @param {{
+    id: string;
+    name: string;
+    adapter: string;
+    dataTarget: string;
+    reportSchema?: string;
+   }} tenant 
+ * @param {string} year 
+ */
 const getData = async (tenant, year) => {
   const adapter = adapters[tenant.adapter];
 
   if (!adapter) throw new Error(`Unknown adapter ${tenant.adapter}`);
-
-  process.stdout.write(
-    `Data ${tenant.id} from ${tenant.adapter} (${year})... `
-  );
 
   const countyData = getCounties(year);
 
@@ -43,6 +51,8 @@ const getData = async (tenant, year) => {
 
   const { reportSchema } = tenant;
 
+  /** @type Set<string> */
+  const memberOrganizationIds = new Set();
   const organizerIds = {};
   const curriculumIds = {};
 
@@ -63,14 +73,26 @@ const getData = async (tenant, year) => {
       coursePlanCode,
       coursePlanId,
       coursePlanTitle,
+      memberOrganizationId,
+      memberOrganizationName,
     }) => {
       // Store curriculum name
       curriculumIds[coursePlanId] = [coursePlanCode, coursePlanTitle].join(" ");
 
       // Store organizer name
       organizerIds[applicantOrganizationId] = smartCase(applicantName);
+
+      if (memberOrganizationId) {
+        // Store member organization name
+        organizerIds[memberOrganizationId] = smartCase(memberOrganizationName);
+
+        memberOrganizationIds.add(memberOrganizationId);
+      }
     }
   );
+
+  // Add or reset tenant name
+  organizerIds[tenant.id] = tenant.name;
 
   // Sort curriculums alphabetically
   const sortedCurriculumIds = Object.keys(curriculumIds).sort((a, b) =>
@@ -86,6 +108,11 @@ const getData = async (tenant, year) => {
   );
   const organizers = sortedOrganizerIds.map((key) => String(organizerIds[key]));
 
+  const organizationParams = sortedOrganizerIds.filter(
+    Set.prototype.has,
+    memberOrganizationIds
+  );
+
   const items = data.map(
     ({
       applicantOrganizationId,
@@ -96,6 +123,8 @@ const getData = async (tenant, year) => {
       endDate,
       hours,
       locationCode,
+      memberOrganizationId,
+      participantCountTotal = undefined,
       reportStatus,
       startDate,
     }) => {
@@ -104,6 +133,11 @@ const getData = async (tenant, year) => {
       const organizerIndex = sortedOrganizerIds.indexOf(
         applicantOrganizationId
       );
+      const organizationId =
+        memberOrganizationId === tenant.id
+          ? applicantOrganizationId
+          : memberOrganizationId || tenant.id;
+      const organizationIndex = sortedOrganizerIds.indexOf(organizationId);
 
       return {
         caseNumber,
@@ -115,7 +149,11 @@ const getData = async (tenant, year) => {
         endDate: stripISODate(endDate),
         hours,
         locationCode,
+        organizationId,
+        organizationIndex,
         organizerIndex,
+        participantCountTotal,
+        planned: !reportStatus,
         reportSchema: reportSchema && !reportStatus,
         reportStatus,
         startDate: stripISODate(startDate),
@@ -123,52 +161,90 @@ const getData = async (tenant, year) => {
     }
   );
 
-  console.log("\x1b[1mOK\x1b[0m");
   return {
     counties,
     countyParams,
     curriculums,
+    organizationParams,
     organizers,
     items,
     reportSchema,
   };
 };
 
-async function main() {
-  console.log(`I like to ...`);
-
-  await Promise.all(
-    settings.tenants.map(async (tenant) => {
-      const today = new Date();
-      const currYear = today.getFullYear();
-      const years = [currYear, currYear + 1];
-      if (today.getMonth() < LAST_YEAR_UNTIL_MONTH) years.unshift(currYear - 1);
-
-      await Promise.all(
-        years.map(async (year) => {
-          const data = await getData(tenant, year);
-          const filepath = `data/${tenant.dataTarget}/${year}.json`;
-          if (data.items.length) {
-            process.stdout.write(`- Lagrer ${filepath} ... `);
-            const wstream = fs.createWriteStream(filepath);
-            wstream.write(JSON.stringify(data));
-            wstream.end();
-            console.log("\x1b[1mOK\x1b[0m");
-          } else {
-            if (fs.existsSync(filepath)) {
-              process.stdout.write(
-                `- Sletter ${reportSchema} (ingen kurs) ... `
-              );
-              fs.unlinkSync(filepath);
-              console.log("\x1b[1mOK\x1b[0m");
-            }
-          }
-        })
-      );
-    })
-  );
-
-  console.log(`... move it!`);
+function getTaskYears() {
+  const today = new Date();
+  const currYear = today.getFullYear();
+  const years = [currYear, currYear + 1];
+  if (today.getMonth() < LAST_YEAR_UNTIL_MONTH) years.unshift(currYear - 1);
+  return years;
 }
 
-main();
+async function process({ tenant, year }) {
+  const loopJobName = chalk.green(
+    "✅ Hentet data [" +
+      chalk.blue(tenant.name) +
+      " (" +
+      chalk.blue(year) +
+      ")]"
+  );
+  console.time(loopJobName);
+
+  try {
+    console.log(
+      `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
+        year
+      )})] fra [${chalk.blue(tenant.adapter)}]...`
+    );
+
+    const data = await getData(tenant, year);
+
+    const filepath = `data/${tenant.dataTarget}/${year}.json`;
+    if (data.items.length) {
+      console.log(`=> Lagrer data i [${chalk.blue(filepath)}]...`);
+      const wstream = fs.createWriteStream(filepath);
+      wstream.write(JSON.stringify(data));
+      wstream.end();
+    } else {
+      if (fs.existsSync(filepath)) {
+        console.log(`=> Sletter [${chalk.blue(filepath)}] (ingen kurs)...`);
+        fs.unlinkSync(filepath);
+      }
+    }
+
+    console.timeEnd(loopJobName);
+  } catch (error) {
+    console.error(error);
+    console.timeEnd(loopJobName);
+  }
+}
+
+(async () => {
+  try {
+    const programExecutionTimer = chalk.green(
+      "✅ By the power vested in me, by the law of the jungle, blah, blah, blah, blah... Be gone!"
+    );
+    console.time(programExecutionTimer);
+
+    console.log(
+      chalk.blueBright(
+        "🥥 [robot voice] I am very clever king... tok tok tok tok... I am super genius... I am robot king of the monkey thing... compute... compute."
+      )
+    );
+
+    const tasks = [];
+    const taskYears = getTaskYears();
+
+    settings.tenants.map((tenant) => {
+      taskYears.map((year) => tasks.push({ tenant, year }));
+    });
+
+    for (let task of tasks) {
+      await process(task);
+    }
+
+    console.timeEnd(programExecutionTimer);
+  } catch (error) {
+    console.error(error);
+  }
+})();

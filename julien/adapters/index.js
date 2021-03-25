@@ -22,6 +22,9 @@ class Adapter {
    *   endDate?: string,
    *   hours: number,
    *   locationCode: string,
+   *   memberOrganizationId?: string,
+   *   memberOrganizationName?: string,
+   *   participantCountTotal?: number,
    *   reportStatus?: string,
    *   startDate: string
    * }[]>}
