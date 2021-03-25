@@ -5,7 +5,6 @@ const getCounties = require("../lib/getCounties");
 const smartCase = require("../lib/smartCase");
 
 const eapply = require("./adapters/eapply");
-const Adapter = require("./adapters");
 /**
  * @constant
  * @type {Record<string, Adapter>}
