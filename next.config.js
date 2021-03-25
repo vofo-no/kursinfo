@@ -15,7 +15,7 @@ const SFS = ["nm", "skt"];
 
 const nextConfiguration = {
   async rewrites() {
-    paths = [];
+    const paths = [];
     const { year, county, organization, group } = defaultParams();
     SFS.map((sf) => {
       paths.push(
