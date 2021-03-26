@@ -1,9 +1,9 @@
 const Papa = require("papaparse");
 const fs = require("fs");
 const mainDataIndex = require("../data/index.json");
+const parameterize = require("../lib/parameterize");
 
 const MAX_HISTORY_YEARS = 5;
-const PATH_REGEX = /[^a-z0-9æøå\s\-]/g;
 
 const getConfig = (year) => {
   process.stdout.write(`Laster konfigurasjon for ${year}... `);
@@ -77,16 +77,6 @@ const getDataHistory = (year) => {
 
   return dataHistory;
 };
-
-function parameterize(str) {
-  return str
-    .toLowerCase()
-    .replace(PATH_REGEX, "")
-    .replace(/\s+/g, "-")
-    .replace(/\-+/g, "-")
-    .replace(/[æå]/g, "a")
-    .replace(/ø/g, "o");
-}
 
 const useTheForce = (year, content) => {
   process.stdout.write(`Lagrer resultater... `);

@@ -3,6 +3,7 @@ const klass = require("./klass");
 const han = require("./han");
 const luke = require("./luke");
 const aNames = require("../data/names/associations.json");
+const chalk = require("chalk");
 
 console.log(`               __
               / _)
@@ -15,8 +16,8 @@ console.log(`               __
 const year = process.argv[2];
 
 if (!year || !year.match(/^\d{4}$/)) {
-  console.log("Du må oppgi et årstall.");
-  return;
+  console.log(chalk.red("Du må oppgi et årstall."));
+  process.exit();
 }
 
 async function main() {

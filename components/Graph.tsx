@@ -8,7 +8,11 @@ if (typeof Highcharts === "object") {
   HCSeriesLabel(Highcharts);
 }
 
-function Graph({ options }): JSX.Element {
+function Graph({
+  options,
+}: {
+  options: Partial<Highcharts.Options>;
+}): JSX.Element {
   const [chartOptions] = useState(
     merge(
       {

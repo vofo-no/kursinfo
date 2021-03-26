@@ -43,6 +43,7 @@
     "react-tabs": "^3.2.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/react-aria-modal": "^4.0.2",

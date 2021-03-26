@@ -1,15 +1,16 @@
+import GraphOrgs from "components/GraphOrgs";
+import names from "data/names/associations.json";
 import { FC } from "react";
-
-import names from "../../data/names/associations.json";
-import { Dictionary, IAssociation } from "../../types";
-import { showName } from "../../utils/names";
-import GraphOrgs from "../GraphOrgs";
+import { Dictionary, IAssociation } from "types";
+import { showName } from "utils/names";
 
 interface PropTypes {
   items: Dictionary<IAssociation>;
   name: string;
   year: string;
 }
+
+type NameKey = keyof typeof names;
 
 const Associations: FC<PropTypes> = ({ items, year, name }) => {
   const associationKeys = Object.keys(items)
@@ -40,7 +41,9 @@ const Associations: FC<PropTypes> = ({ items, year, name }) => {
                 return (
                   <tr key={key}>
                     <td>{i + 1}</td>
-                    <th scope="row">{showName(names[key] || key)}</th>
+                    <th scope="row">
+                      {showName(names[key as NameKey] || key)}
+                    </th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
                     <td>

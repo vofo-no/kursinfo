@@ -34,7 +34,7 @@ const RegionReport: FC<RegionReportProps> = ({
             activeMunicipalitiesLength={
               Object.keys(report.municipalityValues).length
             }
-            allMunicipalitiesLength={report.municipalities.length}
+            allMunicipalitiesLength={report.municipalities?.length || 0}
           />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -71,7 +71,7 @@ const RegionReport: FC<RegionReportProps> = ({
         year={year}
         name={report.name}
       />
-      {report.municipalities.length > 2 && (
+      {report.municipalities && report.municipalities.length > 2 && (
         <Municipalities
           items={report.municipalityValues}
           names={municipalityNames}

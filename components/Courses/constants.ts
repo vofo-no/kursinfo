@@ -38,8 +38,8 @@ export interface ICoursesBaseProps {
 export interface IAggregatedData {
   id: string;
   name: string;
-  plannedCourses?: number;
-  plannedHours?: number;
+  plannedCourses: number;
+  plannedHours: number;
   courses: number;
   hours: number;
   participants: number;

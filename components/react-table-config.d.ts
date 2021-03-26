@@ -25,7 +25,6 @@ import {
   UseSortByInstanceProps,
   UseSortByOptions,
   UseSortByState,
-  UseTableColumnProps,
 } from "react-table";
 
 declare module "react-table" {
@@ -34,7 +33,7 @@ declare module "react-table" {
       UseGroupByOptions<D>,
       UseRowStateOptions<D>,
       UseSortByOptions<D>,
-      Record<string, any> {}
+      Record<string, unknown> {}
 
   export interface Hooks<
     D extends Record<string, unknown> = Record<string, unknown>
@@ -72,7 +71,7 @@ declare module "react-table" {
 
   export interface Cell<
     D extends Record<string, unknown> = Record<string, unknown>,
-    V = any
+    V = unknown
   > extends UseGroupByCellProps<D>,
       UseRowStateCellProps<D> {}
 

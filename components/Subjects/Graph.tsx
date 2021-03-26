@@ -13,12 +13,12 @@ const Graph: FC<SubjectsGraphProps> = ({ year, ages }) => {
   const calcStartYear = year + 1 - ages[0].length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
 
-  const options = {
+  const options: Highcharts.Options = {
     chart: {
       height: 300,
     },
     yAxis: {
-      title: false,
+      title: undefined,
       endOnTick: false,
     },
     xAxis: {
@@ -47,7 +47,7 @@ const Graph: FC<SubjectsGraphProps> = ({ year, ages }) => {
     series: ages.map((age, i) => ({
       name: ageGroupName[i],
       data: age,
-    })),
+    })) as Array<Highcharts.SeriesLineOptions>,
   };
 
   return (

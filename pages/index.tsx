@@ -1,18 +1,25 @@
-import Link from "next/link";
 import { Box } from "@vofo-no/design";
+import { GetStaticProps } from "next";
+import Link from "next/link";
+import { FC } from "react";
+
 import Layout from "../components/Layout";
 import PageHeading from "../components/PageHeading";
 import { years } from "../data/index.json";
 
-export async function getStaticProps() {
+interface IndexProps {
+  years: Array<string>;
+}
+
+export const getStaticProps: GetStaticProps<IndexProps> = async () => {
   return {
     props: {
       years,
     },
   };
-}
+};
 
-export default function Index({ years }) {
+const Index: FC<IndexProps> = ({ years }) => {
   return (
     <Layout title={`Statistikk`} header>
       <Box variant="light" p={3} boxShadow="small">
@@ -29,4 +36,6 @@ export default function Index({ years }) {
       </Box>
     </Layout>
   );
-}
+};
+
+export default Index;

@@ -23,7 +23,7 @@ const Graph: FC<PropTypes> = ({
   const calcStartYear = year + 1 - values.length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
 
-  const yAxis: Array<unknown> = [
+  const yAxis: Array<Highcharts.YAxisOptions> = [
     {
       endOnTick: false,
       title: {
@@ -32,12 +32,13 @@ const Graph: FC<PropTypes> = ({
     },
   ];
 
-  const series: Array<unknown> = [
+  const series: Array<Highcharts.SeriesLineOptions> = [
     {
       name: `${type} i ${unit}`,
       data: values,
       yAxis: 0,
       zIndex: 1,
+      type: "line",
     },
   ];
 
@@ -65,10 +66,11 @@ const Graph: FC<PropTypes> = ({
       yAxis: 1,
       color: "rgb(144, 237, 125)",
       zIndex: 0,
+      type: "line",
     });
   }
 
-  const options = {
+  const options: Highcharts.Options = {
     chart: {
       height: 200,
     },

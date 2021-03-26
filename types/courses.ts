@@ -1,10 +1,12 @@
+import { ParsedUrlQuery } from "node:querystring";
+
 import { GroupType } from "../components/Courses/constants";
 
-export interface CoursesParams {
-  year?: string;
-  county?: string;
-  organization?: string;
-  group?: GroupType;
+export interface CoursesParams extends ParsedUrlQuery {
+  year: string;
+  county: string;
+  organization: string;
+  group: GroupType;
 }
 
 export interface ICourseItem {

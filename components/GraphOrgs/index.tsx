@@ -16,7 +16,7 @@ const shortOrName = (item: INamed) => item.short ?? item.name;
 const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
   const lastYear = String(Number(year) - 1);
 
-  const options = {
+  const options: Highcharts.Options = {
     chart: {
       type: "column",
       height: 180,
@@ -29,7 +29,7 @@ const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
     },
     yAxis: {
       min: 0,
-      title: false,
+      title: undefined,
       endOnTick: false,
     },
     legend: {
@@ -61,7 +61,7 @@ const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
         name: year,
         data: keys.map((key: string) => items[key].hours),
       },
-    ],
+    ] as Array<Highcharts.SeriesColumnOptions>,
   };
 
   return (

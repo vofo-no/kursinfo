@@ -1,11 +1,13 @@
-import { INamed } from "../types";
 import { Text } from "@vofo-no/design";
+import { ReactNode } from "react";
 
-function isNamed(item: any): item is INamed {
+import { INamed } from "../types";
+
+function isNamed(item: unknown): item is INamed {
   return (item as INamed).name !== undefined;
 }
 
-export function showName(item: string | INamed) {
+export function showName(item: string | INamed): ReactNode {
   if (isNamed(item)) {
     return (
       <>

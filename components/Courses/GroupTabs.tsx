@@ -20,7 +20,10 @@ const tabLabels: Record<GroupType, string> = {
   studieplaner: "Studieplaner",
 };
 
-const isSpecific = (tab: GroupType, { organization, county }) => {
+const isSpecific = (
+  tab: GroupType,
+  { organization, county }: { organization: string; county: string }
+) => {
   if (tab === "fylker" && !isDefaultCounty(county)) return true;
   if (tab === "organisasjoner" && !isDefaultOrganization(organization))
     return true;

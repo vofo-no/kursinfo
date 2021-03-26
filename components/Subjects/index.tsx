@@ -3,6 +3,8 @@ import { FC, Fragment } from "react";
 import Graph from "./Graph";
 import names from "./names.json";
 
+type NameKeys = keyof typeof names;
+
 type SubjectType = {
   participants: {
     males: number;
@@ -76,7 +78,7 @@ const Subjects: FC<SubjectsProps> = ({
                   return (
                     <tr key={key}>
                       <td>{i + 1}</td>
-                      <th scope="row">{names[key] || key}</th>
+                      <th scope="row">{names[key as NameKeys] || key}</th>
                       <td>{females.toLocaleString("nb")}</td>
                       <td>{males.toLocaleString("nb")}</td>
                       <td>{(females + males).toLocaleString("nb")}</td>
@@ -114,10 +116,11 @@ const Subjects: FC<SubjectsProps> = ({
                       const {
                         participants: { ages: topSubjectAges },
                       } = subjects[key];
+                      if (!topSubjectAges) return null;
                       return (
                         <tr key={key}>
                           <td>{i + 1}</td>
-                          <th scope="row">{names[key] || key}</th>
+                          <th scope="row">{names[key as NameKeys] || key}</th>
                           <td>{topSubjectAges[age].toLocaleString("nb")}</td>
                         </tr>
                       );

@@ -36,6 +36,23 @@ function makeTitle(
   return parts.filter(Boolean).join(", ");
 }
 
+interface NumberCell {
+  value: number;
+}
+
+interface StringCell {
+  value: string;
+}
+
+interface StatusCell {
+  value?: string;
+  row: { isGrouped: boolean };
+}
+
+interface InfoCell {
+  data: Array<{ hours?: number; participants?: number }>;
+}
+
 const Courses: FC<CoursesProps> = ({
   county,
   countyOptions,
@@ -52,7 +69,7 @@ const Courses: FC<CoursesProps> = ({
   ...rest
 }) => {
   const router = useRouter();
-  const nav = (query: CoursesParams = {}) => {
+  const nav = (query: Partial<CoursesParams> = {}) => {
     if (!query.group) {
       if (
         query.county &&
@@ -90,43 +107,43 @@ const Courses: FC<CoursesProps> = ({
       {
         Header: "Organisasjon",
         accessor: "organizationIndex",
-        Cell: ({ value }) => organizers[value] || null,
+        Cell: ({ value }: NumberCell) => organizers[value] || null,
       },
       {
         Header: "Lokallag",
         accessor: "organizerIndex",
-        Cell: ({ value }) => organizers[value] || null,
+        Cell: ({ value }: NumberCell) => organizers[value] || null,
       },
       {
         Header: "Fylke",
         accessor: "countyIndex",
-        Cell: ({ value }) => counties[value] || null,
+        Cell: ({ value }: NumberCell) => counties[value] || null,
       },
       {
         Header: "Start",
         accessor: "startDate",
-        Cell: ({ value }) => remixISODate(value),
+        Cell: ({ value }: StringCell) => remixISODate(value),
       },
       {
         Header: "Slutt",
         accessor: "endDate",
-        Cell: ({ value }) => remixISODate(value),
+        Cell: ({ value }: StringCell) => remixISODate(value),
       },
       {
         Header: "Studieplan",
         accessor: "curriculumIndex",
-        Cell: ({ value }) => curriculums[value] || null,
+        Cell: ({ value }: NumberCell) => curriculums[value] || null,
       },
       {
         Header: "Tittel",
         accessor: "courseTitle",
-        Footer: (info) =>
+        Footer: (info: InfoCell) =>
           useMemo(() => `${info.data.length} kurs`, [info.data]),
       },
       {
         Header: "Status",
         accessor: "reportStatus",
-        Cell: ({ row, value }) => {
+        Cell: ({ row, value }: StatusCell) => {
           if (value) return value;
           if (row.isGrouped) return null;
 
@@ -138,8 +155,8 @@ const Courses: FC<CoursesProps> = ({
         accessor: "caseNumber",
         disableSortBy: true,
         // eslint-disable-next-line react/display-name
-        Cell: ({ row, value }) => {
-          if (row.isGrouped) return null;
+        Cell: ({ row, value }: StatusCell) => {
+          if (row.isGrouped || !value) return null;
           return (
             <button
               className="transparent tight"
@@ -157,10 +174,11 @@ const Courses: FC<CoursesProps> = ({
         id: "courses",
         aggregate: "sum",
         Cell: () => null,
-        Aggregated: ({ value }) => value,
+        Aggregated: ({ value }: NumberCell) => value,
         sortDescFirst: true,
         className: "num",
-        Footer: (info) => useMemo(() => info.data.length, [info.data]),
+        Footer: (info: InfoCell) =>
+          useMemo(() => info.data.length, [info.data]),
       },
       {
         Header: "Timer",
@@ -168,9 +186,10 @@ const Courses: FC<CoursesProps> = ({
         aggregate: "sum",
         sortDescFirst: true,
         className: "num",
-        Footer: (info) =>
+        Footer: (info: InfoCell) =>
           useMemo(
-            () => info.data.reduce((sum, row) => (+row.hours || 0) + sum, 0),
+            () =>
+              info.data.reduce((sum, row) => (Number(row.hours) || 0) + sum, 0),
             [info.data]
           ),
       },
@@ -180,10 +199,13 @@ const Courses: FC<CoursesProps> = ({
         sortDescFirst: true,
         aggregate: "sum",
         className: "num",
-        Footer: (info) =>
+        Footer: (info: InfoCell) =>
           useMemo(
             () =>
-              info.data.reduce((sum, row) => (+row.participants || 0) + sum, 0),
+              info.data.reduce(
+                (sum, row) => (Number(row.participants) || 0) + sum,
+                0
+              ),
             [info.data]
           ),
       },
@@ -221,7 +243,7 @@ const Courses: FC<CoursesProps> = ({
   const getModalCourse = useCallback(() => {
     const course =
       modal && tableData.find(({ caseNumber }) => caseNumber === modal);
-    if (!course) return null;
+    if (!course) return undefined;
     return {
       ...course,
       startDate: remixISODate(course.startDate, true),

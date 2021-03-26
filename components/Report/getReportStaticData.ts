@@ -1,26 +1,21 @@
 import fs from "fs";
+import { GetStaticPropsResult } from "next";
 import path from "path";
-
 import {
   ASSOCIATION,
   AssociationReportProps,
   Dictionary,
   INamed,
   REGION,
-  RegionReportProps,
   ReportProps,
   TOTAL,
-  TotalReportProps,
-} from "../../types";
+} from "types";
+import { ReportDataProps, ReportParams } from "types/reports";
 
-interface ParamType {
-  year: string;
-  report: string;
-}
-
-interface StaticDataProps {
-  props: RegionReportProps | AssociationReportProps | TotalReportProps;
-}
+const perCapita = (courses: number, population = 0) => {
+  if (population > 0) return courses / population;
+  return 0;
+};
 
 const getOrgNames = (sf: string): Dictionary<INamed> => {
   const namePath = path.join(process.cwd(), `data/names/orgs/${sf}.json`);
@@ -33,7 +28,7 @@ const getOrgNames = (sf: string): Dictionary<INamed> => {
 export const getReportStaticData = async ({
   year,
   report,
-}: ParamType): Promise<StaticDataProps> => {
+}: ReportParams): Promise<GetStaticPropsResult<ReportDataProps>> => {
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data: {
     reports: {
@@ -70,16 +65,18 @@ export const getReportStaticData = async ({
             participants:
               association.participants.males + association.participants.females,
             hours: association.hours,
-            coursesPerCapita: association.courses / population,
+            coursesPerCapita: perCapita(association.courses, population),
             isCurrent: false,
           };
         }
         case TOTAL: {
-          if ((reportData.key as string[]) !== reportData.key)
-            throw new Error("Unexpected combo key");
+          const comboKey = reportData.key;
+          if (!Array.isArray(comboKey)) throw new Error("Unexpected combo key");
+
           const aKeys = Object.keys(associations).filter((a) =>
-            reportData.key.includes(a)
+            comboKey.includes(a)
           );
+
           return {
             name: name,
             courses: aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
@@ -91,9 +88,10 @@ export const getReportStaticData = async ({
               0
             ),
             hours: aKeys.reduce((sum, a) => sum + associations[a].hours, 0),
-            coursesPerCapita:
-              aKeys.reduce((sum, a) => sum + associations[a].courses, 0) /
-              population,
+            coursesPerCapita: perCapita(
+              aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
+              population
+            ),
             isCurrent: false,
           };
         }
@@ -103,15 +101,15 @@ export const getReportStaticData = async ({
             courses: courses,
             participants: participants.males + participants.females,
             hours: hours,
-            coursesPerCapita: courses / population,
+            coursesPerCapita: perCapita(courses, population),
             isCurrent: municipalities.every((m) =>
-              reportData.municipalities.includes(m)
+              reportData.municipalities?.includes(m)
             ),
           };
         }
       }
     })
-    .sort((a, b) => b.coursesPerCapita - a.coursesPerCapita);
+    .sort((a, b) => Number(b.coursesPerCapita) - Number(a.coursesPerCapita));
 
   const props = {
     year,
@@ -119,14 +117,19 @@ export const getReportStaticData = async ({
     report: reportData,
     municipalities: data.municipalities,
     counties,
-    municipalityNames: Object.keys(data.municipalities).reduce((obj, key) => {
-      obj[key] = data.municipalities[key].name;
-      return obj;
-    }, {}),
+    municipalityNames: Object.keys(data.municipalities).reduce(
+      (obj: Record<string, string>, key) => {
+        obj[key] = data.municipalities[key].name;
+        return obj;
+      },
+      {}
+    ),
   };
 
   if (reportData.type === ASSOCIATION) {
-    props["orgNames"] = getOrgNames(reportData.key as string);
+    (props as AssociationReportProps).orgNames = getOrgNames(
+      reportData.key as string
+    );
   }
 
   return {

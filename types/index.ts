@@ -54,7 +54,7 @@ export interface ReportProps {
     participants: {
       males: number;
       females: number;
-      ages?: number[][];
+      ages: number[][];
     };
     hours: number;
     facilitated: ISums;

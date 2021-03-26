@@ -9,9 +9,11 @@ import {
   IAggregatedData,
 } from "./constants";
 
+type AggregateKey = "organizationId";
+
 const aggregate = (
   data: Array<ICourseItem>,
-  key: string,
+  key: AggregateKey,
   getName: (item: ICourseItem) => string
 ) => {
   return Object.values(

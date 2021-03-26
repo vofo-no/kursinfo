@@ -11,12 +11,13 @@ function getCounties(
   const configYear = Object.keys(config)
     .sort((a, b) => a.localeCompare(b))
     .find((key) => Number(key) <= Number(year));
-  const configItem = config[configYear];
 
-  if (!configItem)
+  if (!configYear)
     throw new Error(
       `Year before or on "${year}" is not defined in data/config.json.`
     );
+
+  const configItem = config[configYear as keyof typeof config];
 
   const futureSet = new Set(configItem.futureRegions);
   const regions = Object.keys(configItem.regions).filter(
@@ -26,7 +27,9 @@ function getCounties(
   return regions.map((region) => ({
     region,
     param: parameterize(region),
-    keys: new Set(configItem.regions[region]),
+    keys: new Set(
+      configItem.regions[region as keyof typeof configItem.regions]
+    ),
   }));
 }
 

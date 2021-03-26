@@ -1,3 +1,5 @@
+import { GetStaticPathsResult } from "next";
+
 import getCounties from "../../lib/getCounties";
 import getTenantYearOrganizations from "../../lib/getTenantYearOrganizations";
 import getTenantYears from "../../lib/getTenantYears";
@@ -12,7 +14,7 @@ type PathsType = Array<{ params: CoursesParams }>;
 
 async function getStaticPaths(
   tenant: string
-): Promise<{ paths: PathsType; fallback: boolean }> {
+): Promise<GetStaticPathsResult<CoursesParams>> {
   const paths: PathsType = [];
   const years = getTenantYears(tenant);
 
