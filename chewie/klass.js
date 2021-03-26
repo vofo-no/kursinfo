@@ -47,7 +47,7 @@ const fetchFromSSB = (year) =>
     req.end();
   });
 
-const sanitizeName = (name) => name.replace(/\s\(\d*\-\d+\)$/, "");
+const sanitizeName = (name) => name.replace(/\s\(\d*-\d+\)$/, "");
 
 const makeMunicipalityObject = (data) => {
   let result = {};

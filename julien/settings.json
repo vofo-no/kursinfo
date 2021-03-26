@@ -1,0 +1,17 @@
+{
+  "tenants": [
+    {
+      "id": "5F21539F-E164-462E-80CF-9949830B952A",
+      "name": "Studieforbundet natur og miljø",
+      "adapter": "eapply",
+      "dataTarget": "2539"
+    },
+    {
+      "id": "73E12C2A-64A4-4EAC-A80A-898F3F3BFEF3",
+      "name": "Studieforbundet kultur og tradisjon",
+      "adapter": "eapply",
+      "dataTarget": "2510",
+      "reportSchema": "/rapport2510.xlsx"
+    }
+  ]
+}

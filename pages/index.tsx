@@ -1,21 +1,28 @@
+import { Box } from "@vofo-no/design";
+import { GetStaticProps } from "next";
 import Link from "next/link";
-import { Container } from "vofo-design";
+import { FC } from "react";
+
 import Layout from "../components/Layout";
 import PageHeading from "../components/PageHeading";
 import { years } from "../data/index.json";
 
-export async function getStaticProps() {
+interface IndexProps {
+  years: Array<string>;
+}
+
+export const getStaticProps: GetStaticProps<IndexProps> = async () => {
   return {
     props: {
       years,
     },
   };
-}
+};
 
-export default function Index({ years }) {
+const Index: FC<IndexProps> = ({ years }) => {
   return (
     <Layout title={`Statistikk`} header>
-      <Container variant="white" my={3} py={3} boxShadow={1}>
+      <Box variant="light" p={3} boxShadow="small">
         <PageHeading>Statistikk</PageHeading>
         <ul>
           {years.map((year) => (
@@ -26,7 +33,9 @@ export default function Index({ years }) {
             </li>
           ))}
         </ul>
-      </Container>
+      </Box>
     </Layout>
   );
-}
+};
+
+export default Index;

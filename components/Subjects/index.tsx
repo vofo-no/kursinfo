@@ -1,6 +1,9 @@
-import { Fragment } from "react";
+import { FC, Fragment } from "react";
+
 import Graph from "./Graph";
 import names from "./names.json";
+
+type NameKeys = keyof typeof names;
 
 type SubjectType = {
   participants: {
@@ -10,7 +13,7 @@ type SubjectType = {
   };
 };
 
-type SubjectsProps = {
+interface SubjectsProps {
   mainSubjects: {
     [key: string]: SubjectType;
   };
@@ -21,7 +24,7 @@ type SubjectsProps = {
   year: string;
   name: string;
   ages: number[][];
-};
+}
 
 function p(subject: SubjectType) {
   return subject.participants.females + subject.participants.males;
@@ -36,14 +39,14 @@ export const ageGroupName = [
   "60+ år",
 ];
 
-function Subjects({
+const Subjects: FC<SubjectsProps> = ({
   mainSubjects,
   subjects,
   topSubjects,
   ages,
   year,
   name,
-}: SubjectsProps) {
+}) => {
   const subjectKeys = Object.keys(mainSubjects)
     .sort((a, b) => p(mainSubjects[b]) - p(mainSubjects[a]))
     .filter((key) => p(mainSubjects[key]));
@@ -75,7 +78,7 @@ function Subjects({
                   return (
                     <tr key={key}>
                       <td>{i + 1}</td>
-                      <th scope="row">{names[key] || key}</th>
+                      <th scope="row">{names[key as NameKeys] || key}</th>
                       <td>{females.toLocaleString("nb")}</td>
                       <td>{males.toLocaleString("nb")}</td>
                       <td>{(females + males).toLocaleString("nb")}</td>
@@ -113,10 +116,11 @@ function Subjects({
                       const {
                         participants: { ages: topSubjectAges },
                       } = subjects[key];
+                      if (!topSubjectAges) return null;
                       return (
                         <tr key={key}>
                           <td>{i + 1}</td>
-                          <th scope="row">{names[key] || key}</th>
+                          <th scope="row">{names[key as NameKeys] || key}</th>
                           <td>{topSubjectAges[age].toLocaleString("nb")}</td>
                         </tr>
                       );
@@ -130,6 +134,6 @@ function Subjects({
       </section>
     </>
   );
-}
+};
 
 export default Subjects;

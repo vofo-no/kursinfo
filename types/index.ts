@@ -54,7 +54,7 @@ export interface ReportProps {
     participants: {
       males: number;
       females: number;
-      ages?: number[][];
+      ages: number[][];
     };
     hours: number;
     facilitated: ISums;
@@ -88,7 +88,7 @@ export interface ReportProps {
  */
 export type CompactValues = [number, number, number, number];
 
-export interface RegionReportProps extends ReportProps {}
+export type RegionReportProps = ReportProps;
 export interface AssociationReportProps extends ReportProps {
   orgNames?: Dictionary<INamed>;
 }

@@ -1,8 +1,8 @@
-import names from "../../data/names/associations.json";
-import GraphOrgs from "../GraphOrgs";
-import { COLORS } from "../Layout";
-import { Dictionary, IAssociation } from "../../types";
-import { showName } from "../../utils/names";
+import GraphOrgs from "components/GraphOrgs";
+import names from "data/names/associations.json";
+import { FC } from "react";
+import { Dictionary, IAssociation } from "types";
+import { showName } from "utils/names";
 
 interface PropTypes {
   items: Dictionary<IAssociation>;
@@ -10,7 +10,9 @@ interface PropTypes {
   year: string;
 }
 
-function Associations({ items, year, name }: PropTypes) {
+type NameKey = keyof typeof names;
+
+const Associations: FC<PropTypes> = ({ items, year, name }) => {
   const associationKeys = Object.keys(items)
     .sort((a, b) => items[b].hours - items[a].hours)
     .filter((key) => items[key].courses);
@@ -39,7 +41,9 @@ function Associations({ items, year, name }: PropTypes) {
                 return (
                   <tr key={key}>
                     <td>{i + 1}</td>
-                    <th scope="row">{showName(names[key] || key)}</th>
+                    <th scope="row">
+                      {showName(names[key as NameKey] || key)}
+                    </th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
                     <td>
@@ -61,16 +65,8 @@ function Associations({ items, year, name }: PropTypes) {
           unit="Studieforbund"
         />
       </div>
-      <style jsx>
-        {`
-          th small {
-            font-weight: normal;
-            color: ${COLORS.grayDark};
-          }
-        `}
-      </style>
     </section>
   );
-}
+};
 
 export default Associations;

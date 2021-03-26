@@ -1,7 +1,8 @@
-import GraphOrgs from "../GraphOrgs";
-import { COLORS } from "../Layout";
+import { FC } from "react";
+
 import { Dictionary, IAssociation, INamed } from "../../types";
 import { showName } from "../../utils/names";
+import GraphOrgs from "../GraphOrgs";
 
 interface PropTypes {
   items: Dictionary<IAssociation>;
@@ -10,7 +11,7 @@ interface PropTypes {
   year: string;
 }
 
-function Organizations({ items, year, name, names }: PropTypes) {
+const Organizations: FC<PropTypes> = ({ items, year, name, names }) => {
   const allKeys = Object.keys(items).filter((key) => items[key].courses);
   const limit = allKeys.length > 6 ? 5 : undefined;
 
@@ -68,16 +69,8 @@ function Organizations({ items, year, name, names }: PropTypes) {
           unit="Organisasjon"
         />
       </div>
-      <style jsx>
-        {`
-          th small {
-            font-weight: normal;
-            color: ${COLORS.grayDark};
-          }
-        `}
-      </style>
     </section>
   );
-}
+};
 
 export default Organizations;

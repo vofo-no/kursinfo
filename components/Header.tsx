@@ -1,42 +1,37 @@
-import { useState } from "react";
+import { Box, Logo, Menu, MenuButton, MenuContainer } from "@vofo-no/design";
 import Link from "next/link";
+import { FC, useState } from "react";
 import React from "react";
-import styled from "@emotion/styled";
 
-import { Logo, Menu, MenuContainer, MenuButton, Container } from "vofo-design";
-
-const LogoHeading = styled.h1`
-  margin: 0 16px 0 0 !important;
-  padding: 0 !important;
-`;
-
-const Header = () => {
+const Header: FC = () => {
   const [menu, toggleMenu] = useState(false);
   return (
-    <Container maxWidth={null} boxShadow={1} variant="white" px={[0, 2, 3]}>
-      <Container display="flex" alignItems="stretch">
-        <LogoHeading>
+    <Box boxShadow="small" variant="light" px={2} py={1}>
+      <Box container display="flex" alignItems="stretch">
+        <Box as="h1" margin="0 16px 0 0 !important" padding="0 !important">
           <Link href="/">
             <a>
               <Logo variant="header" />
             </a>
           </Link>
-        </LogoHeading>
-        <MenuContainer>
+        </Box>
+        <Box display="flex" flexGrow={2} flexDirection="column">
           <MenuButton open={menu} onClick={() => toggleMenu(!menu)} />
-          <Menu open={menu}>
-            <Link href="/">
-              <a>Statistikk</a>
-            </Link>
-          </Menu>
-          <Menu variant="top" open={menu}>
-            <a href="http://www.vofo.no/">
-              <a className="black">Gå til vofo.no</a>
-            </a>
-          </Menu>
-        </MenuContainer>
-      </Container>
-    </Container>
+          <MenuContainer open={menu}>
+            <Menu>
+              <Link href="/">
+                <a>Statistikk</a>
+              </Link>
+            </Menu>
+            <Menu variant="top">
+              <a href="http://www.vofo.no/">
+                <a className="black">Gå til vofo.no</a>
+              </a>
+            </Menu>
+          </MenuContainer>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

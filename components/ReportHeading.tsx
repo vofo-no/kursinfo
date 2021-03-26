@@ -1,23 +1,7 @@
-import styled from "@emotion/styled";
-import { Container, Text } from "vofo-design";
-import { ReportProps, ASSOCIATION, REGION, TOTAL } from "../types";
+import { Box, Text } from "@vofo-no/design";
+import { FC } from "react";
 
-const Heading = styled.h1`
-  align-self: start;
-  margin: 40px 0 auto 0;
-`;
-
-const ReportTag = styled(Container)`
-  position: absolute;
-  top: 0;
-  right: 10px;
-`;
-const ReportTagText = styled(Text.Inline)`
-  @media (min-width: 725px) {
-    writing-mode: vertical-lr;
-  }
-  position: relative;
-`;
+import { ASSOCIATION, REGION, ReportProps, TOTAL } from "../types";
 
 const typeName = {
   [ASSOCIATION]: "Studieforbundstatistikk",
@@ -25,26 +9,39 @@ const typeName = {
   [TOTAL]: "Kursstatistikk",
 };
 
-function ReportHeading({
-  name,
-  year,
-  type,
-}: {
+interface ReportHeadingProps {
   name: string;
   year: string;
   type: ReportProps["type"];
-}) {
-  return (
-    <Heading>
-      <Text.Block fontSize={4} color="gray" lineHeight="title">
-        Studieforbundenes kursvirksomhet i {year}
-      </Text.Block>
-      <Text.Block fontSize={6}>{name}</Text.Block>
-      <ReportTag variant="primary" py={[1, 2, 3]}>
-        <ReportTagText fontSize={[1, 2, 3]}>{typeName[type]}</ReportTagText>
-      </ReportTag>
-    </Heading>
-  );
 }
+
+const ReportHeading: FC<ReportHeadingProps> = ({ name, year, type }) => (
+  <Box alignSelf="start" margin="40px 0 auto 0" as="h1">
+    <Text
+      fontSize={4}
+      as="div"
+      color="gray"
+      lineHeight="heading"
+      fontFamily="heading"
+    >
+      Studieforbundenes kursvirksomhet i {year}
+    </Text>
+    <Text fontSize={6} as="div" lineHeight="heading" fontFamily="heading">
+      {name}
+    </Text>
+    <Box
+      variant="primary"
+      py={[1, 2, 3]}
+      px={3}
+      position="absolute"
+      top={0}
+      right="10px"
+    >
+      <Text as="span" fontSize={[1, 2, 3]} vertical="responsive">
+        {typeName[type]}
+      </Text>
+    </Box>
+  </Box>
+);
 
 export default ReportHeading;

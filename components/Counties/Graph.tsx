@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import GraphBase from "../Graph";
 
 interface PropTypes {
@@ -9,35 +11,36 @@ interface PropTypes {
   totalValues?: number[];
 }
 
-function Graph({
+const Graph: FC<PropTypes> = ({
   year,
   type,
   unit,
   values,
   totalUnit,
   totalValues,
-}: PropTypes) {
+}) => {
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - values.length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
 
-  const yAxis = [
+  const yAxis: Array<Highcharts.YAxisOptions> = [
     {
       endOnTick: false,
       title: {
         text: `${type} i ${unit}`,
       },
     },
-  ] as [any];
+  ];
 
-  const series = [
+  const series: Array<Highcharts.SeriesLineOptions> = [
     {
       name: `${type} i ${unit}`,
       data: values,
       yAxis: 0,
       zIndex: 1,
+      type: "line",
     },
-  ] as [any];
+  ];
 
   if (totalValues) {
     yAxis.push({
@@ -63,10 +66,11 @@ function Graph({
       yAxis: 1,
       color: "rgb(144, 237, 125)",
       zIndex: 0,
+      type: "line",
     });
   }
 
-  const options = {
+  const options: Highcharts.Options = {
     chart: {
       height: 200,
     },
@@ -106,6 +110,6 @@ function Graph({
       <GraphBase options={options} />
     </>
   );
-}
+};
 
 export default Graph;
