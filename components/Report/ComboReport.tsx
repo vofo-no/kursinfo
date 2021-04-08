@@ -1,20 +1,20 @@
+import Associations from "components/Associations";
 import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
 import Municipalities from "components/Municipalities";
-import Organizations from "components/Organizations";
 import ReportHeading from "components/ReportHeading";
 import Subjects from "components/Subjects";
 import Summary from "components/Summary";
 import { FC, useEffect } from "react";
-import { AssociationReportProps } from "types/reports";
+import { COMBO, ComboReportProps } from "types/reports";
 
 import Footer from "./Footer";
 
-const AssociationReport: FC<AssociationReportProps> = ({
+const ComboReport: FC<ComboReportProps> = ({
   year,
   name,
-  organizations,
+  associations,
   counties,
   historical,
   historicalAll,
@@ -28,10 +28,10 @@ const AssociationReport: FC<AssociationReportProps> = ({
     initializeGraphs();
   }, []);
   return (
-    <Layout title={`${name}: Studieforbundstatistikk ${year}`}>
+    <Layout title={`${name}: Kursstatistikk ${year}`}>
       <section className="page">
         <div className="container">
-          <ReportHeading name={name} year={year} type="ASSOCIATION" />
+          <ReportHeading name={name} year={year} type={COMBO} />
           <Summary {...summary} />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
@@ -55,7 +55,7 @@ const AssociationReport: FC<AssociationReportProps> = ({
         historicalAll={historicalAll}
         totalUnit="alle studieforbund"
       />
-      <Organizations items={organizations} year={year} name={name} />
+      <Associations items={associations} year={year} name={name} />
       <Subjects
         mainSubjects={mainSubjects}
         topSubjects={topSubjects}
@@ -68,4 +68,4 @@ const AssociationReport: FC<AssociationReportProps> = ({
   );
 };
 
-export default AssociationReport;
+export default ComboReport;

@@ -1,19 +1,15 @@
 import { FC } from "react";
+import { Organization } from "types/reports";
 
-import { Dictionary, IAssociation, INamed } from "../../types";
 import GraphBase from "../Graph";
 
 interface PropTypes {
-  keys: string[];
-  items: Dictionary<IAssociation>;
-  names: Dictionary<INamed>;
+  items: Array<Organization>;
   year: string;
   unit: "Studieforbund" | "Organisasjon";
 }
 
-const shortOrName = (item: INamed) => item.short ?? item.name;
-
-const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
+const Graph: FC<PropTypes> = ({ items, year, unit }) => {
   const lastYear = String(Number(year) - 1);
 
   const options: Highcharts.Options = {
@@ -22,9 +18,7 @@ const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
       height: 180,
     },
     xAxis: {
-      categories: keys.map((key: string) =>
-        key in names ? shortOrName(names[key]) : key
-      ),
+      categories: items.map(({ short, name }) => short ?? name),
       crosshair: true,
     },
     yAxis: {
@@ -55,11 +49,11 @@ const Graph: FC<PropTypes> = ({ keys, items, names, year, unit }) => {
     series: [
       {
         name: lastYear,
-        data: keys.map((key: string) => items[key].lastYearHours),
+        data: items.map((item) => item.lastYearHours),
       },
       {
         name: year,
-        data: keys.map((key: string) => items[key].hours),
+        data: items.map((item) => item.hours),
       },
     ] as Array<Highcharts.SeriesColumnOptions>,
   };

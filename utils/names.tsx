@@ -1,7 +1,6 @@
 import { Text } from "@vofo-no/design";
 import { ReactNode } from "react";
-
-import { INamed } from "../types";
+import { INamed } from "types/reports";
 
 function isNamed(item: unknown): item is INamed {
   return (item as INamed).name !== undefined;

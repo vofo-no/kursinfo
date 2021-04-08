@@ -4,12 +4,21 @@ import { years } from "data/index.json";
 import fs from "fs";
 import { GetStaticPaths, GetStaticProps } from "next";
 import path from "path";
-import { ReportDataProps, ReportParams } from "types/reports";
+import {
+  AssociationReportProps,
+  ComboReportProps,
+  GlobalReportProps,
+  RegionReportProps,
+  ReportParams,
+} from "types/reports";
 
 type PathsType = Array<{ params: ReportParams }>;
 
 export const getStaticProps: GetStaticProps<
-  ReportDataProps,
+  | RegionReportProps
+  | AssociationReportProps
+  | ComboReportProps
+  | GlobalReportProps,
   ReportParams
 > = async ({ params }) => {
   if (!params) throw new Error();

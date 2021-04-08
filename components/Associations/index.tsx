@@ -1,21 +1,15 @@
 import GraphOrgs from "components/GraphOrgs";
-import names from "data/names/associations.json";
 import { FC } from "react";
-import { Dictionary, IAssociation } from "types";
+import { Organization } from "types/reports";
 import { showName } from "utils/names";
 
 interface PropTypes {
-  items: Dictionary<IAssociation>;
+  items: Array<Organization>;
   name: string;
   year: string;
 }
 
-type NameKey = keyof typeof names;
-
 const Associations: FC<PropTypes> = ({ items, year, name }) => {
-  const associationKeys = Object.keys(items)
-    .sort((a, b) => items[b].hours - items[a].hours)
-    .filter((key) => items[key].courses);
   return (
     <section className="page">
       <div className="container">
@@ -36,34 +30,27 @@ const Associations: FC<PropTypes> = ({ items, year, name }) => {
               </tr>
             </thead>
             <tbody>
-              {associationKeys.map((key, i) => {
-                const { courses, participants, hours } = items[key];
-                return (
-                  <tr key={key}>
-                    <td>{i + 1}</td>
-                    <th scope="row">
-                      {showName(names[key as NameKey] || key)}
-                    </th>
-                    <td>{courses.toLocaleString("nb")}</td>
-                    <td>{hours.toLocaleString("nb")}</td>
-                    <td>
-                      {(
-                        participants.males + participants.females
-                      ).toLocaleString("nb")}
-                    </td>
-                  </tr>
-                );
-              })}
+              {items.map(
+                ({ courses, participants, hours, key, ...rest }, i) => {
+                  return (
+                    <tr key={key}>
+                      <td>{i + 1}</td>
+                      <th scope="row">{showName(rest)}</th>
+                      <td>{courses.toLocaleString("nb")}</td>
+                      <td>{hours.toLocaleString("nb")}</td>
+                      <td>
+                        {(
+                          participants.males + participants.females
+                        ).toLocaleString("nb")}
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
             </tbody>
           </table>
         </div>
-        <GraphOrgs
-          keys={associationKeys}
-          items={items}
-          names={names}
-          year={year}
-          unit="Studieforbund"
-        />
+        <GraphOrgs items={items} year={year} unit="Studieforbund" />
       </div>
     </section>
   );

@@ -1,27 +1,35 @@
 import { FC } from "react";
-
 import {
   ASSOCIATION,
   AssociationReportProps,
+  COMBO,
+  ComboReportProps,
+  GLOBAL,
+  GlobalReportProps,
   REGION,
   RegionReportProps,
-  TOTAL,
-  TotalReportProps,
-} from "../../types";
+} from "types/reports";
+
 import AssociationReport from "./AssociationReport";
+import ComboReport from "./ComboReport";
+import GlobalReport from "./GlobalReport";
 import RegionReport from "./RegionReport";
-import TotalReport from "./TotalReport";
 
 const Report: FC<
-  RegionReportProps | AssociationReportProps | TotalReportProps
+  | RegionReportProps
+  | AssociationReportProps
+  | ComboReportProps
+  | GlobalReportProps
 > = (props) => {
   switch (props.type) {
     case ASSOCIATION:
-      return <AssociationReport {...(props as AssociationReportProps)} />;
+      return <AssociationReport {...props} />;
+    case COMBO:
+      return <ComboReport {...props} />;
+    case GLOBAL:
+      return <GlobalReport {...props} />;
     case REGION:
-      return <RegionReport {...(props as RegionReportProps)} />;
-    case TOTAL:
-      return <TotalReport {...(props as TotalReportProps)} />;
+      return <RegionReport {...props} />;
   }
 };
 

@@ -1,9 +1,10 @@
 import { FC, Fragment } from "react";
+import { AgeSet, MainSubjectWithKey } from "types/reports";
 
 import Graph from "./Graph";
 import names from "./names.json";
 
-type NameKeys = keyof typeof names;
+type NameKey = keyof typeof names;
 
 type SubjectType = {
   participants: {
@@ -14,16 +15,11 @@ type SubjectType = {
 };
 
 interface SubjectsProps {
-  mainSubjects: {
-    [key: string]: SubjectType;
-  };
-  subjects: {
-    [key: string]: SubjectType;
-  };
-  topSubjects: string[][];
-  year: string;
+  mainSubjects: Array<MainSubjectWithKey>;
+  topSubjects: AgeSet<Array<{ key: string; value: number }>>;
+  ageSetHistory: Array<AgeSet<number>>;
   name: string;
-  ages: number[][];
+  year: string;
 }
 
 function p(subject: SubjectType) {
@@ -41,15 +37,11 @@ export const ageGroupName = [
 
 const Subjects: FC<SubjectsProps> = ({
   mainSubjects,
-  subjects,
   topSubjects,
-  ages,
+  ageSetHistory,
   year,
   name,
 }) => {
-  const subjectKeys = Object.keys(mainSubjects)
-    .sort((a, b) => p(mainSubjects[b]) - p(mainSubjects[a]))
-    .filter((key) => p(mainSubjects[key]));
   return (
     <>
       <section className="page blue">
@@ -71,36 +63,37 @@ const Subjects: FC<SubjectsProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {subjectKeys.map((key, i) => {
-                  const {
-                    participants: { males, females },
-                  } = mainSubjects[key];
-                  return (
-                    <tr key={key}>
-                      <td>{i + 1}</td>
-                      <th scope="row">{names[key as NameKeys] || key}</th>
-                      <td>{females.toLocaleString("nb")}</td>
-                      <td>{males.toLocaleString("nb")}</td>
-                      <td>{(females + males).toLocaleString("nb")}</td>
-                    </tr>
-                  );
-                })}
+                {mainSubjects.map(
+                  ({ key, participants: { males, females } }, i) => {
+                    return (
+                      <tr key={key}>
+                        <td>{i + 1}</td>
+                        <th scope="row">
+                          {key in names ? names[key as NameKey] : key}
+                        </th>
+                        <td>{females.toLocaleString("nb")}</td>
+                        <td>{males.toLocaleString("nb")}</td>
+                        <td>{(females + males).toLocaleString("nb")}</td>
+                      </tr>
+                    );
+                  }
+                )}
               </tbody>
             </table>
           </div>
-          <Graph year={Number(year)} ages={ages} />
+          <Graph year={Number(year)} ages={ageSetHistory} />
         </div>
       </section>
       <section className="page">
         <div className="container">
-          {[0, 1, 2, 3, 4, 5].map((age) => (
-            <Fragment key={`ag-tab-${age}`}>
+          {topSubjects.map((subjectItems, ageIndex) => (
+            <Fragment key={`ag-tab-${ageIndex}`}>
               <h3 className="table-label">
-                Topp 5 kursemner for deltakere {ageGroupName[age]}
+                Topp 5 kursemner for deltakere {ageGroupName[ageIndex]}
               </h3>
               <p className="subtitle">
                 Kursemner etter antall deltakere i aldersgruppen{" "}
-                {ageGroupName[age]}
+                {ageGroupName[ageIndex]}
               </p>
               <div className="responsive-table">
                 <table className="report-table">
@@ -112,16 +105,14 @@ const Subjects: FC<SubjectsProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {topSubjects[age].map((key, i) => {
-                      const {
-                        participants: { ages: topSubjectAges },
-                      } = subjects[key];
-                      if (!topSubjectAges) return null;
+                    {subjectItems.map(({ key, value }, i) => {
                       return (
                         <tr key={key}>
                           <td>{i + 1}</td>
-                          <th scope="row">{names[key as NameKeys] || key}</th>
-                          <td>{topSubjectAges[age].toLocaleString("nb")}</td>
+                          <th scope="row">
+                            {key in names ? names[key as NameKey] : key}
+                          </th>
+                          <td>{value.toLocaleString("nb")}</td>
                         </tr>
                       );
                     })}

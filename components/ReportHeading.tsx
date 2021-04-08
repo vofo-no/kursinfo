@@ -1,18 +1,18 @@
 import { Box, Text } from "@vofo-no/design";
 import { FC } from "react";
-
-import { ASSOCIATION, REGION, ReportProps, TOTAL } from "../types";
+import { ASSOCIATION, COMBO, GLOBAL, REGION } from "types/reports";
 
 const typeName = {
   [ASSOCIATION]: "Studieforbundstatistikk",
   [REGION]: "Fylkesstatistikk",
-  [TOTAL]: "Kursstatistikk",
+  [GLOBAL]: "Kursstatistikk",
+  [COMBO]: "Kursstatistikk",
 };
 
 interface ReportHeadingProps {
   name: string;
   year: string;
-  type: ReportProps["type"];
+  type: keyof typeof typeName;
 }
 
 const ReportHeading: FC<ReportHeadingProps> = ({ name, year, type }) => (
