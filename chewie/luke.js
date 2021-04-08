@@ -78,6 +78,11 @@ const getDataHistory = (year) => {
   return dataHistory;
 };
 
+/**
+ *
+ * @param {string} year
+ * @param {import("../types/reports").IDataFile} content
+ */
 const useTheForce = (year, content) => {
   process.stdout.write(`Lagrer resultater... `);
   const wstream = fs.createWriteStream(`data/${year}.json`);

@@ -50,6 +50,7 @@ const fetchFromSSB = (year) =>
 const sanitizeName = (name) => name.replace(/\s\(\d*-\d+\)$/, "");
 
 const makeMunicipalityObject = (data) => {
+  /** @type {Record<string, import("../types/reports").Municipality>} */
   let result = {};
 
   Object.keys(data.dimension.Region.category.index).forEach((key) => {
@@ -68,6 +69,11 @@ const makeMunicipalityObject = (data) => {
   return result;
 };
 
+/**
+ *
+ * @param {string} year
+ * @returns {Promise<Record<string, import("../types/reports").Municipality>>}
+ */
 const getData = async (year) => {
   process.stdout.write(`Henter kommunedata fra SSB for ${year}... `);
 

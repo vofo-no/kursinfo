@@ -2,6 +2,7 @@
 const klass = require("./klass");
 const han = require("./han");
 const luke = require("./luke");
+const Storage = require("./r2");
 const aNames = require("../data/names/associations.json");
 const chalk = require("chalk");
 
@@ -28,48 +29,121 @@ async function main() {
 
   process.stdout.write(`Analyserer... `);
 
-  const reports = {};
-  const regions = [];
-  const associations = [];
+  const r2 = new Storage();
 
-  const makeRegStat = (k) => {
-    const ks = config.regions[k];
-    const ksFilter = (value) => ks.includes(Math.floor(value / 100));
-    const ksRowFilter = (row) => ksFilter(row[han.COL.MUNICIPALITY]);
-    const kData = data.filter(ksRowFilter);
-    const kDataHistory = dataHistory.map((item) => item.filter(ksRowFilter));
-    const kMunicipalities = Object.keys(municipalities).filter(ksFilter);
+  /**
+   * @param {string} key
+   * @param {import("../types/reports").AnyReportType} type
+   * @param {(item: unknown) => boolean} datafilter
+   * @param {*} param3
+   */
+  const makeStat = (
+    key,
+    type,
+    datafilter,
+    {
+      makeName = (name) => String(name),
+      makeParam = luke.parameterize,
+      municipalityKeys = [],
+    } = {}
+  ) => {
+    const dataSet = data.filter(datafilter);
+    const dataSetHistory = dataHistory.map((dataHistoryYear) =>
+      dataHistoryYear.filter(datafilter)
+    );
 
-    const assocSummary = han.associationSummer(kData, kDataHistory[0]);
-    const subjectSums = han.subjectSums(kData);
+    const assocSummary = han.associationSummer(dataSet, dataSetHistory[0]);
+    const orgSummary = han.organizationSummer(dataSet, dataSetHistory[0]);
+    const subjectSums = han.subjectSums(dataSet);
 
-    const paramName = luke.parameterize(k);
-    regions.push(paramName);
-    reports[paramName] = {
-      name: k,
-      type: "REGION",
-      isFuture: config.futureRegions.includes(k),
-      courses: kData.length,
-      facilitated: han.facilitated(kData),
-      hours: han.sumHours(kData),
-      historical: han.historical([kData, ...kDataHistory]),
-      historicalAll: han.historical([data, ...dataHistory]),
-      participants: han.participantsWithHistory([kData, ...kDataHistory]),
-      municipalities: kMunicipalities,
-      municipalityValues: han.getCompactMunicipalityData(kData, municipalities),
-      organizations: han.countOrganizations(kData),
-      population: kMunicipalities.reduce(
-        (acc, key) => acc + municipalities[key].pop,
-        0
+    const paramName = makeParam(key);
+    const reportData = {
+      name: makeName(key),
+      courses: dataSet.length,
+      facilitated: han.facilitated(dataSet),
+      hours: han.sumHours(dataSet),
+      historical: han.historical([dataSet, ...dataSetHistory]),
+      participants: han.participantsWithHistory([dataSet, ...dataSetHistory]),
+      municipalityValues: han.getCompactMunicipalityData(
+        dataSet,
+        municipalities
       ),
+      organizations: han.countOrganizations(dataSet),
       associations: config.associations.reduce((obj, key) => {
         obj[key] = assocSummary(key);
         return obj;
       }, {}),
       subjects: subjectSums,
       topSubjects: han.topAges(subjectSums),
-      mainSubjects: han.mainSubjectSums(kData),
+      mainSubjects: han.mainSubjectSums(dataSet),
     };
+
+    switch (type) {
+      case "REGION": {
+        r2.setRegionReport(paramName, {
+          ...reportData,
+          key,
+          type,
+          isFuture: config.futureRegions.includes(key),
+          municipalities: municipalityKeys,
+          population: municipalityKeys.reduce(
+            (acc, key) => acc + municipalities[key].pop,
+            0
+          ),
+          historicalAll: han.historical([data, ...dataHistory]),
+        });
+        break;
+      }
+      case "ASSOCIATION": {
+        const orgs = Array.from(
+          new Set(
+            [...dataSet, ...(dataSetHistory[0] || [])].map(
+              (row) => row[han.COL.ORGANIZATION]
+            )
+          )
+        );
+
+        r2.setAssociationReport(paramName, {
+          ...reportData,
+          key,
+          type,
+          historicalAll: han.historical([data, ...dataHistory]),
+          associations: orgs.reduce((obj, key) => {
+            obj[key] = orgSummary(key);
+            return obj;
+          }, {}),
+        });
+        break;
+      }
+      case "COMBO": {
+        const keys = config.combos[key];
+
+        r2.setTotalReport(paramName, {
+          ...reportData,
+          type,
+          keys: keys.map(String),
+          historicalAll: han.historical([data, ...dataHistory]),
+        });
+        break;
+      }
+      case "GLOBAL": {
+        r2.setGlobalReport(paramName, {
+          ...reportData,
+          type,
+          key,
+        });
+        break;
+      }
+    }
+  };
+
+  const makeRegStat = (k) => {
+    const ks = config.regions[k];
+    const ksFilter = (value) => ks.includes(Math.floor(value / 100));
+    const ksRowFilter = (row) => ksFilter(row[han.COL.MUNICIPALITY]);
+    const municipalityKeys = Object.keys(municipalities).filter(ksFilter);
+
+    makeStat(k, "REGION", ksRowFilter, { municipalityKeys });
   };
 
   Object.keys(config.regions).map(makeRegStat);
@@ -78,34 +152,8 @@ async function main() {
     const cKeys = config.combos[k];
     const cFilter = (value) => cKeys.includes(value);
     const cRowFilter = (row) => cFilter(row[han.COL.ASSOCIATION]);
-    const cData = data.filter(cRowFilter);
-    const cDataHistory = dataHistory.map((yearData) =>
-      yearData.filter(cRowFilter)
-    );
 
-    const assocSummary = han.associationSummer(cData, cDataHistory[0]);
-    const subjectSums = han.subjectSums(cData);
-
-    const paramName = luke.parameterize(k);
-    reports[paramName] = {
-      name: k,
-      type: "TOTAL",
-      key: cKeys.map(String),
-      courses: cData.length,
-      facilitated: han.facilitated(cData),
-      hours: han.sumHours(cData),
-      historical: han.historical([cData, ...cDataHistory]),
-      participants: han.participantsWithHistory([cData, ...cDataHistory]),
-      municipalityValues: han.getCompactMunicipalityData(cData, municipalities),
-      organizations: han.countOrganizations(cData),
-      associations: config.associations.reduce((obj, key) => {
-        obj[key] = assocSummary(key);
-        return obj;
-      }, {}),
-      subjects: subjectSums,
-      topSubjects: han.topAges(subjectSums),
-      mainSubjects: han.mainSubjectSums(cData),
-    };
+    makeStat(k, "COMBO", cRowFilter);
   };
 
   config.combos && Object.keys(config.combos).map(makeComboStat);
@@ -113,52 +161,21 @@ async function main() {
   const makeAssociationStat = (a) => {
     const aFilter = (value) => value === a;
     const aRowFilter = (row) => aFilter(row[han.COL.ASSOCIATION]);
-    const aData = data.filter(aRowFilter);
-    const aDataHistory = dataHistory.map((yearData) =>
-      yearData.filter(aRowFilter)
-    );
 
-    const orgSummary = han.organizationSummer(aData, aDataHistory[0]);
-    const subjectSums = han.subjectSums(aData);
-
-    const orgs = Array.from(
-      new Set(
-        [...aData, ...(aDataHistory[0] || [])].map(
-          (row) => row[han.COL.ORGANIZATION]
-        )
-      )
-    );
-
-    const paramName = luke.parameterize(aNames[String(a)].short);
-    associations.push(paramName);
-    reports[paramName] = {
-      name: aNames[String(a)].name,
-      type: "ASSOCIATION",
-      key: String(a),
-      courses: aData.length,
-      facilitated: han.facilitated(aData),
-      hours: han.sumHours(aData),
-      historical: han.historical([aData, ...aDataHistory]),
-      historicalAll: han.historical([data, ...dataHistory]),
-      participants: han.participantsWithHistory([aData, ...aDataHistory]),
-      municipalityValues: han.getCompactMunicipalityData(aData, municipalities),
-      organizations: han.countOrganizations(aData),
-      associations: orgs.reduce((obj, key) => {
-        obj[key] = orgSummary(key);
-        return obj;
-      }, {}),
-      subjects: subjectSums,
-      topSubjects: han.topAges(subjectSums),
-      mainSubjects: han.mainSubjectSums(aData),
-    };
+    makeStat(a, "ASSOCIATION", aRowFilter, {
+      makeName: (a) => aNames[String(a)].name,
+      makeParam: (a) => luke.parameterize(aNames[String(a)].short),
+    });
   };
 
   config.associations.map(makeAssociationStat);
 
+  makeStat("all", "GLOBAL", () => true);
+
   console.log("\x1b[1mOK\x1b[0m");
 
   // Save results
-  luke.useTheForce(year, { municipalities, reports, regions, associations });
+  luke.useTheForce(year, { municipalities, ...r2.data() });
 }
 
 main();
