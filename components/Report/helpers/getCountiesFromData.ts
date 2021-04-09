@@ -57,8 +57,8 @@ export default function getCountiesFromData(
             };
           }
           case COMBO: {
-            const aKeys = Object.keys(associations).filter(
-              reportData.keys.includes
+            const aKeys = Object.keys(associations).filter((key) =>
+              reportData.keys.includes(key)
             );
 
             return {
