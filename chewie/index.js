@@ -137,6 +137,10 @@ async function main() {
     }
   };
 
+  makeStat("all", "GLOBAL", () => true, {
+    makeName: () => "Hele landet",
+  });
+
   const makeRegStat = (k) => {
     const ks = config.regions[k];
     const ksFilter = (value) => ks.includes(Math.floor(value / 100));
@@ -169,8 +173,6 @@ async function main() {
   };
 
   config.associations.map(makeAssociationStat);
-
-  makeStat("all", "GLOBAL", () => true);
 
   console.log("\x1b[1mOK\x1b[0m");
 
