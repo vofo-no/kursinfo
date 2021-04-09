@@ -55,7 +55,11 @@ const Organizations: FC<PropTypes> = ({ items, year, name }) => {
             </tbody>
           </table>
         </div>
-        <GraphOrgs items={items} year={year} unit="Organisasjon" />
+        <GraphOrgs
+          items={items.slice(0, limit)}
+          year={year}
+          unit="Organisasjon"
+        />
       </div>
     </section>
   );
