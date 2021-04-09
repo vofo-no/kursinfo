@@ -40,6 +40,9 @@ const nextConfiguration = {
     });
     return paths;
   },
+  future: {
+    webpack5: true,
+  },
 };
 
 const withPlugins = require("next-compose-plugins");

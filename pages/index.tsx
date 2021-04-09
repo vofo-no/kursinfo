@@ -5,7 +5,7 @@ import { FC } from "react";
 
 import Layout from "../components/Layout";
 import PageHeading from "../components/PageHeading";
-import { years } from "../data/index.json";
+import dataIndex from "../data/index.json";
 
 interface IndexProps {
   years: Array<string>;
@@ -14,7 +14,7 @@ interface IndexProps {
 export const getStaticProps: GetStaticProps<IndexProps> = async () => {
   return {
     props: {
-      years,
+      years: dataIndex.years,
     },
   };
 };

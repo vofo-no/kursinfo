@@ -8,7 +8,7 @@ import { FC } from "react";
 
 import Layout from "../../components/Layout";
 import PageHeading from "../../components/PageHeading";
-import { years } from "../../data/index.json";
+import dataIndex from "../../data/index.json";
 
 interface ReportIndexProps {
   year: string;
@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps<
 
 export const getStaticPaths: GetStaticPaths<ReportIndexParams> = async () => {
   return {
-    paths: years.map((year) => ({
+    paths: dataIndex.years.map((year) => ({
       params: {
         year,
       },
