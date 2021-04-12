@@ -6,7 +6,7 @@ function isNamed(item: unknown): item is INamed {
   return (item as INamed).name !== undefined;
 }
 
-export function showName(item: string | INamed): ReactNode {
+export function showName(item: string | INamed, key?: string): ReactNode {
   if (isNamed(item)) {
     return (
       <>
@@ -21,5 +21,5 @@ export function showName(item: string | INamed): ReactNode {
       </>
     );
   }
-  return item;
+  return typeof item === "string" ? item : key || "(ukjent)";
 }

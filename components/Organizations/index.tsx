@@ -41,7 +41,7 @@ const Organizations: FC<PropTypes> = ({ items, year, name }) => {
                   return (
                     <tr key={key}>
                       <td>{i + 1}</td>
-                      <th scope="row">{showName(rest || key)}</th>
+                      <th scope="row">{showName(rest, key)}</th>
                       <td>{courses.toLocaleString("nb")}</td>
                       <td>{hours.toLocaleString("nb")}</td>
                       <td>
