@@ -6,24 +6,12 @@ import names from "./names.json";
 
 type NameKey = keyof typeof names;
 
-type SubjectType = {
-  participants: {
-    males: number;
-    females: number;
-    ages?: number[];
-  };
-};
-
 interface SubjectsProps {
   mainSubjects: Array<MainSubjectWithKey>;
   topSubjects: AgeSet<Array<{ key: string; value: number }>>;
   ageSetHistory: Array<AgeSet<number>>;
   name: string;
   year: string;
-}
-
-function p(subject: SubjectType) {
-  return subject.participants.females + subject.participants.males;
 }
 
 export const ageGroupName = [

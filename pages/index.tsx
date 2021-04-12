@@ -1,7 +1,6 @@
 import { Box } from "@vofo-no/design";
 import GridLinks from "components/GridLinks";
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import { FC } from "react";
 
 import Layout from "../components/Layout";

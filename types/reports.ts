@@ -116,7 +116,7 @@ export interface Subject {
   participants: ParticipantsWithAgeSet;
 }
 
-type AgeSet<T> = [T, T, T, T, T, T];
+export type AgeSet<T> = [T, T, T, T, T, T];
 
 export interface ReportMunicipality {
   name: string;
