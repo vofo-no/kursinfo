@@ -24,8 +24,8 @@ const Header: FC = () => {
               </Link>
             </Menu>
             <Menu variant="top">
-              <a href="http://www.vofo.no/">
-                <a className="black">Gå til vofo.no</a>
+              <a href="http://www.vofo.no/" className="black">
+                Gå til vofo.no
               </a>
             </Menu>
           </MenuContainer>
