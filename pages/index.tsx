@@ -1,4 +1,5 @@
 import { Box } from "@vofo-no/design";
+import GridLinks from "components/GridLinks";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import { FC } from "react";
@@ -24,16 +25,12 @@ const Index: FC<IndexProps> = ({ years }) => {
     <Layout title={`Statistikk`} header>
       <Box variant="light" p={3} boxShadow="small">
         <PageHeading>Statistikk</PageHeading>
-        <ul>
-          {years.map((year) => (
-            <li key={year}>
-              <Link href={`/${year}`}>
-                <a>{year}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <p>
+          Her finner du Vofos nasjonale og regionale statistikkrapporter for
+          studieforbundenes opplæringsvirksomhet.
+        </p>
       </Box>
+      <GridLinks items={years.map((year) => [`/${year}`, year])} />
     </Layout>
   );
 };
