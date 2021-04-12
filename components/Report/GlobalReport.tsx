@@ -49,18 +49,26 @@ const GlobalReport: FC<GlobalReportProps> = ({
       <Counties
         counties={counties}
         year={year}
-        name={name}
+        name={name.toLowerCase()}
         historical={historical}
       />
-      <Associations items={associations} year={year} name={name} />
+      <Associations
+        items={associations}
+        year={year}
+        name={name.toLowerCase()}
+      />
       <Subjects
         mainSubjects={mainSubjects}
         topSubjects={topSubjects}
         ageSetHistory={ageSetHistory}
         year={year}
-        name={name}
+        name={name.toLowerCase()}
       />
-      <Municipalities items={municipalities} year={year} name={name} />
+      <Municipalities
+        items={municipalities}
+        year={year}
+        name={name.toLowerCase()}
+      />
     </Layout>
   );
 };
