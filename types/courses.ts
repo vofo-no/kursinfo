@@ -23,11 +23,12 @@ export interface ICourseItem {
   organizationIndex: number;
   organizerIndex: number;
   participantCountTotal: number;
+  participants?: number;
   planned: boolean;
   reportSchema: boolean;
   reportStatus: string;
   startDate: string;
-  totalGrantActual: number;
+  totalGrantActual?: number;
 }
 
 export interface ITenantData {

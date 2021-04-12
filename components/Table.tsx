@@ -9,6 +9,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { ICourseItem } from "types/courses";
 
 const ArrowLeft = () => (
   <svg viewBox="0 0 10 12" width={10} height={12}>
@@ -22,7 +23,7 @@ const ArrowDown = () => (
   </svg>
 );
 
-const Arrow: FC<{ column: ColumnInstance<Record<string, unknown>> }> = ({
+const Arrow: FC<{ column: ColumnInstance<ICourseItem> }> = ({
   column: { isSorted, isSortedDesc, canSort },
 }) => {
   if (!canSort) return null;
@@ -46,7 +47,7 @@ const Arrow: FC<{ column: ColumnInstance<Record<string, unknown>> }> = ({
 };
 
 function headerA11yProps(
-  column: ColumnInstance<Record<string, unknown>>
+  column: ColumnInstance<ICourseItem>
 ): {
   "aria-sort"?: "descending" | "ascending" | "none";
   tabIndex?: number;
@@ -65,7 +66,7 @@ function headerA11yProps(
   };
 }
 
-const Table: FC<TableOptions<Record<string, unknown>>> = (props) => {
+const Table: FC<TableOptions<ICourseItem>> = (props) => {
   const {
     getTableProps,
     getTableBodyProps,
