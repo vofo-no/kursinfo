@@ -1,140 +1,154 @@
+import associationNames from "data/names/associations.json";
 import fs from "fs";
 import { GetStaticPropsResult } from "next";
 import path from "path";
 import {
   ASSOCIATION,
   AssociationReportProps,
-  Dictionary,
+  COMBO,
+  ComboReportProps,
+  GLOBAL,
+  GlobalReportProps,
+  IDataFile,
   INamed,
+  Participants,
   REGION,
-  ReportProps,
-  TOTAL,
-} from "types";
-import { ReportDataProps, ReportParams } from "types/reports";
+  RegionReportProps,
+  ReportParams,
+} from "types/reports";
 
-const perCapita = (courses: number, population = 0) => {
-  if (population > 0) return courses / population;
-  return 0;
-};
+import getCountiesFromData from "./helpers/getCountiesFromData";
+import getMunicipalitiesFromData from "./helpers/getMunicipalitiesFromData";
+import getNamedOrganizationsFromData from "./helpers/getNamedOrganizationsFromData";
+import getTopSubjectsFromData from "./helpers/getTopSubjectsFromData";
 
-const getOrgNames = (sf: string): Dictionary<INamed> => {
-  const namePath = path.join(process.cwd(), `data/names/orgs/${sf}.json`);
+type AssociationNameKey = keyof typeof associationNames;
 
-  if (!fs.existsSync(namePath)) return {};
+function getAssociationName(key: string): INamed {
+  if (!(key in associationNames)) return { name: key };
+  return associationNames[key as AssociationNameKey];
+}
 
-  return JSON.parse(fs.readFileSync(namePath, "utf-8"));
-};
+function recordToArray<T>(
+  records: Record<string, T>
+): Array<T & { key: string }> {
+  return Object.keys(records).map((key) => ({ ...records[key], key }));
+}
 
 export const getReportStaticData = async ({
   year,
   report,
-}: ReportParams): Promise<GetStaticPropsResult<ReportDataProps>> => {
+}: ReportParams): Promise<
+  GetStaticPropsResult<
+    | RegionReportProps
+    | AssociationReportProps
+    | ComboReportProps
+    | GlobalReportProps
+  >
+> => {
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
-  const data: {
-    reports: {
-      [key: string]: ReportProps["report"] & {
-        type: ReportProps["type"];
-        key?: string | string[];
-      };
-    };
-    regions: string[];
-    municipalities: ReportProps["municipalities"];
-  } = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+  const data: IDataFile = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];
 
-  const counties: ReportProps["counties"] = data.regions
-    .filter((key) => !data.reports[key].isFuture)
-    .map((key) => {
-      const {
-        name,
-        courses,
-        participants,
-        hours,
-        associations,
-        population,
-        municipalities = [],
-      } = data.reports[key];
-      switch (reportData.type) {
-        case ASSOCIATION: {
-          if ((reportData.key as string) !== reportData.key)
-            throw new Error("Unexpected association key");
-          const association = associations[reportData.key];
-          return {
-            name: name,
-            courses: association.courses,
-            participants:
-              association.participants.males + association.participants.females,
-            hours: association.hours,
-            coursesPerCapita: perCapita(association.courses, population),
-            isCurrent: false,
-          };
-        }
-        case TOTAL: {
-          const comboKey = reportData.key;
-          if (!Array.isArray(comboKey)) throw new Error("Unexpected combo key");
+  const { name, historical } = reportData;
 
-          const aKeys = Object.keys(associations).filter((a) =>
-            comboKey.includes(a)
-          );
+  const counties = getCountiesFromData(data.reports, data.regions, report);
 
-          return {
-            name: name,
-            courses: aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
-            participants: aKeys.reduce(
-              (sum, a) =>
-                sum +
-                associations[a].participants.males +
-                associations[a].participants.females,
-              0
-            ),
-            hours: aKeys.reduce((sum, a) => sum + associations[a].hours, 0),
-            coursesPerCapita: perCapita(
-              aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
-              population
-            ),
-            isCurrent: false,
-          };
-        }
-        case REGION: {
-          return {
-            name: name,
-            courses: courses,
-            participants: participants.males + participants.females,
-            hours: hours,
-            coursesPerCapita: perCapita(courses, population),
-            isCurrent: municipalities.every((m) =>
-              reportData.municipalities?.includes(m)
-            ),
-          };
-        }
-      }
-    })
-    .sort((a, b) => Number(b.coursesPerCapita) - Number(a.coursesPerCapita));
+  const municipalityKeys =
+    "municipalities" in reportData
+      ? reportData.municipalities
+      : Object.keys(data.municipalities);
+  const municipalities = getMunicipalitiesFromData(
+    data.municipalities,
+    municipalityKeys,
+    reportData.municipalityValues
+  );
 
-  const props = {
+  const topSubjects = getTopSubjectsFromData(
+    reportData.subjects,
+    reportData.topSubjects
+  );
+
+  const associations = recordToArray(reportData.associations)
+    .sort((a, b) => b.hours - a.hours)
+    .filter((item) => item.courses);
+
+  const psum = (p: Participants) => p.females + p.males;
+  const mainSubjects = recordToArray(reportData.mainSubjects)
+    .sort((a, b) => psum(b.participants) - psum(a.participants))
+    .filter((item) => psum(item.participants));
+
+  const baseProps = {
     year,
-    type: reportData.type,
-    report: reportData,
-    municipalities: data.municipalities,
+    name,
+    municipalities,
     counties,
-    municipalityNames: Object.keys(data.municipalities).reduce(
-      (obj: Record<string, string>, key) => {
-        obj[key] = data.municipalities[key].name;
-        return obj;
-      },
-      {}
-    ),
+    historical,
+    mainSubjects,
+    topSubjects,
+    ageSetHistory: reportData.participants.ages,
+    summary: {
+      courses: reportData.courses,
+      facilitatedCourses: reportData.facilitated.courses,
+      participants:
+        reportData.participants.males + reportData.participants.females,
+      hours: reportData.hours,
+      organizations: reportData.organizations,
+      activeMunicipalitiesLength: Object.keys(reportData.municipalityValues)
+        .length,
+      allMunicipalitiesLength: municipalityKeys.length,
+    },
   };
 
-  if (reportData.type === ASSOCIATION) {
-    (props as AssociationReportProps).orgNames = getOrgNames(
-      reportData.key as string
-    );
+  switch (reportData.type) {
+    case REGION: {
+      const props: RegionReportProps = {
+        ...baseProps,
+        type: reportData.type,
+        associations: associations.map((item) => ({
+          ...item,
+          ...getAssociationName(item.key),
+        })),
+        historicalAll: reportData.historicalAll,
+      };
+      return { props };
+    }
+    case ASSOCIATION: {
+      const props: AssociationReportProps = {
+        ...baseProps,
+        type: reportData.type,
+        organizations: getNamedOrganizationsFromData(
+          reportData.key,
+          associations
+        ),
+        historicalAll: reportData.historicalAll,
+      };
+      return { props };
+    }
+    case COMBO: {
+      const props: ComboReportProps = {
+        ...baseProps,
+        type: reportData.type,
+        associations: associations.map((item) => ({
+          ...item,
+          ...getAssociationName(item.key),
+        })),
+        historicalAll: reportData.historicalAll,
+      };
+      return { props };
+    }
+    case GLOBAL: {
+      const props: GlobalReportProps = {
+        ...baseProps,
+        type: reportData.type,
+        associations: associations.map((item) => ({
+          ...item,
+          ...getAssociationName(item.key),
+        })),
+      };
+      return { props };
+    }
   }
-
-  return {
-    props,
-  };
 };
 
 export default getReportStaticData;

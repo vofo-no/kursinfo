@@ -1,23 +1,16 @@
+import GraphOrgs from "components/GraphOrgs";
 import { FC } from "react";
-
-import { Dictionary, IAssociation, INamed } from "../../types";
-import { showName } from "../../utils/names";
-import GraphOrgs from "../GraphOrgs";
+import { Organization } from "types/reports";
+import { showName } from "utils/names";
 
 interface PropTypes {
-  items: Dictionary<IAssociation>;
-  names: Dictionary<INamed>;
+  items: Array<Organization>;
   name: string;
   year: string;
 }
 
-const Organizations: FC<PropTypes> = ({ items, year, name, names }) => {
-  const allKeys = Object.keys(items).filter((key) => items[key].courses);
-  const limit = allKeys.length > 6 ? 5 : undefined;
-
-  const organizationKeys = allKeys
-    .sort((a, b) => items[b].hours - items[a].hours)
-    .slice(0, limit);
+const Organizations: FC<PropTypes> = ({ items, year, name }) => {
+  const limit = items.length > 6 ? 5 : undefined;
 
   return (
     <section className="page">
@@ -42,29 +35,28 @@ const Organizations: FC<PropTypes> = ({ items, year, name, names }) => {
               </tr>
             </thead>
             <tbody>
-              {organizationKeys.map((key, i) => {
-                const { courses, participants, hours } = items[key];
-                return (
-                  <tr key={key}>
-                    <td>{i + 1}</td>
-                    <th scope="row">{showName(names[key] || key)}</th>
-                    <td>{courses.toLocaleString("nb")}</td>
-                    <td>{hours.toLocaleString("nb")}</td>
-                    <td>
-                      {(
-                        participants.males + participants.females
-                      ).toLocaleString("nb")}
-                    </td>
-                  </tr>
-                );
-              })}
+              {items
+                .slice(0, limit)
+                .map(({ courses, participants, hours, key, ...rest }, i) => {
+                  return (
+                    <tr key={key}>
+                      <td>{i + 1}</td>
+                      <th scope="row">{showName(rest, key)}</th>
+                      <td>{courses.toLocaleString("nb")}</td>
+                      <td>{hours.toLocaleString("nb")}</td>
+                      <td>
+                        {(
+                          participants.males + participants.females
+                        ).toLocaleString("nb")}
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
         <GraphOrgs
-          keys={organizationKeys}
-          items={items}
-          names={names}
+          items={items.slice(0, limit)}
           year={year}
           unit="Organisasjon"
         />

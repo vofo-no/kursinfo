@@ -1,13 +1,12 @@
 import { Text } from "@vofo-no/design";
 import { ReactNode } from "react";
-
-import { INamed } from "../types";
+import { INamed } from "types/reports";
 
 function isNamed(item: unknown): item is INamed {
   return (item as INamed).name !== undefined;
 }
 
-export function showName(item: string | INamed): ReactNode {
+export function showName(item: string | INamed, key?: string): ReactNode {
   if (isNamed(item)) {
     return (
       <>
@@ -22,5 +21,5 @@ export function showName(item: string | INamed): ReactNode {
       </>
     );
   }
-  return item;
+  return typeof item === "string" ? item : key || "(ukjent)";
 }

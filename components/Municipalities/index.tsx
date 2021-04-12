@@ -1,33 +1,27 @@
 import { FC, useState } from "react";
-
-import { CompactValues } from "../../types";
+import { ReportMunicipality } from "types/reports";
 
 interface PropTypes {
-  names: Record<string, string>;
-  items: Record<string, CompactValues>;
-  keys?: string[];
+  items: Array<ReportMunicipality>;
   year: string;
   name: string;
+  initialLimit?: number;
 }
 
-function perCapita(item?: Array<number>) {
-  return (item && item[3]) || 0;
-}
-
-const Municipalities: FC<PropTypes> = ({ names, year, name, items, keys }) => {
-  const [limit, setLimit] = useState(keys ? keys.length : 25);
-  const municipalityKeysSorted = (keys || Object.keys(items)).sort(
-    (a, b) => perCapita(items[b]) - perCapita(items[a])
-  );
+const Municipalities: FC<PropTypes> = ({
+  year,
+  name,
+  items,
+  initialLimit = 25,
+}) => {
+  const [limit, setLimit] = useState(initialLimit);
   return (
     <section className="page yellow">
       <div className="container">
         <h2 className="h1">Kommuner i {name}</h2>
         <h3 className="table-label">
           Kursoversikt for{" "}
-          {limit < municipalityKeysSorted.length
-            ? `topp ${limit} av ${municipalityKeysSorted.length}`
-            : "alle"}{" "}
+          {limit < items.length ? `topp ${limit} av ${items.length}` : "alle"}{" "}
           kommuner
         </h3>
         <p className="subtitle">
@@ -47,17 +41,17 @@ const Municipalities: FC<PropTypes> = ({ names, year, name, items, keys }) => {
               </tr>
             </thead>
             <tbody>
-              {municipalityKeysSorted.slice(0, limit).map((key, i) => {
+              {items.slice(0, limit).map(({ name, values }, i) => {
                 const [
                   courses = 0,
                   hours = 0,
                   participants = 0,
                   coursesPerCapita = 0,
-                ] = items[key] || [];
+                ] = values;
                 return (
-                  <tr key={key}>
+                  <tr key={name}>
                     <td>{i + 1}</td>
-                    <th scope="row">{names[key]}</th>
+                    <th scope="row">{name}</th>
                     <td>{courses.toLocaleString("nb")}</td>
                     <td>{hours.toLocaleString("nb")}</td>
                     <td>{participants.toLocaleString("nb")}</td>
@@ -73,12 +67,10 @@ const Municipalities: FC<PropTypes> = ({ names, year, name, items, keys }) => {
             </tbody>
           </table>
         </div>
-        {limit < municipalityKeysSorted.length && (
+        {limit < items.length && (
           <p className="no-print">
             <button onClick={() => setLimit(limit + 25)}>Vis flere</button>{" "}
-            <button onClick={() => setLimit(municipalityKeysSorted.length)}>
-              Vis alle
-            </button>
+            <button onClick={() => setLimit(items.length)}>Vis alle</button>
           </p>
         )}
       </div>

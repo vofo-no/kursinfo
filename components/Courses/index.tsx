@@ -2,8 +2,9 @@ import { Box, Text } from "@vofo-no/design";
 import { useRouter } from "next/router";
 import { FC, useCallback, useMemo, useState } from "react";
 import { Info } from "react-feather";
+import { Column } from "react-table";
 
-import { CoursesParams } from "../../types/courses";
+import { CoursesParams, ICourseItem } from "../../types/courses";
 import AlertDialog from "../AlertDialog";
 import Table from "../Table";
 import {
@@ -102,117 +103,112 @@ const Courses: FC<CoursesProps> = ({
   const [modal, setModal] = useState("");
 
   const tableData = useMemo(() => items, [items]);
-  const columns = useMemo(() => {
-    const cols = [
-      {
-        Header: "Organisasjon",
-        accessor: "organizationIndex",
-        Cell: ({ value }: NumberCell) => organizers[value] || null,
-      },
-      {
-        Header: "Lokallag",
-        accessor: "organizerIndex",
-        Cell: ({ value }: NumberCell) => organizers[value] || null,
-      },
-      {
-        Header: "Fylke",
-        accessor: "countyIndex",
-        Cell: ({ value }: NumberCell) => counties[value] || null,
-      },
-      {
-        Header: "Start",
-        accessor: "startDate",
-        Cell: ({ value }: StringCell) => remixISODate(value),
-      },
-      {
-        Header: "Slutt",
-        accessor: "endDate",
-        Cell: ({ value }: StringCell) => remixISODate(value),
-      },
-      {
-        Header: "Studieplan",
-        accessor: "curriculumIndex",
-        Cell: ({ value }: NumberCell) => curriculums[value] || null,
-      },
-      {
-        Header: "Tittel",
-        accessor: "courseTitle",
-        Footer: (info: InfoCell) =>
-          useMemo(() => `${info.data.length} kurs`, [info.data]),
-      },
-      {
-        Header: "Status",
-        accessor: "reportStatus",
-        Cell: ({ row, value }: StatusCell) => {
-          if (value) return value;
-          if (row.isGrouped) return null;
+  const columns: Array<Column<ICourseItem>> = [
+    {
+      Header: "Organisasjon",
+      accessor: "organizationIndex",
+      Cell: ({ value }: NumberCell) => organizers[value] || null,
+    },
+    {
+      Header: "Lokallag",
+      accessor: "organizerIndex",
+      Cell: ({ value }: NumberCell) => organizers[value] || null,
+    },
+    {
+      Header: "Fylke",
+      accessor: "countyIndex",
+      Cell: ({ value }: NumberCell) => counties[value] || null,
+    },
+    {
+      Header: "Start",
+      accessor: "startDate",
+      Cell: ({ value }: StringCell) => remixISODate(value),
+    },
+    {
+      Header: "Slutt",
+      accessor: "endDate",
+      Cell: ({ value }: StringCell) => remixISODate(value),
+    },
+    {
+      Header: "Studieplan",
+      accessor: "curriculumIndex",
+      Cell: ({ value }: NumberCell) => curriculums[value] || null,
+    },
+    {
+      Header: "Tittel",
+      accessor: "courseTitle",
+      Footer: (info: InfoCell) =>
+        useMemo(() => `${info.data.length} kurs`, [info.data]),
+    },
+    {
+      Header: "Status",
+      accessor: "reportStatus",
+      Cell: ({ row, value }: StatusCell) => {
+        if (value) return value;
+        if (row.isGrouped) return null;
 
-          return "Søknad godkjent";
-        },
+        return "Søknad godkjent";
       },
-      {
-        Header: "",
-        accessor: "caseNumber",
-        disableSortBy: true,
-        // eslint-disable-next-line react/display-name
-        Cell: ({ row, value }: StatusCell) => {
-          if (row.isGrouped || !value) return null;
-          return (
-            <button
-              className="transparent tight"
-              title="Vis kursinformasjon"
-              onClick={() => setModal(value)}
-            >
-              <Info />
-            </button>
-          );
-        },
+    },
+    {
+      Header: "",
+      accessor: "caseNumber",
+      disableSortBy: true,
+      // eslint-disable-next-line react/display-name
+      Cell: ({ row, value }: StatusCell) => {
+        if (row.isGrouped || !value) return null;
+        return (
+          <button
+            className="transparent tight"
+            title="Vis kursinformasjon"
+            onClick={() => setModal(value)}
+          >
+            <Info />
+          </button>
+        );
       },
-      {
-        Header: "Kurs",
-        accessor: () => 1,
-        id: "courses",
-        aggregate: "sum",
-        Cell: () => null,
-        Aggregated: ({ value }: NumberCell) => value,
-        sortDescFirst: true,
-        className: "num",
-        Footer: (info: InfoCell) =>
-          useMemo(() => info.data.length, [info.data]),
-      },
-      {
-        Header: "Timer",
-        accessor: "hours",
-        aggregate: "sum",
-        sortDescFirst: true,
-        className: "num",
-        Footer: (info: InfoCell) =>
-          useMemo(
-            () =>
-              info.data.reduce((sum, row) => (Number(row.hours) || 0) + sum, 0),
-            [info.data]
-          ),
-      },
-      {
-        Header: "Deltakere",
-        accessor: "participants",
-        sortDescFirst: true,
-        aggregate: "sum",
-        className: "num",
-        Footer: (info: InfoCell) =>
-          useMemo(
-            () =>
-              info.data.reduce(
-                (sum, row) => (Number(row.participants) || 0) + sum,
-                0
-              ),
-            [info.data]
-          ),
-      },
-    ];
-
-    return cols;
-  }, [organizers, counties, curriculums, reportSchema]);
+    },
+    {
+      Header: "Kurs",
+      accessor: () => 1,
+      id: "courses",
+      aggregate: "sum",
+      Cell: () => null,
+      Aggregated: ({ value }: NumberCell) => value,
+      sortDescFirst: true,
+      className: "num",
+      Footer: (info: InfoCell) => useMemo(() => info.data.length, [info.data]),
+    },
+    {
+      Header: "Timer",
+      accessor: "hours",
+      aggregate: "sum",
+      sortDescFirst: true,
+      className: "num",
+      Footer: (info: InfoCell) =>
+        useMemo(
+          () =>
+            info.data.reduce((sum, row) => (Number(row.hours) || 0) + sum, 0),
+          [info.data]
+        ),
+    },
+    {
+      Header: "Deltakere",
+      accessor: "participants",
+      sortDescFirst: true,
+      aggregate: "sum",
+      className: "num",
+      Footer: (info: InfoCell) =>
+        useMemo(
+          () =>
+            info.data.reduce(
+              (sum, row) => (Number(row.participants) || 0) + sum,
+              0
+            ),
+          [info.data]
+        ),
+    },
+  ];
 
   const groupBy = useMemo(() => {
     switch (group) {

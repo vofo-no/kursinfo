@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable react/jsx-key */
 import React, { FC, useEffect } from "react";
 import {
   ColumnInstance,
@@ -7,6 +9,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import { ICourseItem } from "types/courses";
 
 const ArrowLeft = () => (
   <svg viewBox="0 0 10 12" width={10} height={12}>
@@ -20,7 +23,7 @@ const ArrowDown = () => (
   </svg>
 );
 
-const Arrow: FC<{ column: ColumnInstance<object> }> = ({
+const Arrow: FC<{ column: ColumnInstance<ICourseItem> }> = ({
   column: { isSorted, isSortedDesc, canSort },
 }) => {
   if (!canSort) return null;
@@ -44,7 +47,7 @@ const Arrow: FC<{ column: ColumnInstance<object> }> = ({
 };
 
 function headerA11yProps(
-  column: ColumnInstance<object>
+  column: ColumnInstance<ICourseItem>
 ): {
   "aria-sort"?: "descending" | "ascending" | "none";
   tabIndex?: number;
@@ -63,7 +66,7 @@ function headerA11yProps(
   };
 }
 
-const Table: FC<TableOptions<object>> = (props) => {
+const Table: FC<TableOptions<ICourseItem>> = (props) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -76,7 +79,7 @@ const Table: FC<TableOptions<object>> = (props) => {
   } = useTable(props, useGroupBy, useSortBy, useExpanded);
 
   useEffect(() => {
-    if (groupBy.length && !Object.keys(expanded).length) {
+    if (groupBy.length && Object.keys(expanded).length) {
       setHiddenColumns(
         [
           "courseTitle",
@@ -118,7 +121,7 @@ const Table: FC<TableOptions<object>> = (props) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>

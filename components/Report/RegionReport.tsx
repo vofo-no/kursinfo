@@ -1,46 +1,43 @@
+import Associations from "components/Associations";
+import Counties from "components/Counties";
+import { initialize as initializeGraphs } from "components/Graph";
+import Layout from "components/Layout";
+import Municipalities from "components/Municipalities";
+import ReportHeading from "components/ReportHeading";
+import Subjects from "components/Subjects";
+import Summary from "components/Summary";
 import { FC, useEffect } from "react";
+import { RegionReportProps } from "types/reports";
 
-import Associations from "../../components/Associations";
-import Counties from "../../components/Counties";
-import { initialize as initializeGraphs } from "../../components/Graph";
-import Layout from "../../components/Layout";
-import Municipalities from "../../components/Municipalities";
-import ReportHeading from "../../components/ReportHeading";
-import Subjects from "../../components/Subjects";
-import Summary from "../../components/Summary";
-import { RegionReportProps } from "../../types";
 import Footer from "./Footer";
 
 const RegionReport: FC<RegionReportProps> = ({
   year,
-  report,
-  municipalityNames,
+  name,
+  associations,
   counties,
+  historical,
+  historicalAll,
+  mainSubjects,
+  topSubjects,
+  ageSetHistory,
+  municipalities,
+  summary,
 }) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
   return (
-    <Layout title={`${report.name}: Fylkesstatistikk ${year}`}>
+    <Layout title={`${name}: Fylkesstatistikk ${year}`}>
       <section className="page">
         <div className="container">
-          <ReportHeading name={report.name} year={year} type="REGION" />
-          <Summary
-            courses={report.courses}
-            facilitatedCourses={report.facilitated.courses}
-            participants={report.participants}
-            hours={report.hours}
-            organizations={report.organizations}
-            activeMunicipalitiesLength={
-              Object.keys(report.municipalityValues).length
-            }
-            allMunicipalitiesLength={report.municipalities?.length || 0}
-          />
+          <ReportHeading name={name} year={year} type="REGION" />
+          <Summary {...summary} />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
             godkjente studieforbund. Virksomheten måles i antall arrangerte
             kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {report.name} i {year}.
+            kurs som er gjennomført i {name} i {year}.
           </p>
           <p>
             For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
@@ -53,31 +50,25 @@ const RegionReport: FC<RegionReportProps> = ({
       <Counties
         counties={counties}
         year={year}
-        name={report.name}
-        historical={report.historical}
-        historicalAll={report.historicalAll}
+        name={name}
+        historical={historical}
+        historicalAll={historicalAll}
         totalUnit="hele landet"
       />
-      <Associations
-        items={report.associations}
-        year={year}
-        name={report.name}
-      />
+      <Associations items={associations} year={year} name={name} />
       <Subjects
-        mainSubjects={report.mainSubjects}
-        subjects={report.subjects}
-        topSubjects={report.topSubjects}
-        ages={report.participants.ages}
+        mainSubjects={mainSubjects}
+        topSubjects={topSubjects}
+        ageSetHistory={ageSetHistory}
         year={year}
-        name={report.name}
+        name={name}
       />
-      {report.municipalities && report.municipalities.length > 2 && (
+      {municipalities.length > 2 && (
         <Municipalities
-          items={report.municipalityValues}
-          names={municipalityNames}
-          keys={report.municipalities}
+          items={municipalities}
           year={year}
-          name={report.name}
+          name={name}
+          initialLimit={municipalities.length}
         />
       )}
     </Layout>

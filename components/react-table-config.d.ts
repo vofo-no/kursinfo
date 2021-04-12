@@ -57,11 +57,16 @@ declare module "react-table" {
       UseRowStateState<D>,
       UseSortByState<D> {}
 
+  interface InfoCell {
+    data: Array<{ hours?: number; participants?: number }>;
+  }
+
   export interface ColumnInterface<
     D extends Record<string, unknown> = Record<string, unknown>
   > extends UseGroupByColumnOptions<D>,
       UseSortByColumnOptions<D> {
     className?: string;
+    Footer?: (info: InfoCell) => string | number;
   }
 
   export interface ColumnInstance<
@@ -70,8 +75,7 @@ declare module "react-table" {
       UseSortByColumnProps<D> {}
 
   export interface Cell<
-    D extends Record<string, unknown> = Record<string, unknown>,
-    V = unknown
+    D extends Record<string, unknown> = Record<string, unknown>
   > extends UseGroupByCellProps<D>,
       UseRowStateCellProps<D> {}
 

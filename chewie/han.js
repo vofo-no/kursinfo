@@ -10,8 +10,6 @@ const COL = {
   HOURS: 23,
 };
 
-const AGEINDEX = [0, 1, 2, 3, 4, 5];
-
 const associationFilter = (val) => (row) => row[COL.ASSOCIATION] === val;
 const organizationFilter = (val) => (row) => row[COL.ORGANIZATION] === val;
 
@@ -26,13 +24,23 @@ const sumMales = (rows) => sumCols(rows, ...COL.MALES);
 const sumFemales = (rows) => sumCols(rows, ...COL.FEMALES);
 const sumParticipants = (rows) => sumCols(rows, ...COL.MALES, ...COL.FEMALES);
 
-const sumAges = (rows) =>
-  AGEINDEX.map((i) => sumCols(rows, COL.MALES[i], COL.FEMALES[i]));
+const sumAges = (rows) => [
+  sumCols(rows, COL.MALES[0], COL.FEMALES[0]),
+  sumCols(rows, COL.MALES[1], COL.FEMALES[1]),
+  sumCols(rows, COL.MALES[2], COL.FEMALES[2]),
+  sumCols(rows, COL.MALES[3], COL.FEMALES[3]),
+  sumCols(rows, COL.MALES[4], COL.FEMALES[4]),
+  sumCols(rows, COL.MALES[5], COL.FEMALES[5]),
+];
 
-const sumHistoryAges = (rowset) =>
-  AGEINDEX.map((i) =>
-    rowset.map((rows) => sumCols(rows, COL.MALES[i], COL.FEMALES[i])).reverse()
-  );
+const sumHistoryAges = (rowset) => [
+  rowset.map((rows) => sumCols(rows, COL.MALES[0], COL.FEMALES[0])).reverse(),
+  rowset.map((rows) => sumCols(rows, COL.MALES[1], COL.FEMALES[1])).reverse(),
+  rowset.map((rows) => sumCols(rows, COL.MALES[2], COL.FEMALES[2])).reverse(),
+  rowset.map((rows) => sumCols(rows, COL.MALES[3], COL.FEMALES[3])).reverse(),
+  rowset.map((rows) => sumCols(rows, COL.MALES[4], COL.FEMALES[4])).reverse(),
+  rowset.map((rows) => sumCols(rows, COL.MALES[5], COL.FEMALES[5])).reverse(),
+];
 
 const participantsWithHistory = (rowset) => ({
   ...participants(rowset[0]),
@@ -87,7 +95,17 @@ const topAge = (summed, i, limit = 5) =>
     )
     .slice(0, limit);
 
-const topAges = (summed) => AGEINDEX.map((i) => topAge(summed, i));
+/**
+ * @returns {import("../types/reports").AgeSet<Array<string>>}
+ */
+const topAges = (summed) => [
+  topAge(summed, 0),
+  topAge(summed, 1),
+  topAge(summed, 2),
+  topAge(summed, 3),
+  topAge(summed, 4),
+  topAge(summed, 5),
+];
 
 const countOrganizations = (rows) =>
   new Set(rows.map((row) => `${row[COL.ASSOCIATION]}:${row[COL.ORGANIZATION]}`))
@@ -119,6 +137,8 @@ const organizationSummer = (rows, lastYearRows = [[]]) => (org) => {
 
 const getCompactMunicipalityData = (rows, municipalities) => {
   const municipalitiesSet = new Set(rows.map((row) => row[COL.MUNICIPALITY]));
+
+  /** @type {Record<string, import("../types/reports").CompactValues>} */
   const output = {};
 
   Object.keys(municipalities)

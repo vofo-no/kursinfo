@@ -1,21 +1,9 @@
 import { Box } from "@vofo-no/design";
 import { FC } from "react";
 import { Clock, Layers, Map, Share2, UserCheck, Users } from "react-feather";
+import { SummaryProps } from "types/reports";
 
 import Card from "./Card";
-
-interface SummaryProps {
-  courses: number;
-  facilitatedCourses: number;
-  participants: {
-    males: number;
-    females: number;
-  };
-  hours: number;
-  organizations: number;
-  activeMunicipalitiesLength: number;
-  allMunicipalitiesLength: number;
-}
 
 const Summary: FC<SummaryProps> = ({
   courses,
@@ -44,7 +32,7 @@ const Summary: FC<SummaryProps> = ({
         })}
       </Card>
       <Card Icon={Users} label="deltakere">
-        {(participants.males + participants.females).toLocaleString("nb")}
+        {participants.toLocaleString("nb")}
       </Card>
       <Card Icon={Clock} label="kurstimer">
         {hours.toLocaleString("nb")}

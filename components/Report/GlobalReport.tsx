@@ -1,23 +1,22 @@
+import Associations from "components/Associations";
 import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
 import Municipalities from "components/Municipalities";
-import Organizations from "components/Organizations";
 import ReportHeading from "components/ReportHeading";
 import Subjects from "components/Subjects";
 import Summary from "components/Summary";
 import { FC, useEffect } from "react";
-import { AssociationReportProps } from "types/reports";
+import { GLOBAL, GlobalReportProps } from "types/reports";
 
 import Footer from "./Footer";
 
-const AssociationReport: FC<AssociationReportProps> = ({
+const GlobalReport: FC<GlobalReportProps> = ({
   year,
   name,
-  organizations,
+  associations,
   counties,
   historical,
-  historicalAll,
   mainSubjects,
   topSubjects,
   ageSetHistory,
@@ -28,16 +27,16 @@ const AssociationReport: FC<AssociationReportProps> = ({
     initializeGraphs();
   }, []);
   return (
-    <Layout title={`${name}: Studieforbundstatistikk ${year}`}>
+    <Layout title={`${name}: Kursstatistikk ${year}`}>
       <section className="page">
         <div className="container">
-          <ReportHeading name={name} year={year} type="ASSOCIATION" />
+          <ReportHeading name={name} year={year} type={GLOBAL} />
           <Summary {...summary} />
           <p>
             Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
             godkjente studieforbund. Virksomheten måles i antall arrangerte
             kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {name} i {year}.
+            kurs som er gjennomført i {year}.
           </p>
           <p>
             For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
@@ -50,22 +49,28 @@ const AssociationReport: FC<AssociationReportProps> = ({
       <Counties
         counties={counties}
         year={year}
-        name={name}
+        name={name.toLowerCase()}
         historical={historical}
-        historicalAll={historicalAll}
-        totalUnit="alle studieforbund"
       />
-      <Organizations items={organizations} year={year} name={name} />
+      <Associations
+        items={associations}
+        year={year}
+        name={name.toLowerCase()}
+      />
       <Subjects
         mainSubjects={mainSubjects}
         topSubjects={topSubjects}
         ageSetHistory={ageSetHistory}
         year={year}
-        name={name}
+        name={name.toLowerCase()}
       />
-      <Municipalities items={municipalities} year={year} name={name} />
+      <Municipalities
+        items={municipalities}
+        year={year}
+        name={name.toLowerCase()}
+      />
     </Layout>
   );
 };
 
-export default AssociationReport;
+export default GlobalReport;
