@@ -46,12 +46,12 @@ const getData = (year) => {
 
   console.log(
     "\x1b[2m",
-    hours.toLocaleString().padStart(10, " "),
+    hours.toLocaleString("nb").padStart(10, " "),
     "timer\x1b[0m"
   );
   console.log(
     "\x1b[2m",
-    file.data.length.toLocaleString().padStart(10, " "),
+    file.data.length.toLocaleString("nb").padStart(10, " "),
     "kurs\x1b[0m"
   );
 

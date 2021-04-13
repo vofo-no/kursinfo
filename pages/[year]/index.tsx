@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps<
         report,
         String(data.reports[report].name),
       ])
-      .sort((a, b) => a[1].localeCompare(b[1]));
+      .sort((a, b) => a[1].localeCompare(b[1], "nb"));
 
   return {
     props: {
