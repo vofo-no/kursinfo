@@ -26,7 +26,7 @@ const Index: FC<IndexProps> = ({ years }) => {
         <PageHeading>Statistikk</PageHeading>
         <p>
           Her finner du Vofos nasjonale og regionale statistikkrapporter for
-          studieforbundenes opplæringsvirksomhet.
+          studieforbundenes kursvirksomhet.
         </p>
       </Box>
       <GridLinks items={years.map((year) => [`/${year}`, year])} />

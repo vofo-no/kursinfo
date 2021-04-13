@@ -114,7 +114,7 @@ const YearIndex: FC<ReportIndexProps> = ({
             <Text as="h2" my={0}>
               Fylker
             </Text>
-            <p>Kursaktiviteten i de ulike fylkene og hele landet.</p>
+            <p>Kursvirksomheten i de ulike fylkene og hele landet.</p>
           </Box>
           <ul className="link-list">
             {regionReports.map(([key, value]) => (
@@ -136,7 +136,7 @@ const YearIndex: FC<ReportIndexProps> = ({
             <Text as="h2" my={0}>
               Studieforbund
             </Text>
-            <p>Kursaktiviteten i de ulike studieforbundene.</p>
+            <p>Kursvirksomheten i de ulike studieforbundene.</p>
           </Box>
           <ul className="link-list">
             {associationReports.map(([key, value]) => (
