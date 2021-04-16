@@ -1,3 +1,6 @@
+import "@formatjs/intl-numberformat/polyfill";
+import "@formatjs/intl-numberformat/locale-data/nb";
+
 import GraphOrgs from "components/GraphOrgs";
 import { FC } from "react";
 import { Organization } from "types/reports";

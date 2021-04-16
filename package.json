@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "@formatjs/intl-numberformat": "^6.2.6",
     "@next/bundle-analyzer": "^10.0.5",
     "@types/react-table": "^7.0.26",
     "@vofo-no/design": "^0.4.4",

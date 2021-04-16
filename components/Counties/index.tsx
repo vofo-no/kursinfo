@@ -1,3 +1,6 @@
+import "@formatjs/intl-numberformat/polyfill";
+import "@formatjs/intl-numberformat/locale-data/nb";
+
 import { FC } from "react";
 
 import Graph from "./Graph";
