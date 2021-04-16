@@ -1,6 +1,7 @@
 const chalk = require("chalk");
 const settings = require("./settings.json");
 const fs = require("fs");
+const path = require("path");
 const getCounties = require("../lib/getCounties");
 const smartCase = require("../lib/smartCase");
 
@@ -165,7 +166,9 @@ function getTaskYears() {
 }
 
 async function doWork({ tenant, year }) {
-  const filepath = `data/${tenant.dataTarget}/${year}.json`;
+  const outpath = `data/${tenant.dataTarget}/${year}.json`;
+  const filepath = path.join(process.cwd(), outpath);
+
   if (fs.existsSync(filepath) && !force) {
     console.log(
       chalk.green(
@@ -196,13 +199,13 @@ async function doWork({ tenant, year }) {
       const data = await getData(tenant, year);
 
       if (data.items.length) {
-        console.log(`=> Lagrer data i [${chalk.blue(filepath)}]...`);
+        console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
         const wstream = fs.createWriteStream(filepath);
         wstream.write(JSON.stringify(data));
         wstream.end();
       } else {
         if (fs.existsSync(filepath)) {
-          console.log(`=> Sletter [${chalk.blue(filepath)}] (ingen kurs)...`);
+          console.log(`=> Sletter [${chalk.blue(outpath)}] (ingen kurs)...`);
           fs.unlinkSync(filepath);
         }
       }
