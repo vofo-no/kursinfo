@@ -2,7 +2,7 @@ import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
 } from "../../lib/constants";
-import { ICourseItem } from "../../types/courses";
+import { IndexedCourseItem, ITenantData } from "../../types/courses";
 
 export const ALL_COUNTIES_OPTION = [DEFAULT_COUNTY_PARAM, "Hele landet"];
 export const ALL_ORGANIZATIONS_OPTION = [
@@ -35,28 +35,11 @@ export interface ICoursesBaseProps {
   yearOptions: string[];
 }
 
-export interface IAggregatedData {
-  id: string;
-  name: string;
-  plannedCourses: number;
-  plannedHours: number;
-  courses: number;
-  hours: number;
-  participants: number;
-  grant: number;
-}
-
-export interface CoursesProps extends ICoursesBaseProps {
+export interface CoursesProps extends ITenantData, ICoursesBaseProps {
   group: GroupType;
-  counties: Array<string>;
-  curriculums: Array<string>;
-  organizers: Array<string>;
-  items: Array<ICourseItem>;
-  reportSchema?: string;
-  tabular?: Array<IAggregatedData>;
 }
 
-export interface ExtendedICourseItem extends ICourseItem {
+export interface ExtendedICourseItem extends IndexedCourseItem {
   curriculum: string;
   organizer: string;
 }
