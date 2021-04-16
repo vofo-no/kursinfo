@@ -6,6 +6,16 @@ const smartCase = require("../lib/smartCase");
 
 const EapplyAdapter = require("./adapters/eapply").EapplyAdapter;
 const { CourseStatuses } = require("./constants");
+
+const force = process.argv[2] === "--hard";
+if (force) {
+  console.log(
+    chalk.yellow("Overskriver eksisterende datafiler fordi `--hard` er angitt.")
+  );
+} else {
+  console.log(chalk.yellow("Overskriver ikke eksisterende datafiler."));
+}
+
 /**
  * @constant
  * @type {Record<string, import("../types/courses").Adapter>}
@@ -154,42 +164,54 @@ function getTaskYears() {
   return years;
 }
 
-async function process({ tenant, year }) {
-  const loopJobName = chalk.green(
-    "✅ Hentet data [" +
-      chalk.blue(tenant.name) +
-      " (" +
-      chalk.blue(year) +
-      ")]"
-  );
-  console.time(loopJobName);
-
-  try {
+async function doWork({ tenant, year }) {
+  const filepath = `data/${tenant.dataTarget}/${year}.json`;
+  if (fs.existsSync(filepath) && !force) {
     console.log(
-      `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
-        year
-      )})] fra [${chalk.blue(tenant.adapter)}]...`
+      chalk.green(
+        "✅ Data finnes allerede på disk [" +
+          chalk.blue(tenant.name) +
+          " (" +
+          chalk.blue(year) +
+          ")], hopper over."
+      )
     );
+  } else {
+    const loopJobName = chalk.green(
+      "✅ Hentet data [" +
+        chalk.blue(tenant.name) +
+        " (" +
+        chalk.blue(year) +
+        ")]"
+    );
+    console.time(loopJobName);
 
-    const data = await getData(tenant, year);
+    try {
+      console.log(
+        `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
+          year
+        )})] fra [${chalk.blue(tenant.adapter)}]...`
+      );
 
-    const filepath = `data/${tenant.dataTarget}/${year}.json`;
-    if (data.items.length) {
-      console.log(`=> Lagrer data i [${chalk.blue(filepath)}]...`);
-      const wstream = fs.createWriteStream(filepath);
-      wstream.write(JSON.stringify(data));
-      wstream.end();
-    } else {
-      if (fs.existsSync(filepath)) {
-        console.log(`=> Sletter [${chalk.blue(filepath)}] (ingen kurs)...`);
-        fs.unlinkSync(filepath);
+      const data = await getData(tenant, year);
+
+      if (data.items.length) {
+        console.log(`=> Lagrer data i [${chalk.blue(filepath)}]...`);
+        const wstream = fs.createWriteStream(filepath);
+        wstream.write(JSON.stringify(data));
+        wstream.end();
+      } else {
+        if (fs.existsSync(filepath)) {
+          console.log(`=> Sletter [${chalk.blue(filepath)}] (ingen kurs)...`);
+          fs.unlinkSync(filepath);
+        }
       }
-    }
 
-    console.timeEnd(loopJobName);
-  } catch (error) {
-    console.error(error);
-    console.timeEnd(loopJobName);
+      console.timeEnd(loopJobName);
+    } catch (error) {
+      console.error(error);
+      console.timeEnd(loopJobName);
+    }
   }
 }
 
@@ -214,7 +236,7 @@ async function process({ tenant, year }) {
     });
 
     for (let task of tasks) {
-      await process(task);
+      await doWork(task);
     }
 
     console.timeEnd(programExecutionTimer);
