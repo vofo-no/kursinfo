@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node julien && next build",
     "start": "next start",
     "chewie": "node chewie",
     "julien": "node julien",
