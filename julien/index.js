@@ -4,12 +4,13 @@ const fs = require("fs");
 const getCounties = require("../lib/getCounties");
 const smartCase = require("../lib/smartCase");
 
-const eapply = require("./adapters/eapply");
+const EapplyAdapter = require("./adapters/eapply").EapplyAdapter;
+const { CourseStatuses } = require("./constants");
 /**
  * @constant
- * @type {Record<string, Adapter>}
+ * @type {Record<string, import("../types/courses").Adapter>}
  */
-const adapters = { eapply };
+const adapters = { eapply: new EapplyAdapter() };
 
 /** Sync last year's data until the end of this month. */
 const LAST_YEAR_UNTIL_MONTH = 3;
@@ -28,7 +29,8 @@ const stripISODate = (raw) => {
     dataTarget: string;
     reportSchema?: string;
    }} tenant 
- * @param {string} year 
+ * @param {string} year
+   @returns {Promise<import("../types/courses").ITenantData>}
  */
 const getData = async (tenant, year) => {
   const adapter = adapters[tenant.adapter];
@@ -37,21 +39,15 @@ const getData = async (tenant, year) => {
 
   const countyData = getCounties(year);
 
-  const data = await adapter.get(tenant.id, year).then((data) =>
-    data
-      .filter((item) => item.applicationStatus === "Granted")
-      .filter((item) => item.reportStatus !== "Rejected")
-      .filter((item) =>
-        String(item.endDate || item.endYear || item.startDate).startsWith(
-          String(year)
-        )
-      )
-  );
+  const data = await adapter.get(tenant.id, year);
 
   const { reportSchema } = tenant;
 
+  /** @type Array<string> */
+  const organizations = [];
   /** @type Set<string> */
-  const memberOrganizationIds = new Set();
+  const organizationCodes = new Set();
+
   const organizerIds = {};
   const curriculumIds = {};
 
@@ -67,35 +63,29 @@ const getData = async (tenant, year) => {
   // Prepare indices
   data.map(
     ({
-      applicantOrganizationId,
-      applicantName,
-      coursePlanCode,
-      coursePlanId,
-      coursePlanTitle,
-      memberOrganizationId,
-      memberOrganizationName,
+      organizerId,
+      organizerName,
+      curriculumCode,
+      curriculumId,
+      curriculumTitle,
+      organizationCode,
+      organizationName,
     }) => {
       // Store curriculum name
-      curriculumIds[coursePlanId] = [coursePlanCode, coursePlanTitle].join(" ");
+      curriculumIds[curriculumId] = [curriculumCode, curriculumTitle].join(" ");
 
       // Store organizer name
-      organizerIds[applicantOrganizationId] = smartCase(applicantName);
+      organizerIds[organizerId] = smartCase(organizerName);
 
-      if (memberOrganizationId) {
-        // Store member organization name
-        organizerIds[memberOrganizationId] = smartCase(memberOrganizationName);
-
-        memberOrganizationIds.add(memberOrganizationId);
-      }
+      // Index organizationCode
+      organizations[Number(organizationCode)] = organizationName;
+      organizationCodes.add(organizationCode);
     }
   );
 
-  // Add or reset tenant name
-  organizerIds[tenant.id] = tenant.name;
-
   // Sort curriculums alphabetically
   const sortedCurriculumIds = Object.keys(curriculumIds).sort((a, b) =>
-    curriculumIds[a].localeCompare(curriculumIds[b], "no")
+    curriculumIds[a].localeCompare(curriculumIds[b], "nb")
   );
   const curriculums = sortedCurriculumIds.map((key) =>
     String(curriculumIds[key])
@@ -103,62 +93,45 @@ const getData = async (tenant, year) => {
 
   // Sort organizers alphabetically
   const sortedOrganizerIds = Object.keys(organizerIds).sort((a, b) =>
-    organizerIds[a].localeCompare(organizerIds[b], "no")
+    organizerIds[a].localeCompare(organizerIds[b], "nb")
   );
   const organizers = sortedOrganizerIds.map((key) => String(organizerIds[key]));
 
-  const organizationParams = sortedOrganizerIds.filter(
-    Set.prototype.has,
-    memberOrganizationIds
+  // Sort organizations alphabetically
+  const organizationParams = Array.from(organizationCodes).sort((a, b) =>
+    organizations[Number(a)].localeCompare(organizations[Number(b)], "nb")
   );
 
-  const items = data.map(
-    ({
-      applicantOrganizationId,
-      caseNumber,
-      coursePlanId,
-      courseStatus,
-      courseTitle,
-      endDate,
-      hours,
-      locationCode,
-      memberOrganizationId,
-      participantCountTotal = undefined,
-      reportStatus,
-      startDate,
-    }) => {
-      const countyIndex = getCountyIndex(Number(locationCode));
-      const curriculumIndex = sortedCurriculumIds.indexOf(coursePlanId);
-      const organizerIndex = sortedOrganizerIds.indexOf(
-        applicantOrganizationId
-      );
-      const organizationId =
-        memberOrganizationId === tenant.id
-          ? applicantOrganizationId
-          : memberOrganizationId || tenant.id;
-      const organizationIndex = sortedOrganizerIds.indexOf(organizationId);
+  /** @type {Array<import("../types/courses").IndexedCourseItem>} */
+  const items = data.map((item) => {
+    const countyIndex = getCountyIndex(Number(item.locationCode));
+    const curriculumIndex = sortedCurriculumIds.indexOf(item.curriculumId);
+    const organizerIndex = sortedOrganizerIds.indexOf(item.organizerId);
 
-      return {
-        caseNumber,
-        countyIndex,
-        curriculumIndex,
-        coursePlanId,
-        courseStatus,
-        courseTitle,
-        endDate: stripISODate(endDate),
-        hours,
-        locationCode,
-        organizationId,
-        organizationIndex,
-        organizerIndex,
-        participantCountTotal,
-        planned: !reportStatus,
-        reportSchema: reportSchema && !reportStatus,
-        reportStatus,
-        startDate: stripISODate(startDate),
-      };
-    }
-  );
+    item.startDate = stripISODate(item.startDate);
+    if (item.endDate) item.endDate = stripISODate(item.endDate);
+
+    const filterKeys = ["endDate", "endYear", "grant", "participants"];
+
+    const optionalProps = Object.fromEntries(
+      Object.entries(item).filter(([key]) => filterKeys.includes(key))
+    );
+
+    return {
+      ...optionalProps,
+      countyIndex,
+      curriculumIndex,
+      hours: item.hours,
+      ID: item.ID,
+      locationCode: item.locationCode,
+      organizationCode: item.organizationCode,
+      organizerIndex,
+      reportSchema: reportSchema && item.status === CourseStatuses.PLANNED,
+      startDate: item.startDate,
+      status: item.status,
+      title: item.title,
+    };
+  });
 
   return {
     counties,
@@ -166,6 +139,7 @@ const getData = async (tenant, year) => {
     curriculums,
     organizationParams,
     organizers,
+    organizations,
     items,
     reportSchema,
   };
@@ -174,8 +148,9 @@ const getData = async (tenant, year) => {
 function getTaskYears() {
   const today = new Date();
   const currYear = today.getFullYear();
-  const years = [currYear, currYear + 1];
-  if (today.getMonth() < LAST_YEAR_UNTIL_MONTH) years.unshift(currYear - 1);
+  const years = [String(currYear), String(currYear + 1)];
+  if (today.getMonth() < LAST_YEAR_UNTIL_MONTH)
+    years.unshift(String(currYear - 1));
   return years;
 }
 
