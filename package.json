@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node julien && next build",
+    "build": "next build",
+    "vercel-build": "node ./julien",
     "start": "next start",
     "chewie": "node chewie",
     "julien": "node julien",
