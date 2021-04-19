@@ -199,6 +199,10 @@ async function doWork({ tenant, year }) {
       const data = await getData(tenant, year);
 
       if (data.items.length) {
+        const dirpath = path.dirname(filepath);
+        if (!fs.existsSync(dirpath)) {
+          fs.mkdirSync(dirpath);
+        }
         console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
         const wstream = fs.createWriteStream(filepath);
         wstream.write(JSON.stringify(data));
