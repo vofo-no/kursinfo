@@ -2,6 +2,7 @@ import { Box, Text } from "@vofo-no/design";
 import Head from "next/head";
 import { FC } from "react";
 
+import FooterSponsor from "./FooterSponsor";
 import Header from "./Header";
 
 interface LayoutProps {
@@ -32,11 +33,7 @@ const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
               Statistikkbank for{" "}
               <a href="http://www.vofo.no/">Voksenopplæringsforbundet</a>
             </Text>
-            <Text textAlign="center" mx="auto">
-              <a href="https://vercel.com/?utm_source=vofo-kursinfo&utm_campaign=oss">
-                <img src="/powered-by-vercel.svg" alt="Powered by Vercel" />
-              </a>
-            </Text>
+            <FooterSponsor />
           </Box>
         </Box>
       </>

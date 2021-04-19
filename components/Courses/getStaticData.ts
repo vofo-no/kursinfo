@@ -1,7 +1,9 @@
-import getCounties from "../../lib/getCounties";
-import getTenantData from "../../lib/getTenantData";
-import getTenantYears from "../../lib/getTenantYears";
-import { CoursesParams } from "../../types/courses";
+import getCounties from "lib/getCounties";
+import getTenantData from "lib/getTenantData";
+import getTenantName from "lib/getTenantName";
+import getTenantYears from "lib/getTenantYears";
+import { CoursesParams } from "types/courses";
+
 import {
   ALL_COUNTIES_OPTION,
   ALL_ORGANIZATIONS_OPTION,
@@ -37,6 +39,7 @@ const getStaticData = async (
   }
 
   const props: CoursesProps = {
+    tenantName: getTenantName(tenant),
     ...data,
     county,
     countyOptions: [

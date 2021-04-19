@@ -89,7 +89,7 @@ const getData = async (tenant, year) => {
       organizerIds[organizerId] = smartCase(organizerName);
 
       // Index organizationCode
-      organizations[Number(organizationCode)] = organizationName;
+      organizations[Number(organizationCode)] = smartCase(organizationName);
       organizationCodes.add(organizationCode);
     }
   );
@@ -145,6 +145,7 @@ const getData = async (tenant, year) => {
   });
 
   return {
+    buildTime: new Date().toISOString(),
     counties,
     countyParams,
     curriculums,

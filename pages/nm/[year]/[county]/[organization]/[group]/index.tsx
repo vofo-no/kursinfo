@@ -1,7 +1,8 @@
-const TENANT = "2510";
+const TENANT = "2539";
 
 import Courses from "components/Courses";
 import { CoursesProps } from "components/Courses/constants";
+import NmHeader from "components/Courses/customHeaders/NmHeader";
 import getCoursesStaticData from "components/Courses/getStaticData";
 import getCoursesStaticPaths from "components/Courses/getStaticPaths";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -14,8 +15,20 @@ export const getStaticProps: GetStaticProps<
   if (!params) throw new Error();
   return getCoursesStaticData(params, TENANT);
 };
+
 export const getStaticPaths: GetStaticPaths<CoursesParams> = async () => {
   return getCoursesStaticPaths(TENANT);
 };
 
-export default Courses;
+const Wrapped: React.FC<CoursesProps> = (props) => (
+  <>
+    <NmHeader />
+    <Courses
+      {...props}
+      contactEmail="post@naturogmiljo.no"
+      contactUrl="https://www.naturogmiljo.no"
+    />
+  </>
+);
+
+export default Wrapped;

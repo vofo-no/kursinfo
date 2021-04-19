@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
@@ -26,17 +28,15 @@ export function isDefaultOrganization(val: string): boolean {
   return val === DEFAULT_ORGANIZATION_PARAM;
 }
 
-export interface ICoursesBaseProps {
+export interface CoursesProps extends ITenantData {
   county: string;
   countyOptions: string[][];
   organization: string;
   organizationOptions: string[][];
   year: string;
   yearOptions: string[];
-}
-
-export interface CoursesProps extends ITenantData, ICoursesBaseProps {
   group: GroupType;
+  tenantName: string;
 }
 
 export interface ExtendedICourseItem extends IndexedCourseItem {

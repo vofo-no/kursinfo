@@ -1,6 +1,6 @@
 import { Dispatch, FC } from "react";
 
-import { ICoursesBaseProps } from "./constants";
+import { CoursesProps } from "./constants";
 
 interface SelectProps {
   options?: (string[] | string)[];
@@ -8,7 +8,16 @@ interface SelectProps {
   callback: Dispatch<string>;
 }
 
-interface FilterProps extends ICoursesBaseProps {
+interface FilterProps
+  extends Pick<
+    CoursesProps,
+    | "county"
+    | "countyOptions"
+    | "organization"
+    | "organizationOptions"
+    | "year"
+    | "yearOptions"
+  > {
   setYear: Dispatch<string>;
   setCounty: Dispatch<string>;
   setOrganization: Dispatch<string>;
@@ -59,6 +68,28 @@ const Filter: FC<FilterProps> = ({
       options={countyOptions}
       callback={setCounty}
     />
+    <style jsx>
+      {`
+        fieldset {
+          border: 0;
+          padding: 0;
+          margin: 0;
+        }
+        fieldset legend {
+          border: 0 !important;
+          clip: rect(1px, 1px, 1px, 1px) !important;
+          -webkit-clip-path: inset(50%) !important;
+          clip-path: inset(50%) !important;
+          height: 1px !important;
+          margin: -1px !important;
+          overflow: hidden !important;
+          padding: 0 !important;
+          position: absolute !important;
+          width: 1px !important;
+          white-space: nowrap !important;
+        }
+      `}
+    </style>
   </fieldset>
 );
 

@@ -1,7 +1,11 @@
 import "@formatjs/intl-numberformat/polyfill";
 import "@formatjs/intl-numberformat/locale-data/nb";
+import "@formatjs/intl-datetimeformat/polyfill";
+import "@formatjs/intl-datetimeformat/locale-data/nb";
 
 import { Box, Text } from "@vofo-no/design";
+import FooterSponsor from "components/FooterSponsor";
+import PageHeading from "components/PageHeading";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { CoursesParams } from "types/courses";
@@ -11,6 +15,11 @@ import CoursesTable from "./CoursesTable";
 import Filter from "./Filter";
 import GroupTabs from "./GroupTabs";
 import getUrlObject from "./helpers/getUrlObject";
+
+const fullDateTime = new Intl.DateTimeFormat("nb", {
+  timeStyle: "short",
+  dateStyle: "medium",
+});
 
 function makeTitle(
   year: string,
@@ -24,8 +33,18 @@ function makeTitle(
   return parts.filter(Boolean).join(", ");
 }
 
-const Courses: FC<CoursesProps> = (props) => {
-  const { group, organization, county, year, countyOptions } = props;
+const Courses: FC<
+  CoursesProps & { contactEmail: string; contactUrl: string }
+> = (props) => {
+  const {
+    group,
+    organization,
+    county,
+    year,
+    countyOptions,
+    contactEmail,
+    contactUrl,
+  } = props;
   const router = useRouter();
   const nav = (query: Partial<CoursesParams> = {}) => {
     router.push(getUrlObject(router, query, { group, organization, county }));
@@ -36,9 +55,9 @@ const Courses: FC<CoursesProps> = (props) => {
 
   return (
     <>
-      <Box as="main" variant="light" container>
-        <Box my={3}>
-          <Text as="h1">{makeTitle(year, county, countyOptions)}</Text>
+      <Box as="main" my={2} container>
+        <Box variant="light" p={3} boxShadow="small">
+          <PageHeading>{makeTitle(year, county, countyOptions)}</PageHeading>
           <Filter
             {...props}
             setCounty={setCounty}
@@ -75,9 +94,36 @@ const Courses: FC<CoursesProps> = (props) => {
             `}
           </style>
         </Box>
+        <Text textAlign="right" as="div" ml="auto" mt={2} mr={2} fontSize={1}>
+          Sist oppdatert {fullDateTime.format(new Date(props.buildTime))}
+        </Text>
       </Box>
       <Box variant="dark" py={3}>
-        <Box container>Vofo!</Box>
+        <Box
+          container
+          display="grid"
+          gridTemplateColumns={["auto", "auto 235px"]}
+          alignItems="end"
+        >
+          <Box px={3}>
+            <Text>
+              Statistikk for <strong>{props.tenantName}</strong>
+            </Text>
+            <Text fontSize={1}>
+              Kontakt studieforbundet:
+              <br />
+              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+              <br />
+              <a href={contactUrl}>{contactUrl}</a>
+            </Text>
+            <Text fontSize={1}>
+              Kursstatistikken utarbeides av{" "}
+              <a href="http://www.vofo.no">Voksenopplæringsforbundet</a> på
+              grunnlag av data fra studieforbundets kurssystem.
+            </Text>
+          </Box>
+          <FooterSponsor />
+        </Box>
       </Box>
     </>
   );

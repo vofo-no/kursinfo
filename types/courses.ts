@@ -58,6 +58,7 @@ export interface CoursesParams extends ParsedUrlQuery {
 }
 
 export interface ITenantData {
+  buildTime: string;
   counties: Array<string>;
   countyParams: Array<string>;
   curriculums: Array<string>;
