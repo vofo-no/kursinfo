@@ -1,13 +1,9 @@
-import "@formatjs/intl-numberformat/polyfill";
-import "@formatjs/intl-numberformat/locale-data/nb";
-import "@formatjs/intl-datetimeformat/polyfill";
-import "@formatjs/intl-datetimeformat/locale-data/nb";
-
 import { Box, Text } from "@vofo-no/design";
 import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
 import { useRouter } from "next/router";
 import { FC } from "react";
+import { FormattedDate } from "react-intl";
 import { CoursesParams } from "types/courses";
 
 import { CoursesProps } from "./constants";
@@ -15,11 +11,6 @@ import CoursesTable from "./CoursesTable";
 import Filter from "./Filter";
 import GroupTabs from "./GroupTabs";
 import getUrlObject from "./helpers/getUrlObject";
-
-const fullDateTime = new Intl.DateTimeFormat("nb", {
-  timeStyle: "short",
-  dateStyle: "medium",
-});
 
 function makeTitle(
   year: string,
@@ -95,7 +86,12 @@ const Courses: FC<
           </style>
         </Box>
         <Text textAlign="right" as="div" ml="auto" mt={2} mr={2} fontSize={1}>
-          Sist oppdatert {fullDateTime.format(new Date(props.buildTime))}
+          Sist oppdatert{" "}
+          <FormattedDate
+            value={new Date(props.buildTime)}
+            timeStyle="short"
+            dateStyle="medium"
+          />
         </Text>
       </Box>
       <Box variant="dark" py={3}>

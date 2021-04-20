@@ -43,6 +43,10 @@ const nextConfiguration = {
   future: {
     webpack5: true,
   },
+  i18n: {
+    locales: ["nb"],
+    defaultLocale: "nb",
+  },
 };
 
 const withPlugins = require("next-compose-plugins");

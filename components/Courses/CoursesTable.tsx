@@ -1,11 +1,9 @@
-import "@formatjs/intl-numberformat/polyfill";
-import "@formatjs/intl-numberformat/locale-data/nb";
-
 import AlertDialog from "components/AlertDialog";
 import { useRouter } from "next/router";
-import { Dispatch, FC, useMemo, useState } from "react";
+import React, { Dispatch, FC, ReactNode, useMemo, useState } from "react";
 import { Info } from "react-feather";
-import { Cell, Column, HeaderProps } from "react-table";
+import { FormattedNumber } from "react-intl";
+import { CellProps, Column, HeaderProps } from "react-table";
 import { CourseStatus, IndexedCourseItem } from "types/courses";
 
 import { CoursesProps, ExtendedICourseItem } from "./constants";
@@ -13,6 +11,70 @@ import getUrlObject from "./helpers/getUrlObject";
 import remixISODate from "./helpers/remixISODate";
 import Item from "./Item";
 import Table from "./Table";
+
+const PlannedNum: FC<{ value: number; prefix?: string }> = ({
+  value,
+  prefix = "(",
+}) => (
+  <>
+    <span>
+      <FormattedNumber value={Number(value)} />
+    </span>
+    <style jsx>{`
+      span:before {
+        content: "${prefix}";
+      }
+      span:after {
+        content: ")";
+        position: absolute;
+      }
+    `}</style>
+  </>
+);
+
+interface NumCellProps
+  extends Pick<CellProps<IndexedCourseItem>, "value" | "row"> {
+  status?: CourseStatus;
+}
+interface AggNumHeaderProps
+  extends Pick<HeaderProps<IndexedCourseItem>, "groupedRows" | "column"> {
+  status?: CourseStatus;
+}
+interface IStatusProps {
+  status?: CourseStatus;
+}
+
+const withStatus = <P extends IStatusProps>(
+  WrappedComponent: React.ComponentType<P>,
+  status: CourseStatus
+): ((props: P) => ReactNode) => {
+  const WithStatus = (props: P) => (
+    <WrappedComponent {...props} status={status} />
+  );
+  return WithStatus;
+};
+
+const NumCell = ({ value, row, status }: NumCellProps) => {
+  if (typeof value !== "number") return null;
+  return (status || (row && row.original && row.original.status)) ===
+    CourseStatus.PLANNED ? (
+    <PlannedNum value={value} />
+  ) : (
+    <FormattedNumber value={value} />
+  );
+};
+
+const AggNumFooter = ({ groupedRows, column, status }: AggNumHeaderProps) => {
+  const outVal = groupedRows.reduce((sum, row) => {
+    const val = row.values[column.id];
+    return typeof val === "number" ? val + sum : sum;
+  }, 0);
+  return status === CourseStatus.PLANNED ? (
+    <PlannedNum value={outVal} />
+  ) : (
+    <FormattedNumber value={outVal} />
+  );
+};
 
 const numCol = (
   Header: string,
@@ -26,30 +88,45 @@ const numCol = (
   Footer: (p: HeaderProps<IndexedCourseItem>) => {
     return p.rows
       .reduce(
-        ([dd, pp], r) => {
+        ([dd, space, pp], r) => {
           const val = r.values[accessor];
           if (typeof val === "number") {
             if (r.values["status"] === CourseStatus.PLANNED)
-              return [dd, pp + val];
-            return [dd + val, pp];
+              return [dd, space, Number(pp) + val];
+            return [Number(dd) + val, space, pp];
           }
-          return [dd, pp];
+          return [dd, space, pp];
         },
-        [0, 0]
+        [0, " ", 0]
       )
-      .map((v, i) =>
-        i === 1 && v
-          ? `(+${v.toLocaleString("nb")})`
-          : v && v.toLocaleString("nb")
-      )
-      .filter(Boolean)
-      .join(" ");
+      .map((v, i) => {
+        switch (i) {
+          default:
+            return (
+              v && (
+                <FormattedNumber
+                  key={`${p.column.id}-foot-done`}
+                  value={Number(v)}
+                />
+              )
+            );
+          case 1:
+            return v;
+          case 2:
+            return (
+              v && (
+                <PlannedNum
+                  key={`${p.column.id}-foot-planned`}
+                  prefix="(+"
+                  value={Number(v)}
+                />
+              )
+            );
+        }
+      })
+      .filter(Boolean);
   },
-  Cell: (p: Cell<IndexedCourseItem>) => {
-    if (!p.row.original || typeof p.value !== "number") return null;
-    const out = p.value.toLocaleString("nb");
-    return p.row.original.status === CourseStatus.PLANNED ? `(${out})` : out;
-  },
+  Cell: NumCell,
 });
 
 const aggCol = (
@@ -66,20 +143,8 @@ const aggCol = (
   className: `num ${
     status === CourseStatus.PLANNED ? "status-planned" : "status-done"
   }`,
-  Footer: (p: HeaderProps<IndexedCourseItem>) => {
-    const out = p.groupedRows
-      .reduce((sum, row) => {
-        const val = row.values[p.column.id];
-        return typeof val === "number" ? val + sum : sum;
-      }, 0)
-      .toLocaleString("nb");
-    return status === CourseStatus.PLANNED ? `(${out})` : out;
-  },
-  Cell: (p: { value?: number } = {}) => {
-    if (!p || typeof p.value !== "number") return null;
-    const out = p.value.toLocaleString("nb");
-    return status === CourseStatus.PLANNED ? `(${out})` : out;
-  },
+  Footer: withStatus<AggNumHeaderProps>(AggNumFooter, status),
+  Cell: withStatus<NumCellProps>(NumCell, status),
 });
 
 const getNamedIndexCell = (dict: Array<string>) => {

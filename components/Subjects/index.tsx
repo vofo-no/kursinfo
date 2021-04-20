@@ -1,7 +1,5 @@
-import "@formatjs/intl-numberformat/polyfill";
-import "@formatjs/intl-numberformat/locale-data/nb";
-
 import { FC, Fragment } from "react";
+import { FormattedNumber } from "react-intl";
 import { AgeSet, MainSubjectWithKey } from "types/reports";
 
 import Graph from "./Graph";
@@ -62,9 +60,15 @@ const Subjects: FC<SubjectsProps> = ({
                         <th scope="row">
                           {key in names ? names[key as NameKey] : key}
                         </th>
-                        <td>{females.toLocaleString("nb")}</td>
-                        <td>{males.toLocaleString("nb")}</td>
-                        <td>{(females + males).toLocaleString("nb")}</td>
+                        <td>
+                          <FormattedNumber value={females} />
+                        </td>
+                        <td>
+                          <FormattedNumber value={males} />
+                        </td>
+                        <td>
+                          <FormattedNumber value={females + males} />
+                        </td>
                       </tr>
                     );
                   }
@@ -103,7 +107,9 @@ const Subjects: FC<SubjectsProps> = ({
                           <th scope="row">
                             {key in names ? names[key as NameKey] : key}
                           </th>
-                          <td>{value.toLocaleString("nb")}</td>
+                          <td>
+                            <FormattedNumber value={value} />
+                          </td>
                         </tr>
                       );
                     })}
