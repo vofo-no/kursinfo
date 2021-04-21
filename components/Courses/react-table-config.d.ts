@@ -1,8 +1,12 @@
+import { UrlObject } from "node:url";
 import {
+  HeaderProps,
+  Renderer,
   UseColumnOrderInstanceProps,
   UseColumnOrderState,
   UseExpandedHooks,
   UseExpandedInstanceProps,
+  UseExpandedOptions,
   UseExpandedOptions,
   UseExpandedRowProps,
   UseExpandedState,
@@ -14,6 +18,8 @@ import {
   UseGroupByOptions,
   UseGroupByRowProps,
   UseGroupByState,
+  UsePaginationInstanceProps,
+  UsePaginationState,
   UseRowStateCellProps,
   UseRowStateInstanceProps,
   UseRowStateOptions,
@@ -47,7 +53,8 @@ declare module "react-table" {
       UseExpandedInstanceProps<D>,
       UseGroupByInstanceProps<D>,
       UseRowStateInstanceProps<D>,
-      UseSortByInstanceProps<D> {}
+      UseSortByInstanceProps<D>,
+      UsePaginationInstanceProps<D> {}
 
   export interface TableState<
     D extends Record<string, unknown> = Record<string, unknown>
@@ -55,18 +62,16 @@ declare module "react-table" {
       UseExpandedState<D>,
       UseGroupByState<D>,
       UseRowStateState<D>,
-      UseSortByState<D> {}
-
-  interface InfoCell {
-    data: Array<{ hours?: number; participants?: number }>;
-  }
+      UseSortByState<D>,
+      UsePaginationState<D> {}
 
   export interface ColumnInterface<
     D extends Record<string, unknown> = Record<string, unknown>
   > extends UseGroupByColumnOptions<D>,
       UseSortByColumnOptions<D> {
     className?: string;
-    Footer?: (info: InfoCell) => string | number;
+    Footer?: Renderer<HeaderProps<D>>;
+    makeHref?: (param: string) => UrlObject;
   }
 
   export interface ColumnInstance<

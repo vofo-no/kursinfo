@@ -1,6 +1,7 @@
 import { Box } from "@vofo-no/design";
 import { FC } from "react";
 import { Clock, Layers, Map, Share2, UserCheck, Users } from "react-feather";
+import { FormattedNumber } from "react-intl";
 import { SummaryProps } from "types/reports";
 
 import Card from "./Card";
@@ -23,22 +24,23 @@ const Summary: FC<SummaryProps> = ({
       my={6}
     >
       <Card Icon={Layers} label="kurs">
-        {courses.toLocaleString("nb")}
+        <FormattedNumber value={courses} />
       </Card>
       <Card Icon={UserCheck} label="tilrettelagte kurs">
-        {(facilitatedCourses / courses).toLocaleString("nb", {
-          style: "percent",
-          minimumFractionDigits: 0,
-        })}
+        <FormattedNumber
+          style="percent"
+          minimumFractionDigits={0}
+          value={facilitatedCourses / courses}
+        />
       </Card>
       <Card Icon={Users} label="deltakere">
-        {participants.toLocaleString("nb")}
+        <FormattedNumber value={participants} />
       </Card>
       <Card Icon={Clock} label="kurstimer">
-        {hours.toLocaleString("nb")}
+        <FormattedNumber value={hours} />
       </Card>
       <Card Icon={Share2} label="frivillige og ideelle organisasjoner">
-        {organizations.toLocaleString("nb")}
+        <FormattedNumber value={organizations} />
       </Card>
       <Card Icon={Map} label="kommuner med kursvirksomhet">
         <>

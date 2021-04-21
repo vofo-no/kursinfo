@@ -58,13 +58,15 @@ export const initialize = (): void => {
 
   if (window.matchMedia) {
     const mediaQueryList = window.matchMedia("print");
-    mediaQueryList.addEventListener("change", (e) => {
-      if (e.matches) {
-        beforePrint();
-      } else {
-        afterPrint();
-      }
-    });
+    if ("addEventListener" in mediaQueryList) {
+      mediaQueryList.addEventListener("change", (e) => {
+        if (e.matches) {
+          beforePrint();
+        } else {
+          afterPrint();
+        }
+      });
+    }
   } else {
     window.addEventListener("onbeforeprint", beforePrint);
     window.addEventListener("onafterprint", afterPrint);

@@ -1,7 +1,12 @@
 import "react-tabs/style/react-tabs.css";
 
-import { Dispatch, FC } from "react";
+import {
+  DEFAULT_COUNTY_PARAM,
+  DEFAULT_ORGANIZATION_PARAM,
+} from "lib/constants";
+import { FC } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { CoursesParams } from "types/courses";
 
 import { GroupType, isDefaultCounty, isDefaultOrganization } from "./constants";
 
@@ -20,19 +25,20 @@ const tabLabels: Record<GroupType, string> = {
   studieplaner: "Studieplaner",
 };
 
-const isSpecific = (
+const unsetSpecific = (
   tab: GroupType,
   { organization, county }: { organization: string; county: string }
 ) => {
-  if (tab === "fylker" && !isDefaultCounty(county)) return true;
+  if (tab === "fylker" && !isDefaultCounty(county))
+    return { county: DEFAULT_COUNTY_PARAM };
   if (tab === "organisasjoner" && !isDefaultOrganization(organization))
-    return true;
-  return false;
+    return { organization: DEFAULT_ORGANIZATION_PARAM };
+  return {};
 };
 
 interface GroupTabsProps {
   group: GroupType;
-  setGroup: Dispatch<GroupType>;
+  nav: (query: Partial<CoursesParams>) => void;
   organization: string;
   county: string;
   children: JSX.Element;
@@ -40,20 +46,23 @@ interface GroupTabsProps {
 
 const GroupTabs: FC<GroupTabsProps> = ({
   group,
-  setGroup,
   organization,
   county,
+  nav,
   children,
 }) => (
   <Tabs
     selectedIndex={tabs.indexOf(group) || 0}
-    onSelect={(i) => setGroup(tabs[i])}
+    onSelect={(i) =>
+      nav({
+        group: tabs[i],
+        ...unsetSpecific(tabs[i], { organization, county }),
+      })
+    }
   >
     <TabList>
       {tabs.map((tab) => (
-        <Tab key={tab} disabled={isSpecific(tab, { organization, county })}>
-          {tabLabels[tab]}
-        </Tab>
+        <Tab key={tab}>{tabLabels[tab]}</Tab>
       ))}
     </TabList>
     {tabs.map((tab) => (

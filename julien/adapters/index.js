@@ -5,30 +5,14 @@
  */
 class Adapter {
   constructor() {}
+
   /**
-   * Get data from the adapter.
    *
    * @param {string} tenantId
    * @param {string} year
-   * @returns {Promise<{
-   *   applicantName: string,
-   *   applicantOrganizationId: string,
-   *   caseNumber: string,
-   *   coursePlanCode?: string,
-   *   coursePlanId: string,
-   *   coursePlanTitle: string,
-   *   courseStatus: string,
-   *   courseTitle: string,
-   *   endDate?: string,
-   *   hours: number,
-   *   locationCode: string,
-   *   memberOrganizationId?: string,
-   *   memberOrganizationName?: string,
-   *   participantCountTotal?: number,
-   *   reportStatus?: string,
-   *   startDate: string
-   * }[]>}
+   * @returns {Promise<Array<import("../../types/courses").Course>>} Array of courses
    */
+  // eslint-disable-next-line no-unused-vars
   async get(tenantId, year) {
     throw new Error("not implemented");
   }

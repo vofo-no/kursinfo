@@ -15,9 +15,9 @@ const Item: FC<ItemProps> = ({ course, reportSchema }) => {
     <Text as="section">
       <dl>
         <dt>Tittel</dt>
-        <dd>{course.courseTitle}</dd>
+        <dd>{course.title}</dd>
         <dt>Saksnummer</dt>
-        <dd>{course.caseNumber}</dd>
+        <dd>{course.ID}</dd>
         <dt>Kursperiode</dt>
         <dd>
           {course.startDate}–{course.endDate}

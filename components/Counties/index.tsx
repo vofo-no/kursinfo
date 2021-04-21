@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { FormattedNumber } from "react-intl";
 
 import Graph from "./Graph";
 
@@ -71,14 +72,21 @@ const Counties: FC<PropTypes> = ({
                       <span className="bl">{i + 1}</span>
                     </td>
                     <th scope="row">{name}</th>
-                    <td>{courses.toLocaleString("nb")}</td>
-                    <td>{hours.toLocaleString("nb")}</td>
-                    <td>{participants.toLocaleString("nb")}</td>
                     <td>
-                      {(coursesPerCapita * 1000).toLocaleString("nb", {
-                        minimumFractionDigits: 1,
-                        maximumFractionDigits: 1,
-                      })}
+                      <FormattedNumber value={courses} />
+                    </td>
+                    <td>
+                      <FormattedNumber value={hours} />
+                    </td>
+                    <td>
+                      <FormattedNumber value={participants} />
+                    </td>
+                    <td>
+                      <FormattedNumber
+                        value={coursesPerCapita * 1000}
+                        minimumFractionDigits={1}
+                        maximumFractionDigits={1}
+                      />
                     </td>
                   </tr>
                 )

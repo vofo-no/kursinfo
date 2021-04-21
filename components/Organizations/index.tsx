@@ -1,5 +1,6 @@
 import GraphOrgs from "components/GraphOrgs";
 import { FC } from "react";
+import { FormattedNumber } from "react-intl";
 import { Organization } from "types/reports";
 import { showName } from "utils/names";
 
@@ -42,12 +43,16 @@ const Organizations: FC<PropTypes> = ({ items, year, name }) => {
                     <tr key={key}>
                       <td>{i + 1}</td>
                       <th scope="row">{showName(rest, key)}</th>
-                      <td>{courses.toLocaleString("nb")}</td>
-                      <td>{hours.toLocaleString("nb")}</td>
                       <td>
-                        {(
-                          participants.males + participants.females
-                        ).toLocaleString("nb")}
+                        <FormattedNumber value={courses} />
+                      </td>
+                      <td>
+                        <FormattedNumber value={hours} />
+                      </td>
+                      <td>
+                        <FormattedNumber
+                          value={participants.males + participants.females}
+                        />
                       </td>
                     </tr>
                   );

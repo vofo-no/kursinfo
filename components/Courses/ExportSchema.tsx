@@ -1,11 +1,11 @@
-import * as FileSaver from "file-saver";
+import FileSaver from "file-saver";
 import { FC } from "react";
 import { Download } from "react-feather";
 
 interface ExportSchemaProps {
   course: {
-    caseNumber: string;
-    courseTitle: string;
+    ID: string;
+    title: string;
     startDate: string;
     hours: number;
     endDate?: string;
@@ -15,14 +15,7 @@ interface ExportSchemaProps {
 }
 
 const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
-  const {
-    caseNumber,
-    courseTitle,
-    startDate,
-    hours,
-    endDate,
-    organizer,
-  } = course;
+  const { ID, title, startDate, hours, endDate, organizer } = course;
   const exportToCSV = (fileName: string) => {
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -34,12 +27,30 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
         const wbBase = new Workbook();
         wbBase.xlsx.load(buffer).then((wb) => {
           const ws = wb.getWorksheet("Rapport");
-          ws.getCell("A2").value = courseTitle;
-          ws.getCell("S2").value = Number(caseNumber);
-          ws.getCell("A4").value = organizer;
-          ws.getCell("M4").value = `${hours} timer`;
-          ws.getCell("Q4").value = `${startDate}–${endDate}`;
-          ws.getCell("A6").value = ""; // Lærer
+          ws.eachRow((row) => {
+            row.eachCell((cell) => {
+              switch (cell.value?.toString()) {
+                case "[title]":
+                  cell.value = title;
+                  break;
+                case "[ID]":
+                  cell.value = Number(ID);
+                  break;
+                case "[organizer]":
+                  cell.value = organizer;
+                  break;
+                case "[hours]":
+                  cell.value = `${hours} timer`;
+                  break;
+                case "[coursePeriod]":
+                  cell.value = `${startDate}–${endDate}`;
+                  break;
+                case "[teacher]":
+                  cell.value = ""; // TODO: Fix when available
+                  break;
+              }
+            });
+          });
 
           wb.xlsx.writeBuffer().then((excelBuffer) => {
             const data = new Blob([excelBuffer], { type: fileType });
@@ -53,7 +64,7 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
     <button
       style={{ cursor: "pointer" }}
       tabIndex={0}
-      onClick={() => exportToCSV(caseNumber)}
+      onClick={() => exportToCSV(ID)}
     >
       <span>
         <Download />
