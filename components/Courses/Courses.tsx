@@ -1,6 +1,7 @@
 import { Box, Text } from "@vofo-no/design";
 import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { FormattedDate } from "react-intl";
@@ -35,6 +36,8 @@ const Courses: FC<
     countyOptions,
     contactEmail,
     contactUrl,
+    tenantName,
+    buildTime,
   } = props;
   const router = useRouter();
   const nav = (query: Partial<CoursesParams> = {}) => {
@@ -44,11 +47,18 @@ const Courses: FC<
   const setCounty = (county: string) => nav({ county });
   const setOrganization = (organization: string) => nav({ organization });
 
+  const title = makeTitle(year, county, countyOptions);
+
   return (
     <>
+      <Head>
+        <title>
+          {title} - {tenantName}
+        </title>
+      </Head>
       <Box as="main" my={2} container>
         <Box variant="light" p={3} boxShadow="small">
-          <PageHeading>{makeTitle(year, county, countyOptions)}</PageHeading>
+          <PageHeading>{title}</PageHeading>
           <Filter
             {...props}
             setCounty={setCounty}
@@ -88,7 +98,7 @@ const Courses: FC<
         <Text textAlign="right" as="div" ml="auto" mt={2} mr={2} fontSize={1}>
           Sist oppdatert{" "}
           <FormattedDate
-            value={new Date(props.buildTime)}
+            value={new Date(buildTime)}
             timeStyle="short"
             dateStyle="medium"
           />
@@ -103,7 +113,7 @@ const Courses: FC<
         >
           <Box px={3}>
             <Text>
-              Statistikk for <strong>{props.tenantName}</strong>
+              Statistikk for <strong>{tenantName}</strong>
             </Text>
             <Text fontSize={1}>
               Kontakt studieforbundet:
