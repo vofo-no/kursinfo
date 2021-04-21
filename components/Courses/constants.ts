@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
