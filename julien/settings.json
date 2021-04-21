@@ -12,6 +12,12 @@
       "adapter": "eapply",
       "dataTarget": "2510",
       "reportSchema": "/rapport2510.xlsx"
+    },
+    {
+      "id": "D768FD44-4B5D-4AB9-8FF8-467EDE1EAAB8",
+      "name": "Studieforbundet Funkis",
+      "adapter": "eapply",
+      "dataTarget": "2508"
     }
   ]
 }
