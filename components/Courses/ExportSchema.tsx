@@ -27,12 +27,30 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
         const wbBase = new Workbook();
         wbBase.xlsx.load(buffer).then((wb) => {
           const ws = wb.getWorksheet("Rapport");
-          ws.getCell("A2").value = title;
-          ws.getCell("S2").value = Number(ID);
-          ws.getCell("A4").value = organizer;
-          ws.getCell("M4").value = `${hours} timer`;
-          ws.getCell("Q4").value = `${startDate}–${endDate}`;
-          ws.getCell("A6").value = ""; // Lærer
+          ws.eachRow((row) => {
+            row.eachCell((cell) => {
+              switch (cell.value?.toString()) {
+                case "[title]":
+                  cell.value = title;
+                  break;
+                case "[ID]":
+                  cell.value = Number(ID);
+                  break;
+                case "[organizer]":
+                  cell.value = organizer;
+                  break;
+                case "[hours]":
+                  cell.value = `${hours} timer`;
+                  break;
+                case "[coursePeriod]":
+                  cell.value = `${startDate}–${endDate}`;
+                  break;
+                case "[teacher]":
+                  cell.value = ""; // TODO: Fix when available
+                  break;
+              }
+            });
+          });
 
           wb.xlsx.writeBuffer().then((excelBuffer) => {
             const data = new Blob([excelBuffer], { type: fileType });
