@@ -148,10 +148,11 @@ const aggCol = (
 });
 
 const getNamedIndexCell = (dict: Array<string>) => {
-  const NamedIndexCell = ({ value }: { value?: number | string | null }) => {
+  const NamedIndexCell = ({ value, row }: CellProps<IndexedCourseItem>) => {
     if (typeof value === "string" || typeof value === "number") {
       return dict[Number(value)];
     }
+    if (row.isGrouped) return null;
     return "(Ukjent)";
   };
   return NamedIndexCell;
