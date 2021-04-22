@@ -1,4 +1,5 @@
 const fetch = require("node-fetch").default;
+const AbortController = require("abort-controller").default;
 const CourseStatuses = require("../constants").CourseStatuses;
 const Adapter = require("./");
 
@@ -11,24 +12,43 @@ class EapplyAdapter extends Adapter {
    * @returns {Promise<Array<import("./eapply").EapplyCourse>>}
    */
   async fetch(tenantId, year) {
+    /** @type {Array<import("./eapply").EapplyCourse>} */
+    let result = [];
+    const controller = new AbortController();
     const credentials = [process.env.EAPPLY_USER, process.env.EAPPLY_TOKEN];
+
+    /** @type {import("node-fetch").HeaderInit} */
     const headers = {
       Authorization: `Basic ${Buffer.from(credentials.join(":")).toString(
         "base64"
       )}`,
       "Content-Type": "application/json",
     };
+
+    /** @type {import("node-fetch").RequestInit} */
     const options = {
       method: "GET",
       headers,
+      signal: controller.signal,
     };
 
     const url = `${process.env.EAPPLY_URL}/api/v1/courses?limit=99999&tenantId=${tenantId}&endDateFrom=01.01.${year}&endDateTo=31.12.${year}`;
 
-    return fetch(url, options)
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    await fetch(url, options)
       .then(checkStatus)
-      .then((response) => response.json())
-      .then((data) => data);
+      .then(
+        (response) => response.json(),
+        (error) => {
+          if (error.name === "AbortError")
+            throw new Error("Fetch request timed out.");
+          throw error;
+        }
+      )
+      .then((data) => (result = data))
+      .finally(() => clearTimeout(timeout));
+
+    return result;
   }
 
   /**
@@ -89,13 +109,10 @@ class EapplyAdapter extends Adapter {
  */
 function checkStatus(res) {
   if (res.ok) {
-    // res.status >= 200 && res.status < 300
     return res;
   } else {
     throw new Error(res.statusText);
   }
 }
-
-//const eapply = new EapplyAdapter();
 
 module.exports = { EapplyAdapter: EapplyAdapter };

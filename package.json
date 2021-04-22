@@ -26,6 +26,7 @@
     "@next/bundle-analyzer": "^10.0.5",
     "@types/react-table": "^7.0.26",
     "@vofo-no/design": "^0.4.4",
+    "abort-controller": "^3.0.0",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
     "exceljs": "^4.2.0",

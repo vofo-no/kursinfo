@@ -190,36 +190,31 @@ async function doWork({ tenant, year }) {
     );
     console.time(loopJobName);
 
-    try {
-      console.log(
-        `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
-          year
-        )})] fra [${chalk.blue(tenant.adapter)}]...`
-      );
+    console.log(
+      `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
+        year
+      )})] fra [${chalk.blue(tenant.adapter)}]...`
+    );
 
-      const data = await getData(tenant, year);
+    const data = await getData(tenant, year);
 
-      if (data.items.length) {
-        const dirpath = path.dirname(filepath);
-        if (!fs.existsSync(dirpath)) {
-          fs.mkdirSync(dirpath);
-        }
-        console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
-        const wstream = fs.createWriteStream(filepath);
-        wstream.write(JSON.stringify(data));
-        wstream.end();
-      } else {
-        if (fs.existsSync(filepath)) {
-          console.log(`=> Sletter [${chalk.blue(outpath)}] (ingen kurs)...`);
-          fs.unlinkSync(filepath);
-        }
+    if (data.items.length) {
+      const dirpath = path.dirname(filepath);
+      if (!fs.existsSync(dirpath)) {
+        fs.mkdirSync(dirpath);
       }
-
-      console.timeEnd(loopJobName);
-    } catch (error) {
-      console.error(error);
-      console.timeEnd(loopJobName);
+      console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
+      const wstream = fs.createWriteStream(filepath);
+      wstream.write(JSON.stringify(data));
+      wstream.end();
+    } else {
+      if (fs.existsSync(filepath)) {
+        console.log(`=> Sletter [${chalk.blue(outpath)}] (ingen kurs)...`);
+        fs.unlinkSync(filepath);
+      }
     }
+
+    console.timeEnd(loopJobName);
   }
 }
 
@@ -250,5 +245,6 @@ async function doWork({ tenant, year }) {
     console.timeEnd(programExecutionTimer);
   } catch (error) {
     console.error(error);
+    process.exit(1);
   }
 })();
