@@ -50,9 +50,9 @@ const getStaticData = async (
     organization,
     organizationOptions: [
       ALL_ORGANIZATIONS_OPTION,
-      ...data.organizationParams.map((item, index) => [
+      ...data.organizationParams.map((item) => [
         item,
-        data.organizations[index],
+        data.organizations[Number(item)],
       ]),
     ],
     year,
