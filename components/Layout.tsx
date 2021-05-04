@@ -4,6 +4,7 @@ import { FC } from "react";
 
 import FooterSponsor from "./FooterSponsor";
 import Header from "./Header";
+import SuperHeader from "./SuperHeader";
 
 interface LayoutProps {
   title: string;
@@ -22,6 +23,7 @@ const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
     return (
       <>
         {LayoutHead}
+        <SuperHeader />
         <Header />
         <Box my={2} container>
           {children}
