@@ -31,6 +31,7 @@ yarn-error.log*
 .envrc
 .env
 
-# raw data files
-/data/raw
 .vercel
+
+# generated files
+public/*-short.json

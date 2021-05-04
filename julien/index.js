@@ -7,6 +7,7 @@ const smartCase = require("../lib/smartCase");
 
 const EapplyAdapter = require("./adapters/eapply").EapplyAdapter;
 const { CourseStatuses } = require("./constants");
+const makeShortAggregate = require("./helpers/makeShortAggregate");
 
 const force = process.argv[2] === "--hard";
 if (force) {
@@ -197,6 +198,16 @@ async function doWork({ tenant, year }) {
     );
 
     const data = await getData(tenant, year);
+
+    if (Number(year) === new Date().getFullYear()) {
+      const aggData = makeShortAggregate(data);
+      const aggPath = `public/${tenant.dataTarget}-short.json`;
+      const aggFilePath = path.join(process.cwd(), aggPath);
+      console.log(`=> Lagrer sammendrag i [${chalk.blue(aggPath)}]...`);
+      const wstream = fs.createWriteStream(aggFilePath);
+      wstream.write(JSON.stringify(aggData));
+      wstream.end();
+    }
 
     if (data.items.length) {
       const dirpath = path.dirname(filepath);
