@@ -3,7 +3,6 @@ import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FC } from "react";
 import { FormattedDate } from "react-intl";
 import { CoursesParams } from "types/courses";
 
@@ -25,9 +24,9 @@ function makeTitle(
   return parts.filter(Boolean).join(", ");
 }
 
-const Courses: FC<
-  CoursesProps & { contactEmail: string; contactUrl: string }
-> = (props) => {
+const Courses = (
+  props: CoursesProps & { contactEmail: string; contactUrl: string }
+): JSX.Element => {
   const {
     group,
     organization,

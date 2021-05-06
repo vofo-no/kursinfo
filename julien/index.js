@@ -40,6 +40,7 @@ const stripISODate = (raw) => {
     adapter: string;
     dataTarget: string;
     reportSchema?: string;
+    useTitleColumn?: boolean;
    }} tenant 
  * @param {string} year
    @returns {Promise<import("../types/courses").ITenantData>}
@@ -53,7 +54,7 @@ const getData = async (tenant, year) => {
 
   const data = await adapter.get(tenant.id, year);
 
-  const { reportSchema } = tenant;
+  const { reportSchema, useTitleColumn } = tenant;
 
   /** @type Array<string> */
   const organizations = [];
@@ -155,6 +156,7 @@ const getData = async (tenant, year) => {
     organizations,
     items,
     reportSchema,
+    useTitleColumn,
   };
 };
 

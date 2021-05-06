@@ -1,6 +1,6 @@
 import AlertDialog from "components/AlertDialog";
 import { useRouter } from "next/router";
-import React, { Dispatch, FC, ReactNode, useMemo, useState } from "react";
+import React, { Dispatch, ReactNode, useMemo, useState } from "react";
 import { Info } from "react-feather";
 import { FormattedNumber } from "react-intl";
 import { CellProps, Column, HeaderProps } from "react-table";
@@ -12,10 +12,13 @@ import remixISODate from "./helpers/remixISODate";
 import Item from "./Item";
 import Table from "./Table";
 
-const PlannedNum: FC<{ value: number; prefix?: string }> = ({
+const PlannedNum = ({
   value,
   prefix = "(",
-}) => (
+}: {
+  value: number;
+  prefix?: string;
+}): JSX.Element => (
   <>
     <span>
       <FormattedNumber value={Number(value)} />
@@ -181,21 +184,7 @@ const getMoreInfoCell = (callback: Dispatch<string>) => {
   return MoreInfoCell;
 };
 
-const CoursesTable: FC<
-  Pick<
-    CoursesProps,
-    | "counties"
-    | "county"
-    | "countyParams"
-    | "curriculums"
-    | "group"
-    | "items"
-    | "organization"
-    | "organizations"
-    | "organizers"
-    | "reportSchema"
-  >
-> = ({
+const CoursesTable = ({
   counties,
   county,
   countyParams,
@@ -206,7 +195,21 @@ const CoursesTable: FC<
   organizations,
   organizers,
   reportSchema,
-}) => {
+  useTitleColumn,
+}: Pick<
+  CoursesProps,
+  | "counties"
+  | "county"
+  | "countyParams"
+  | "curriculums"
+  | "group"
+  | "items"
+  | "organization"
+  | "organizations"
+  | "organizers"
+  | "reportSchema"
+  | "useTitleColumn"
+>): JSX.Element => {
   const tableData = useMemo(() => items, [items]);
   const [modal, setModal] = useState("");
   const router = useRouter();
@@ -293,6 +296,7 @@ const CoursesTable: FC<
         accessor: "curriculumIndex",
         Cell: getNamedIndexCell(curriculums),
       },
+      { Header: "Tittel", accessor: "title" },
       {
         Header: "Status",
         accessor: "status",
@@ -305,6 +309,11 @@ const CoursesTable: FC<
         Cell: getMoreInfoCell(setModal),
       },
     ];
+
+    const filteredBase = base.filter(
+      (item) => useTitleColumn || item.Header !== "Tittel"
+    );
+
     const aggColumns: Array<Column<IndexedCourseItem>> = [
       {
         Header: "Gjennomførte",
@@ -331,13 +340,16 @@ const CoursesTable: FC<
       numCol("Tilskudd", "grant"),
     ];
 
-    if (group === "kurs") return [...base, ...allCoursesColumns];
+    if (group === "kurs") return [...filteredBase, ...allCoursesColumns];
 
-    return [...base, ...aggColumns];
-  }, [tableData, group]);
+    return [...filteredBase, ...aggColumns];
+  }, [tableData, group, useTitleColumn]);
 
   const hiddenColumns = useMemo(() => {
-    if (!groupBy.length) return ["organizationCode", "countyIndex"];
+    if (!groupBy.length)
+      return useTitleColumn
+        ? ["organizationCode", "countyIndex", "curriculumIndex"]
+        : ["organizationCode", "countyIndex", "title"];
     const cols: Array<keyof IndexedCourseItem> = [
       "title",
       "curriculumIndex",
@@ -350,7 +362,7 @@ const CoursesTable: FC<
       "ID",
     ];
     return cols.filter((c) => !groupBy.includes(c));
-  }, [groupBy]);
+  }, [groupBy, useTitleColumn]);
 
   return (
     <>

@@ -67,4 +67,5 @@ export interface ITenantData {
   organizations: Array<string>;
   organizers: Array<string>;
   reportSchema: string;
+  useTitleColumn?: boolean;
 }

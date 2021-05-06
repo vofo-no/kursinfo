@@ -11,7 +11,8 @@
       "name": "Studieforbundet kultur og tradisjon",
       "adapter": "eapply",
       "dataTarget": "2510",
-      "reportSchema": "/rapport2510.xlsx"
+      "reportSchema": "/rapport2510.xlsx",
+      "useTitleColumn": true
     },
     {
       "id": "D768FD44-4B5D-4AB9-8FF8-467EDE1EAAB8",
