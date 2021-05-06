@@ -2,6 +2,8 @@
  * @typedef {{
  *  name: string;
  *  code: string;
+ *  courses: number;
+ *  coursesPlanned: number;
  *  hours: number;
  *  hoursPlanned: number;
  * }} OrganizationAggregate
@@ -45,13 +47,22 @@ const makeShortAggregate = (data) => {
  */
 const analyzeOrganization = (code, name, items) => {
   /** @type {OrganizationAggregate} */
-  const out = { name, code, hoursPlanned: 0, hours: 0 };
+  const out = {
+    name,
+    code,
+    courses: 0,
+    coursesPlanned: 0,
+    hours: 0,
+    hoursPlanned: 0,
+  };
 
   return items.reduce((result, item) => {
     if (item.status === CourseStatuses.DONE) {
       result.hours += item.hours;
+      result.courses++;
     } else {
       result.hoursPlanned += item.hours;
+      result.coursesPlanned++;
     }
     return result;
   }, out);
