@@ -1,31 +1,32 @@
 import Adapter from "./index";
 
 export interface EapplyCourse {
+  amountApplied?: number;
+  amountApproved?: number;
+  amountGranted?: number;
+  amountPaid?: number;
   applicantName: string;
   applicantOrganizationId: string;
   applicationStatus: EapplyApplicationStatus;
   applyFacilitationGrant?: boolean;
   caseId: string;
   caseNumber: string;
-  coursePlanCode: string;
+  coursePlanCode?: string;
   coursePlanId: string;
-  coursePlanTitle: string;
+  coursePlanTitle?: string;
   courseStatus?: EapplyCourseStatus;
   courseTitle: string;
   decided?: string;
   decision?: EapplyApplicationStatus;
-  endDate: string;
+  endDate?: string;
   endSemester?: EapplyEndSemester;
   endYear?: number;
-  extraGrantActual?: number;
-  extraGrantApplied?: number;
-  extraGrantGranted?: number;
-  facilitationGrantActual?: number;
-  facilitationGrantApplied?: number;
-  facilitationGrantGranted?: number;
-  hourGrantActual?: number;
-  hourGrantApplied?: number;
-  hourGrantGranted?: number;
+  extraGrant?: number;
+  facilitationGrant?: number;
+  facilitationGrantParticipantsFemale?: number;
+  facilitationGrantParticipantsMale?: number;
+  facilitationGrantParticipantsTotal?: number;
+  hourGrant?: number;
   hours?: number;
   hoursWithoutTeacher?: number;
   hoursWithTeacher?: number;
@@ -35,20 +36,17 @@ export interface EapplyCourse {
   memberOrganizationCode?: string;
   memberOrganizationId?: string;
   memberOrganizationName?: string;
-  participantCountFemale?: number;
-  participantCountMale?: number;
-  participantCountTotal?: number;
+  participantsFemale?: number;
+  participantsMale?: number;
+  participantsTotal?: number;
   repertoire?: string;
-  reportStatus?: EapplyReportStatus;
-  startDate: string;
+  startDate?: string;
   startYear?: number;
   submitted: string;
   teacher?: string;
   tenantId: string;
   tenantName: string;
-  totalGrantActual?: number;
-  totalGrantApplied?: number;
-  totalGrantGranted?: number;
+  totalGrant?: number;
 }
 
 export enum EapplyApplicationStatus {
@@ -66,17 +64,13 @@ export enum EapplyApplicationStatus {
 
 export enum EapplyCourseStatus {
   Completed = "Completed",
+  Planned = "Planned",
   Started = "Started",
 }
 
 export enum EapplyEndSemester {
   Fall = "Fall",
   Spring = "Spring",
-}
-
-export enum EapplyReportStatus {
-  Approved = "Approved",
-  Rejected = "Rejected",
 }
 
 export class EapplyAdapter extends Adapter {}

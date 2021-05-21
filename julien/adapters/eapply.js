@@ -66,7 +66,7 @@ class EapplyAdapter extends Adapter {
             item.applicationStatus === "Granted" ||
             item.applicationStatus === "Closed"
         )
-        .filter((item) => item.reportStatus !== "Rejected")
+        .filter((item) => item.decision !== "Rejected")
         .map((i) => ({
           curriculumCode: i.coursePlanCode,
           curriculumId: i.coursePlanId,
@@ -74,10 +74,8 @@ class EapplyAdapter extends Adapter {
           endDate: i.endDate,
           endYear: i.endYear?.toString(),
           grant:
-            typeof i.totalGrantActual === "number"
-              ? i.totalGrantActual - (i.facilitationGrantActual || 0)
-              : typeof i.totalGrantGranted === "number"
-              ? i.totalGrantGranted - (i.facilitationGrantGranted || 0)
+            typeof i.totalGrant === "number"
+              ? i.totalGrant - (i.facilitationGrant || 0)
               : undefined,
           hours: i.hours,
           ID: i.caseNumber,
@@ -89,11 +87,10 @@ class EapplyAdapter extends Adapter {
               : i.tenantName,
           organizerId: i.applicantOrganizationId,
           organizerName: i.applicantName,
-          participants:
-            (i.participantCountMale || 0) + (i.participantCountFemale || 0),
+          participants: i.participantsTotal,
           startDate: i.startDate,
           status:
-            i.reportStatus === "Approved"
+            i.courseStatus === "Completed"
               ? CourseStatuses.DONE
               : CourseStatuses.PLANNED,
           title: i.courseTitle,
