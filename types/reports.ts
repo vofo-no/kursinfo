@@ -3,7 +3,7 @@ export const REGION = "REGION";
 export const COMBO = "COMBO";
 export const GLOBAL = "GLOBAL";
 
-import { ParsedUrlQuery } from "node:querystring";
+import { ParsedUrlQuery } from "querystring";
 
 export interface ReportParams extends ParsedUrlQuery {
   year: string;

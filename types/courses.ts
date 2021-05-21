@@ -1,5 +1,5 @@
 import { CourseStatuses } from "julien/constants";
-import { ParsedUrlQuery } from "node:querystring";
+import { ParsedUrlQuery } from "querystring";
 
 import { GroupType } from "../components/Courses/constants";
 

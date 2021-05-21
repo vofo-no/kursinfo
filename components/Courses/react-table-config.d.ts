@@ -1,4 +1,3 @@
-import { UrlObject } from "node:url";
 import {
   HeaderProps,
   Renderer,
@@ -32,6 +31,7 @@ import {
   UseSortByOptions,
   UseSortByState,
 } from "react-table";
+import { UrlObject } from "url";
 
 declare module "react-table" {
   export interface TableOptions<D extends Record<string, unknown>>

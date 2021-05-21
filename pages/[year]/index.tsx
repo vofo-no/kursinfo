@@ -2,8 +2,8 @@ import { Box, Text } from "@vofo-no/design";
 import fs from "fs";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import { ParsedUrlQuery } from "node:querystring";
 import path from "path";
+import { ParsedUrlQuery } from "querystring";
 import { FC } from "react";
 import { ASSOCIATION, COMBO, GLOBAL, REGION } from "types/reports";
 
