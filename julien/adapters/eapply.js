@@ -90,9 +90,7 @@ class EapplyAdapter extends Adapter {
           participants: i.participantsTotal,
           startDate: i.startDate,
           status:
-            i.courseStatus === "Completed"
-              ? CourseStatuses.DONE
-              : CourseStatuses.PLANNED,
+            i.amountApproved > 0 ? CourseStatuses.DONE : CourseStatuses.PLANNED,
           title: i.courseTitle,
         }))
     );
