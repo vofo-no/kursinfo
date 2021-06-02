@@ -19,6 +19,13 @@
       "name": "Studieforbundet Funkis",
       "adapter": "eapply",
       "dataTarget": "2508"
+    },
+    {
+      "id": "932CB889-D194-423F-BA3B-D35864282219",
+      "name": "Musikkens studieforbund",
+      "adapter": "eapply",
+      "dataTarget": "2525",
+      "useTitleColumn": true
     }
   ]
 }

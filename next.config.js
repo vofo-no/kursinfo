@@ -12,7 +12,7 @@ const plugins = [withBundleAnalyzer];
  * Set up Next.js configuration
  */
 const defaultParams = require("./lib/getDefaultParams");
-const SFS = ["nm", "skt", "funkis"];
+const SFS = ["nm", "skt", "funkis", "msf"];
 
 const nextConfiguration = {
   async rewrites() {
