@@ -6,7 +6,7 @@ const getCounties = require("../lib/getCounties");
 const smartCase = require("../lib/smartCase");
 
 const EapplyAdapter = require("./adapters/eapply").EapplyAdapter;
-const { CourseStatuses } = require("./constants");
+const { CourseStatuses, getConfig } = require("./constants");
 const makeShortAggregate = require("./helpers/makeShortAggregate");
 
 const force = process.argv[2] === "--hard";
@@ -39,8 +39,11 @@ const stripISODate = (raw) => {
     name: string;
     adapter: string;
     dataTarget: string;
-    reportSchema?: string;
-    useTitleColumn?: boolean;
+    config?: {
+      hidePlannedGrants?: boolean;
+      reportSchema?: string;
+      useTitleColumn?: boolean;
+    }
    }} tenant 
  * @param {string} year
    @returns {Promise<import("../types/courses").ITenantData>}
@@ -54,7 +57,9 @@ const getData = async (tenant, year) => {
 
   const data = await adapter.get(tenant.id, year);
 
-  const { reportSchema, useTitleColumn } = tenant;
+  const { hidePlannedGrants, reportSchema, useTitleColumn } = getConfig(
+    tenant.config
+  );
 
   /** @type Array<string> */
   const organizations = [];
@@ -123,6 +128,10 @@ const getData = async (tenant, year) => {
 
     item.startDate = stripISODate(item.startDate);
     if (item.endDate) item.endDate = stripISODate(item.endDate);
+
+    if (hidePlannedGrants && item.status === CourseStatuses.PLANNED) {
+      delete item.grant;
+    }
 
     const filterKeys = ["endDate", "endYear", "grant", "participants"];
 

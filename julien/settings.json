@@ -4,15 +4,15 @@
       "id": "5F21539F-E164-462E-80CF-9949830B952A",
       "name": "Studieforbundet natur og miljø",
       "adapter": "eapply",
-      "dataTarget": "2539"
+      "dataTarget": "2539",
+      "config": { "hidePlannedGrants": true }
     },
     {
       "id": "73E12C2A-64A4-4EAC-A80A-898F3F3BFEF3",
       "name": "Studieforbundet kultur og tradisjon",
       "adapter": "eapply",
       "dataTarget": "2510",
-      "reportSchema": "/rapport2510.xlsx",
-      "useTitleColumn": true
+      "config": { "useTitleColumn": true, "reportSchema": "/rapport2510.xlsx" }
     },
     {
       "id": "D768FD44-4B5D-4AB9-8FF8-467EDE1EAAB8",
@@ -25,7 +25,7 @@
       "name": "Musikkens studieforbund",
       "adapter": "eapply",
       "dataTarget": "2525",
-      "useTitleColumn": true
+      "config": { "useTitleColumn": true, "hidePlannedGrants": true }
     }
   ]
 }
