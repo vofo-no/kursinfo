@@ -40,9 +40,6 @@ const nextConfiguration = {
     });
     return paths;
   },
-  future: {
-    webpack5: true,
-  },
   i18n: {
     locales: ["nb"],
     defaultLocale: "nb",
