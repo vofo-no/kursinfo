@@ -150,15 +150,14 @@ const aggCol = (
   Cell: withStatus<NumCellProps>(NumCell, status),
 });
 
-const getNamedIndexCell = (dict: Array<string>) => {
-  const NamedIndexCell = ({ value, row }: CellProps<IndexedCourseItem>) => {
-    if (typeof value === "string" || typeof value === "number") {
-      return dict[Number(value)];
-    }
-    if (row.isGrouped) return null;
-    return "(Ukjent)";
-  };
-  return NamedIndexCell;
+const FuncCell = ({ value, row, column }: CellProps<IndexedCourseItem>) => {
+  if (
+    (typeof value === "string" || typeof value === "number") &&
+    column.makeValue
+  )
+    return column.makeValue(value);
+  if (row.isGrouped) return null;
+  return "(Ukjent)";
 };
 
 const DateCell = ({ value }: { value?: string }) => remixISODate(value);
@@ -167,8 +166,6 @@ const statusText: Record<CourseStatus, string> = {
   [CourseStatus.PLANNED]: "Planlagt",
   [CourseStatus.DONE]: "Gjennomført",
 };
-const StatusCell = ({ value }: { value?: IndexedCourseItem["status"] }) =>
-  value ? statusText[value] : null;
 
 const getMoreInfoCell = (callback: Dispatch<string>) => {
   const MoreInfoCell = ({ value }: { value?: string }) =>
@@ -257,7 +254,9 @@ const CoursesTable = ({
       {
         Header: "Organisasjon",
         accessor: "organizationCode",
-        Cell: getNamedIndexCell(organizations),
+        Cell: FuncCell,
+        makeValue: (param) =>
+          typeof param === "string" ? organizations[Number(param)] : "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
             router,
@@ -268,12 +267,16 @@ const CoursesTable = ({
       {
         Header: "Lokallag",
         accessor: "organizerIndex",
-        Cell: getNamedIndexCell(organizers),
+        Cell: FuncCell,
+        makeValue: (param) =>
+          typeof param === "number" ? organizers[param] : "(Ukjent)",
       },
       {
         Header: "Fylke",
         accessor: "countyIndex",
-        Cell: getNamedIndexCell(counties),
+        Cell: FuncCell,
+        makeValue: (param) =>
+          typeof param === "number" ? counties[param] : "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
             router,
@@ -294,13 +297,17 @@ const CoursesTable = ({
       {
         Header: "Studieplan",
         accessor: "curriculumIndex",
-        Cell: getNamedIndexCell(curriculums),
+        Cell: FuncCell,
+        makeValue: (param) =>
+          typeof param === "number" ? curriculums[param] : "(Ukjent)",
       },
       { Header: "Tittel", accessor: "title" },
       {
         Header: "Status",
         accessor: "status",
-        Cell: StatusCell,
+        Cell: FuncCell,
+        makeValue: (value?: IndexedCourseItem["status"]) =>
+          value ? statusText[value] : null,
       },
       {
         Header: "",

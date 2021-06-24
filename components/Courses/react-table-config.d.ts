@@ -72,6 +72,9 @@ declare module "react-table" {
     className?: string;
     Footer?: Renderer<HeaderProps<D>>;
     makeHref?: (param: string) => UrlObject;
+    makeValue?: (
+      param: string | number | IndexedCourseItem["status"]
+    ) => string | null;
   }
 
   export interface ColumnInstance<
