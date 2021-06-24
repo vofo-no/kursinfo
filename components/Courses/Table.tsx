@@ -17,6 +17,7 @@ import { CourseStatus, IndexedCourseItem } from "types/courses";
 
 import ArrowDown from "./ArrowDown";
 import ArrowRight from "./ArrowRight";
+import getExcelFromTable from "./helpers/getExcelFromTable";
 import Pagination from "./Pagination";
 
 function Arrow({
@@ -107,6 +108,7 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
     page,
     setHiddenColumns,
     state: { expanded, pageIndex, pageSize, groupBy },
+    visibleColumns,
     pageOptions,
     gotoPage,
   } = useTable(
@@ -279,6 +281,18 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
           </nav>
         </>
       ) : null}
+      <button
+        onClick={() =>
+          getExcelFromTable(
+            String(router.query.group),
+            visibleColumns,
+            rows,
+            prepareRow
+          )
+        }
+      >
+        Lagre som Excel-fil
+      </button>
       <style jsx>{`
         table {
           border-collapse: collapse;
