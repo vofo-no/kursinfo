@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
+import { FormattedNumber } from "react-intl";
 import {
   Cell,
   ColumnInstance,
@@ -15,6 +17,7 @@ import { CourseStatus, IndexedCourseItem } from "types/courses";
 
 import ArrowDown from "./ArrowDown";
 import ArrowRight from "./ArrowRight";
+import Pagination from "./Pagination";
 
 function Arrow({
   column: { isSorted, isSortedDesc, canSort },
@@ -41,9 +44,7 @@ function Arrow({
   );
 }
 
-function headerA11yProps(
-  column: ColumnInstance<IndexedCourseItem>
-): {
+function headerA11yProps(column: ColumnInstance<IndexedCourseItem>): {
   "aria-sort"?: "descending" | "ascending" | "none";
   tabIndex?: number;
 } {
@@ -94,21 +95,30 @@ const CellRender = ({
 };
 
 const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
+  const router = useRouter();
+
   const {
     footerGroups,
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
+    rows,
     page,
     setHiddenColumns,
     state: { expanded, pageIndex, pageSize, groupBy },
     pageOptions,
-    previousPage,
-    nextPage,
-    canPreviousPage,
-    canNextPage,
-  } = useTable(props, useGroupBy, useSortBy, useExpanded, usePagination);
+    gotoPage,
+  } = useTable(
+    {
+      ...props,
+      paginateExpandedRows: false,
+    },
+    useGroupBy,
+    useSortBy,
+    useExpanded,
+    usePagination
+  );
 
   const [toggledColumns, setToggledColumns] = useState<Array<string>>([]);
 
@@ -131,22 +141,45 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
     }
   }, [expanded]);
 
+  const navToPage = (page: number) => {
+    const query: { page?: number } = {
+      ...router.query,
+      page: page + 1,
+    };
+    if (page < 1) {
+      delete query.page;
+    }
+    router.push(
+      {
+        pathname: router.pathname,
+        query,
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
+    window.scrollTo(0, 0);
+  };
+
+  useEffect(() => {
+    gotoPage((Number(router.query.page) || 1) - 1);
+  }, [router.query.page]);
+
+  const prevPagesRowCount = pageIndex * pageSize + 1;
+
   return (
     <>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => {
-            const {
-              key: headerGroupKey,
-              ...headerGroupProps
-            } = headerGroup.getHeaderGroupProps();
+            const { key: headerGroupKey, ...headerGroupProps } =
+              headerGroup.getHeaderGroupProps();
             return (
               <tr key={headerGroupKey} {...headerGroupProps}>
                 {headerGroup.headers.map((column) => {
-                  const {
-                    key: headerKey,
-                    ...headerProps
-                  } = column.getHeaderProps(column.getSortByToggleProps());
+                  const { key: headerKey, ...headerProps } =
+                    column.getHeaderProps(column.getSortByToggleProps());
                   return (
                     <th
                       key={headerKey}
@@ -200,17 +233,13 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
         </tbody>
         <tfoot>
           {footerGroups.map((group) => {
-            const {
-              key: footerGroupKey,
-              ...footerGroupProps
-            } = group.getFooterGroupProps();
+            const { key: footerGroupKey, ...footerGroupProps } =
+              group.getFooterGroupProps();
             return (
               <tr key={footerGroupKey} {...footerGroupProps}>
                 {group.headers.map((column) => {
-                  const {
-                    key: footerKey,
-                    ...footerProps
-                  } = column.getFooterProps();
+                  const { key: footerKey, ...footerProps } =
+                    column.getFooterProps();
                   return (
                     <td
                       key={footerKey}
@@ -227,17 +256,28 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
         </tfoot>
       </table>
       {pageOptions.length > 1 ? (
-        <p>
-          <em>Tabellen er begrenset til {pageSize} rader pr. side.</em>
-          <br />
-          <button disabled={!canPreviousPage} onClick={() => previousPage()}>
-            Forrige side
-          </button>{" "}
-          Side {pageIndex + 1} av {pageOptions.length}{" "}
-          <button disabled={!canNextPage} onClick={() => nextPage()}>
-            Neste side
-          </button>
-        </p>
+        <>
+          <div>
+            Viser{" "}
+            <strong>
+              <FormattedNumber value={prevPagesRowCount} />
+            </strong>{" "}
+            til{" "}
+            <strong>
+              <FormattedNumber
+                value={Math.min(prevPagesRowCount + pageSize - 1, rows.length)}
+              />
+            </strong>{" "}
+            av <FormattedNumber value={rows.length} /> rader.
+          </div>
+          <nav aria-label="Naviger paginering">
+            <Pagination
+              pageCount={pageOptions.length}
+              gotoPage={navToPage}
+              pageIndex={pageIndex}
+            />
+          </nav>
+        </>
       ) : null}
       <style jsx>{`
         table {
