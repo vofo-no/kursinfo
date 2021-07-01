@@ -1,21 +1,16 @@
-/**
- * Common interface for adapters
- *
- * @interface
- */
-class Adapter {
-  constructor() {}
+const EapplyAdapter = require("./eapply").EapplyAdapter;
+const KasAdapter = require("./kas").KasAdapter;
 
+/** @typedef {"eapply" | "kas"} adapterName */
+
+function getAdapters() {
   /**
-   *
-   * @param {string} tenantId
-   * @param {string} year
-   * @returns {Promise<Array<import("../../types/courses").Course>>} Array of courses
+   * @constant
+   * @type {Record<adapterName, import("../../types/courses").Adapter>}
    */
-  // eslint-disable-next-line no-unused-vars
-  async get(tenantId, year) {
-    throw new Error("not implemented");
-  }
+  const adapters = { eapply: new EapplyAdapter(), kas: new KasAdapter() };
+
+  return adapters;
 }
 
-module.exports = Adapter;
+exports.getAdapters = getAdapters;

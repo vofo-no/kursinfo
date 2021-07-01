@@ -1,4 +1,4 @@
-import Adapter from "./index";
+import Adapter from "./adapterBase";
 
 export interface EapplyCourse {
   amountApplied?: number;

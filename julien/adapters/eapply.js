@@ -1,11 +1,14 @@
 const fetch = require("node-fetch").default;
 const AbortController = require("abort-controller").default;
 const CourseStatuses = require("../constants").CourseStatuses;
-const Adapter = require("./");
+const Adapter = require("./adapterBase");
 
 class EapplyAdapter extends Adapter {
+  toString() {
+    return "Eapply";
+  }
+
   /**
-   *
    * @private
    * @param {string} tenantId
    * @param {string} year
@@ -67,32 +70,36 @@ class EapplyAdapter extends Adapter {
             item.applicationStatus === "Closed"
         )
         .filter((item) => item.decision !== "Rejected")
-        .map((i) => ({
-          curriculumCode: i.coursePlanCode,
-          curriculumId: i.coursePlanId,
-          curriculumTitle: i.coursePlanTitle,
-          endDate: i.endDate,
-          endYear: i.endYear?.toString(),
-          grant:
-            typeof i.totalGrant === "number"
-              ? i.totalGrant - (i.facilitationGrant || 0)
-              : undefined,
-          hours: i.hours,
-          ID: i.caseNumber,
-          locationCode: i.locationCode,
-          organizationCode: i.memberOrganizationCode || "000",
-          organizationName:
-            (i.memberOrganizationCode || "000") !== "000"
-              ? i.memberOrganizationName
-              : i.tenantName,
-          organizerId: i.applicantOrganizationId,
-          organizerName: i.applicantName,
-          participants: i.participantsTotal,
-          startDate: i.startDate,
-          status:
-            i.amountApproved > 0 ? CourseStatuses.DONE : CourseStatuses.PLANNED,
-          title: i.courseTitle,
-        }))
+        .map((i) => {
+          /** @type {import("../../types/courses").Course} */
+          const course = {
+            curriculumCode: i.coursePlanCode,
+            curriculumId: i.coursePlanId,
+            curriculumTitle: i.coursePlanTitle,
+            endDate: i.endDate,
+            endYear: i.endYear?.toString(),
+            facilitationGrant: i.facilitationGrant,
+            grant: typeof i.totalGrant === "number" ? i.totalGrant : undefined,
+            hours: i.hours,
+            ID: i.caseNumber,
+            locationCode: i.locationCode,
+            organizationCode: i.memberOrganizationCode || "000",
+            organizationName:
+              (i.memberOrganizationCode || "000") !== "000"
+                ? i.memberOrganizationName
+                : i.tenantName,
+            organizerId: i.applicantOrganizationId,
+            organizerName: i.applicantName,
+            participants: i.participantsTotal,
+            startDate: i.startDate,
+            status:
+              i.amountApproved > 0
+                ? CourseStatuses.DONE
+                : CourseStatuses.PLANNED,
+            title: i.courseTitle,
+          };
+          return course;
+        })
     );
   }
 }
@@ -110,4 +117,4 @@ function checkStatus(res) {
   }
 }
 
-module.exports = { EapplyAdapter: EapplyAdapter };
+module.exports = { EapplyAdapter };
