@@ -9,6 +9,7 @@ export interface Course {
   curriculumTitle: string;
   endDate?: string;
   endYear?: string;
+  facilitationGrant?: number;
   grant?: number;
   hours: number;
   ID: string;
@@ -28,6 +29,7 @@ export interface IndexedCourseItem {
   curriculumIndex: number;
   endDate?: string;
   endYear?: string;
+  facilitationGrant?: number;
   grant?: number;
   hours: number;
   ID: string;

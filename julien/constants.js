@@ -6,6 +6,7 @@ const CourseStatuses = {
 const configDefaults = {
   useTitleColumn: false,
   hidePlannedGrants: false,
+  showFacilitationGrants: false,
 };
 
 /**
@@ -14,6 +15,7 @@ const configDefaults = {
  * @returns {{
       hidePlannedGrants?: boolean;
       reportSchema?: string;
+      showFacilitationGrants?: boolean;
       useTitleColumn?: boolean;
     }
  }

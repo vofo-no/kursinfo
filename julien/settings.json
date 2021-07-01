@@ -18,7 +18,8 @@
       "id": "D768FD44-4B5D-4AB9-8FF8-467EDE1EAAB8",
       "name": "Studieforbundet Funkis",
       "adapter": "eapply",
-      "dataTarget": "2508"
+      "dataTarget": "2508",
+      "config": { "showFacilitationGrants": true }
     },
     {
       "id": "932CB889-D194-423F-BA3B-D35864282219",
