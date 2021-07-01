@@ -2,6 +2,7 @@ const COL = {
   ASSOCIATION: 0,
   ORGANIZATION: 1,
   MUNICIPALITY: 2,
+  ID: 3,
   SUBJECT: 4,
   MALES: [7, 8, 9, 10, 11, 12],
   FEMALES: [13, 14, 15, 16, 17, 18],
@@ -111,29 +112,33 @@ const countOrganizations = (rows) =>
   new Set(rows.map((row) => `${row[COL.ASSOCIATION]}:${row[COL.ORGANIZATION]}`))
     .size;
 
-const associationSummer = (rows, lastYearRows = [[]]) => (assoc) => {
-  const aData = rows.filter(associationFilter(assoc));
-  const bData = lastYearRows.filter(associationFilter(assoc));
-  return {
-    courses: aData.length,
-    participants: participants(aData),
-    hours: sumHours(aData),
-    lastYearHours: sumHours(bData),
-    facilitated: facilitated(aData),
+const associationSummer =
+  (rows, lastYearRows = [[]]) =>
+  (assoc) => {
+    const aData = rows.filter(associationFilter(assoc));
+    const bData = lastYearRows.filter(associationFilter(assoc));
+    return {
+      courses: aData.length,
+      participants: participants(aData),
+      hours: sumHours(aData),
+      lastYearHours: sumHours(bData),
+      facilitated: facilitated(aData),
+    };
   };
-};
 
-const organizationSummer = (rows, lastYearRows = [[]]) => (org) => {
-  const aData = rows.filter(organizationFilter(org));
-  const bData = lastYearRows.filter(organizationFilter(org));
-  return {
-    courses: aData.length,
-    participants: participants(aData),
-    hours: sumHours(aData),
-    lastYearHours: sumHours(bData),
-    facilitated: facilitated(aData),
+const organizationSummer =
+  (rows, lastYearRows = [[]]) =>
+  (org) => {
+    const aData = rows.filter(organizationFilter(org));
+    const bData = lastYearRows.filter(organizationFilter(org));
+    return {
+      courses: aData.length,
+      participants: participants(aData),
+      hours: sumHours(aData),
+      lastYearHours: sumHours(bData),
+      facilitated: facilitated(aData),
+    };
   };
-};
 
 const getCompactMunicipalityData = (rows, municipalities) => {
   const municipalitiesSet = new Set(rows.map((row) => row[COL.MUNICIPALITY]));
@@ -165,6 +170,7 @@ const historical = (rowset) => ({
 
 module.exports = {
   sumHours,
+  sumParticipants,
   historical,
   participants,
   participantsWithHistory,

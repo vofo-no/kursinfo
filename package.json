@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "node ./julien && next build",
+    "vercel-build": "node ./julien fetch && next build",
     "start": "next start",
     "chewie": "node chewie",
     "julien": "node julien",
@@ -44,7 +44,8 @@
     "react-paginate": "^7.1.3",
     "react-table": "^7.6.2",
     "react-tabs": "^3.2.1",
-    "title-case": "^3.0.3"
+    "title-case": "^3.0.3",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
