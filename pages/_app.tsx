@@ -1,3 +1,9 @@
+import "@formatjs/intl-numberformat/polyfill-force";
+import "@formatjs/intl-numberformat/locale-data/nb";
+import "@formatjs/intl-datetimeformat/polyfill-force";
+import "@formatjs/intl-datetimeformat/add-all-tz";
+import "@formatjs/intl-datetimeformat/locale-data/nb";
+
 import { BaseStyles } from "@vofo-no/design";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
