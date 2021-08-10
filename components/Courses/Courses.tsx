@@ -97,9 +97,10 @@ const Courses = (
         <Text textAlign="right" as="div" ml="auto" mt={2} mr={2} fontSize={1}>
           Sist oppdatert{" "}
           <FormattedDate
-            value={new Date(buildTime)}
+            value={Date.parse(buildTime)}
             timeStyle="short"
             dateStyle="medium"
+            timeZone="Europe/Oslo"
           />
         </Text>
       </Box>
