@@ -35,21 +35,27 @@ class EapplyAdapter extends Adapter {
       signal: controller.signal,
     };
 
-    const url = `${process.env.EAPPLY_URL}/api/v1/courses?limit=99999&tenantId=${tenantId}&endDateFrom=01.01.${year}&endDateTo=31.12.${year}`;
+    const LIMIT = 250;
 
-    const timeout = setTimeout(() => controller.abort(), 15000);
-    await fetch(url, options)
-      .then(checkStatus)
-      .then(
-        (response) => response.json(),
-        (error) => {
-          if (error.name === "AbortError")
-            throw new Error("Fetch request timed out.");
-          throw error;
-        }
-      )
-      .then((data) => (result = data))
-      .finally(() => clearTimeout(timeout));
+    for (let offset = 0; offset < LIMIT * 1000; offset += LIMIT) {
+      if (result.length < offset) break;
+
+      const url = `${process.env.EAPPLY_URL}/api/v1/courses?offset=${offset}&limit=${LIMIT}&tenantId=${tenantId}&endDateFrom=01.01.${year}&endDateTo=31.12.${year}`;
+
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      await fetch(url, options)
+        .then(checkStatus)
+        .then(
+          (response) => response.json(),
+          (error) => {
+            if (error.name === "AbortError")
+              throw new Error("Fetch request timed out.");
+            throw error;
+          }
+        )
+        .then((data) => result.push(...data))
+        .finally(() => clearTimeout(timeout));
+    }
 
     return result;
   }
