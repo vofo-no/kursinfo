@@ -153,7 +153,7 @@ const aggCol = (
 const FuncCell = ({ value, row, column }: CellProps<IndexedCourseItem>) => {
   if (
     (typeof value === "string" || typeof value === "number") &&
-    column.makeValue
+    column?.makeValue
   )
     return column.makeValue(value);
   if (row.isGrouped) return null;
@@ -256,7 +256,8 @@ const CoursesTable = ({
         accessor: "organizationCode",
         Cell: FuncCell,
         makeValue: (param) =>
-          typeof param === "string" ? organizations[Number(param)] : "(Ukjent)",
+          (typeof param === "string" && organizations[Number(param)]) ||
+          "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
             router,
@@ -269,14 +270,14 @@ const CoursesTable = ({
         accessor: "organizerIndex",
         Cell: FuncCell,
         makeValue: (param) =>
-          typeof param === "number" ? organizers[param] : "(Ukjent)",
+          (typeof param === "number" && organizers[param]) || "(Ukjent)",
       },
       {
         Header: "Fylke",
         accessor: "countyIndex",
         Cell: FuncCell,
         makeValue: (param) =>
-          typeof param === "number" ? counties[param] : "(Ukjent)",
+          (typeof param === "number" && counties[param]) || "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
             router,
@@ -299,7 +300,7 @@ const CoursesTable = ({
         accessor: "curriculumIndex",
         Cell: FuncCell,
         makeValue: (param) =>
-          typeof param === "number" ? curriculums[param] : "(Ukjent)",
+          (typeof param === "number" && curriculums[param]) || "(Ukjent)",
       },
       { Header: "Tittel", accessor: "title" },
       {
@@ -307,7 +308,7 @@ const CoursesTable = ({
         accessor: "status",
         Cell: FuncCell,
         makeValue: (value?: IndexedCourseItem["status"]) =>
-          value ? statusText[value] : null,
+          (value && statusText[value]) || null,
       },
       {
         Header: "",
