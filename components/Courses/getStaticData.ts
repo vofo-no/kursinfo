@@ -2,6 +2,7 @@ import getCounties from "lib/getCounties";
 import getTenantData from "lib/getTenantData";
 import getTenantName from "lib/getTenantName";
 import getTenantYears from "lib/getTenantYears";
+import { GetStaticPropsResult } from "next";
 import { CoursesParams } from "types/courses";
 
 import {
@@ -10,17 +11,12 @@ import {
   CoursesProps,
 } from "./constants";
 
-interface StaticDataProps {
-  props: CoursesProps;
-}
-
 const getStaticData = async (
   { year, county, group, organization }: CoursesParams,
   tenant: string
-): Promise<StaticDataProps> => {
+): Promise<GetStaticPropsResult<CoursesProps>> => {
   const yearOptions = getTenantYears(tenant);
-  if (!yearOptions.includes(year))
-    throw new Error(`Year ${year} not found for tenant ${tenant}.`);
+  if (!yearOptions.includes(year)) return { notFound: true };
 
   const data = getTenantData(tenant, year);
   const counties = getCounties(year);
@@ -61,6 +57,7 @@ const getStaticData = async (
 
   return {
     props,
+    revalidate: 600,
   };
 };
 
