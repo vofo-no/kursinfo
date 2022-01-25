@@ -141,7 +141,7 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
           return [];
         });
     }
-  }, [expanded]);
+  }, [expanded, setHiddenColumns, toggledColumns.length]);
 
   const navToPage = (page: number) => {
     const query: { page?: number } = {
@@ -166,7 +166,7 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
 
   useEffect(() => {
     gotoPage((Number(router.query.page) || 1) - 1);
-  }, [router.query.page]);
+  }, [gotoPage, router.query.page]);
 
   const prevPagesRowCount = pageIndex * pageSize + 1;
 

@@ -40,7 +40,13 @@ const Courses = (
   } = props;
   const router = useRouter();
   const nav = (query: Partial<CoursesParams> = {}) => {
-    router.push(getUrlObject(router, query, { group, organization, county }));
+    router.push(
+      getUrlObject(router.pathname, router.query, query, {
+        group,
+        organization,
+        county,
+      })
+    );
   };
   const setYear = (year: string) => nav({ year });
   const setCounty = (county: string) => nav({ county });

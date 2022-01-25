@@ -210,6 +210,7 @@ const CoursesTable = ({
   const tableData = useMemo(() => items, [items]);
   const [modal, setModal] = useState("");
   const router = useRouter();
+  const { pathname, query } = router;
 
   const groupBy = useMemo(() => {
     switch (group) {
@@ -247,7 +248,7 @@ const CoursesTable = ({
       organizer: organizers[course.organizerIndex],
       curriculum: curriculums[course.curriculumIndex],
     };
-  }, [modal, tableData]);
+  }, [curriculums, modal, organizers, tableData]);
 
   const columns: Array<Column<IndexedCourseItem>> = useMemo(() => {
     const base: Array<Column<IndexedCourseItem>> = [
@@ -260,7 +261,8 @@ const CoursesTable = ({
           "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
-            router,
+            pathname,
+            query,
             { organization: param },
             { group, organization, county }
           ),
@@ -280,7 +282,8 @@ const CoursesTable = ({
           (typeof param === "number" && counties[param]) || "(Ukjent)",
         makeHref: (param: string) =>
           getUrlObject(
-            router,
+            pathname,
+            query,
             { county: countyParams[Number(param)] },
             { group, organization, county }
           ),
@@ -351,7 +354,19 @@ const CoursesTable = ({
     if (group === "kurs") return [...filteredBase, ...allCoursesColumns];
 
     return [...filteredBase, ...aggColumns];
-  }, [tableData, group, useTitleColumn]);
+  }, [
+    group,
+    organizations,
+    pathname,
+    query,
+    organization,
+    county,
+    organizers,
+    counties,
+    countyParams,
+    curriculums,
+    useTitleColumn,
+  ]);
 
   const hiddenColumns = useMemo(() => {
     if (!groupBy.length)

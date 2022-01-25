@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Text } from "@vofo-no/design";
 
 const FooterSponsor = (): JSX.Element => (

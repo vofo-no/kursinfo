@@ -15,19 +15,24 @@ const AlertDialog: FC<AlertDialogProps> = ({
   title,
   children,
 }) => {
-  if (!open) return null;
-
-  const handleUserKeyPress = useCallback(({ keyCode }) => {
-    if (keyCode === 27) close();
-  }, []);
+  const handleUserKeyPress = useCallback(
+    ({ keyCode }) => {
+      if (keyCode === 27) close();
+    },
+    [close]
+  );
 
   useEffect(() => {
-    window.addEventListener("keydown", handleUserKeyPress);
+    if (open) {
+      window.addEventListener("keydown", handleUserKeyPress);
 
-    return () => {
-      window.removeEventListener("keydown", handleUserKeyPress);
-    };
-  }, [handleUserKeyPress]);
+      return () => {
+        window.removeEventListener("keydown", handleUserKeyPress);
+      };
+    }
+  }, [open, handleUserKeyPress]);
+
+  if (!open) return null;
 
   return (
     <AriaModal

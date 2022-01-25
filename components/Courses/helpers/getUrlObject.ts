@@ -1,4 +1,3 @@
-import { NextRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { CoursesParams } from "types/courses";
 import { UrlObject } from "url";
@@ -6,7 +5,8 @@ import { UrlObject } from "url";
 import { isDefaultCounty, isDefaultOrganization } from "../constants";
 
 const getUrlObject = (
-  router: NextRouter,
+  pathname: string,
+  routerQuery: ParsedUrlQuery,
   query: Partial<CoursesParams> = {},
   {
     group,
@@ -28,11 +28,11 @@ const getUrlObject = (
       query.group = !isDefaultCounty(query.county || county) ? "lag" : "fylker";
     }
   }
-  const mergedQuery: ParsedUrlQuery = { ...router.query, ...query };
+  const mergedQuery: ParsedUrlQuery = { ...routerQuery, ...query };
   delete mergedQuery.page;
 
   return {
-    pathname: router.pathname,
+    pathname,
     query: mergedQuery,
   };
 };
