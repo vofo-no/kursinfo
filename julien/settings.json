@@ -27,6 +27,13 @@
       "adapter": "eapply",
       "dataTarget": "2525",
       "config": { "useTitleColumn": true, "hidePlannedGrants": true }
+    },
+    {
+      "id": "8A22ECD1-329B-4062-A985-780B29AE8B30",
+      "name": "Kristelig studieforbund",
+      "adapter": "eapply",
+      "dataTarget": "2504",
+      "config": { "hidePlannedGrants": true }
     }
   ]
 }
