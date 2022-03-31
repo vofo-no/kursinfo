@@ -1,12 +1,10 @@
-import { Box } from "@vofo-no/design";
-import { FC } from "react";
 import { Clock, Layers, Map, Share2, UserCheck, Users } from "react-feather";
 import { FormattedNumber } from "react-intl";
 import { SummaryProps } from "types/reports";
 
 import Card from "./Card";
 
-const Summary: FC<SummaryProps> = ({
+const Summary = ({
   courses,
   facilitatedCourses,
   participants,
@@ -14,15 +12,9 @@ const Summary: FC<SummaryProps> = ({
   organizations,
   activeMunicipalitiesLength,
   allMunicipalitiesLength,
-}) => (
+}: SummaryProps) => (
   <>
-    <Box
-      display="grid"
-      gridTemplateColumns={["repeat(2, 1fr)", "repeat(3, 1fr)"]}
-      gridColumnGap={3}
-      gridRowGap={5}
-      my={6}
-    >
+    <div className="grid grid-cols-2 tablet:grid-cols-3 gap-6 gap-y-10 my-12">
       <Card Icon={Layers} label="kurs">
         <FormattedNumber value={courses} />
       </Card>
@@ -48,7 +40,7 @@ const Summary: FC<SummaryProps> = ({
           <small> av {allMunicipalitiesLength}</small>
         </>
       </Card>
-    </Box>
+    </div>
   </>
 );
 

@@ -1,17 +1,18 @@
-import Associations from "components/Associations";
-import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
-import Municipalities from "components/Municipalities";
-import ReportHeading from "components/ReportHeading";
-import Subjects from "components/Subjects";
-import Summary from "components/Summary";
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { GLOBAL, GlobalReportProps } from "types/reports";
 
+import Associations from "./Associations";
+import Counties from "./Counties";
 import Footer from "./Footer";
+import Municipalities from "./Municipalities";
+import ReportHeading from "./ReportHeading";
+import ReportPage from "./ReportPage";
+import Subjects from "./Subjects";
+import Summary from "./Summary";
 
-const GlobalReport: FC<GlobalReportProps> = ({
+const GlobalReport = ({
   year,
   name,
   associations,
@@ -22,30 +23,32 @@ const GlobalReport: FC<GlobalReportProps> = ({
   ageSetHistory,
   municipalities,
   summary,
-}) => {
+}: GlobalReportProps) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
   return (
     <Layout title={`${name}: Kursstatistikk ${year}`}>
-      <section className="page">
-        <div className="container">
-          <ReportHeading name={name} year={year} type={GLOBAL} />
-          <Summary {...summary} />
+      <ReportPage>
+        <ReportHeading name={name} year={year} type={GLOBAL} />
+        <Summary {...summary} />
+        <div className="prose mx-auto">
           <p>
-            Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
-            godkjente studieforbund. Virksomheten måles i antall arrangerte
-            kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {year}.
+            Statistikken viser kursvirksomhet i studieforbund som er godkjent og
+            får tilskudd etter{" "}
+            <a href="https://lovdata.no/dokument/NL/lov/2009-06-19-95">
+              voksenopplæringsloven
+            </a>
+            . Denne rapporten viser kurs som er gjennomført i {year}.
           </p>
           <p>
             For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
-            eller kontakt Voksenopplæringsforbundet på{" "}
-            <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
+            eller kontakt Vofo på <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>
+            .
           </p>
           <Footer />
         </div>
-      </section>
+      </ReportPage>
       <Counties
         counties={counties}
         year={year}

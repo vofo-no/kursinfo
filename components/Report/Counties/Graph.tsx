@@ -1,6 +1,5 @@
-import { FC } from "react";
-
-import GraphBase from "../Graph";
+import GraphBase from "../../Graph";
+import FigureLabel from "../FigureLabel";
 
 interface PropTypes {
   year: number;
@@ -11,14 +10,14 @@ interface PropTypes {
   totalValues?: number[];
 }
 
-const Graph: FC<PropTypes> = ({
+const Graph = ({
   year,
   type,
   unit,
   values,
   totalUnit,
   totalValues,
-}) => {
+}: PropTypes) => {
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - values.length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
@@ -98,15 +97,17 @@ const Graph: FC<PropTypes> = ({
     series,
   };
 
+  const subTitleBase = `Antall ${type.toLowerCase()} per år, i ${unit}`;
+
   return (
     <>
-      <h3 className="figure-label">
+      <FigureLabel
+        subtitle={
+          totalValues ? `${subTitleBase} og ${totalUnit}` : subTitleBase
+        }
+      >
         {type} i perioden fra {startYear} til {year}
-      </h3>
-      <p className="subtitle">
-        Antall {type.toLowerCase()} per år, i {unit}
-        {totalValues && ` og ${totalUnit}`}
-      </p>
+      </FigureLabel>
       <GraphBase options={options} />
     </>
   );

@@ -1,18 +1,9 @@
-import { Box, Logo, ScrollDown } from "@vofo-no/design";
-import { FC } from "react";
+import { Logo } from "@vofo-no/ui";
 
-const PageFooter: FC = (props) => (
-  <Box
-    margin="auto 0 0 0"
-    paddingTop={3}
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    {...props}
-  >
-    <Logo />
-    <ScrollDown />
-  </Box>
+const PageFooter = () => (
+  <div className="mt-auto pt-6 flex flex-col items-center">
+    <Logo className="w-60" />
+  </div>
 );
 
 export default PageFooter;

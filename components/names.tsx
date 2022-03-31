@@ -1,4 +1,3 @@
-import { Text } from "@vofo-no/design";
 import { ReactNode } from "react";
 import { INamed } from "types/reports";
 
@@ -12,11 +11,7 @@ export function showName(item: string | INamed, key?: string): ReactNode {
       <>
         {item.name}
         {item.short && (
-          <Text
-            as="small"
-            color="gray"
-            fontSize="small"
-          >{` (${item.short})`}</Text>
+          <small className="text-opacity-60 font-normal text-gray-500">{` (${item.short})`}</small>
         )}
       </>
     );

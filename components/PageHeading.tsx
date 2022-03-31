@@ -1,6 +1,7 @@
-import { Text } from "@vofo-no/design";
-import { FC } from "react";
+import { PropsWithChildren } from "react";
 
-const PageHeading: FC = (props) => <Text as="h1" marginTop={0} {...props} />;
+const PageHeading = ({ children }: PropsWithChildren<{}>) => (
+  <h1 className="mt-0 font-open-sans font-semibold text-4xl">{children}</h1>
+);
 
 export default PageHeading;

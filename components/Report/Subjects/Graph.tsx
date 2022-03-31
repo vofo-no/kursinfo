@@ -1,14 +1,13 @@
-import { FC } from "react";
-
-import GraphBase from "../Graph";
-import { ageGroupName } from "./";
+import GraphBase from "../../Graph";
+import FigureLabel from "../FigureLabel";
+import { ageGroupName } from ".";
 
 interface SubjectsGraphProps {
   year: number;
   ages: number[][];
 }
 
-const Graph: FC<SubjectsGraphProps> = ({ year, ages }) => {
+const Graph = ({ year, ages }: SubjectsGraphProps) => {
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - ages[0].length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
@@ -52,12 +51,9 @@ const Graph: FC<SubjectsGraphProps> = ({ year, ages }) => {
 
   return (
     <>
-      <h3 className="figure-label">
+      <FigureLabel subtitle="Antall deltakere per år, etter 10-årige aldersgrupper">
         Deltakernes alder i perioden fra {startYear} til {year}
-      </h3>
-      <p className="subtitle">
-        Antall deltakere per år, etter 10-årige aldersgrupper
-      </p>
+      </FigureLabel>
       <GraphBase options={options} />
     </>
   );

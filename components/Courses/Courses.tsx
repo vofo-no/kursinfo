@@ -1,4 +1,4 @@
-import { Box, Text } from "@vofo-no/design";
+import Footer from "components/Containers/Footer";
 import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
 import Head from "next/head";
@@ -61,8 +61,8 @@ const Courses = (
           {title} - {tenantName}
         </title>
       </Head>
-      <Box as="main" my={2} container>
-        <Box variant="light" p={3} boxShadow="small">
+      <main className="max-w-screen-full-hd mx-auto my-2">
+        <div className="p-4 bg-white shadow">
           <PageHeading>{title}</PageHeading>
           <Filter
             {...props}
@@ -99,8 +99,8 @@ const Courses = (
               }
             `}
           </style>
-        </Box>
-        <Text textAlign="right" as="div" ml="auto" mt={2} mr={2} fontSize={1}>
+        </div>
+        <div className="text-right ml-auto mt-2 mr-2 text-xs">
           Sist oppdatert{" "}
           <FormattedDate
             value={Date.parse(buildTime)}
@@ -108,35 +108,30 @@ const Courses = (
             dateStyle="medium"
             timeZone="Europe/Oslo"
           />
-        </Text>
-      </Box>
-      <Box variant="dark" py={3}>
-        <Box
-          container
-          display="grid"
-          gridTemplateColumns={["auto", "auto 235px"]}
-          alignItems="end"
-        >
-          <Box px={3}>
-            <Text>
+        </div>
+      </main>
+      <Footer>
+        <div className="grid grid-cols-1 tablet:grid-cols-2 items-end gap-4">
+          <div>
+            <p>
               Statistikk for <strong>{tenantName}</strong>
-            </Text>
-            <Text fontSize={1}>
+            </p>
+            <p className="text-sm">
               Kontakt studieforbundet:
               <br />
               <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
               <br />
               <a href={contactUrl}>{contactUrl}</a>
-            </Text>
-            <Text fontSize={1}>
+            </p>
+            <p className="text-sm">
               Kursstatistikken utarbeides av{" "}
               <a href="http://www.vofo.no">Voksenopplæringsforbundet</a> på
               grunnlag av data fra studieforbundets kurssystem.
-            </Text>
-          </Box>
+            </p>
+          </div>
           <FooterSponsor />
-        </Box>
-      </Box>
+        </div>
+      </Footer>
     </>
   );
 };

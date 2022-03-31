@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { Organization } from "types/reports";
 
-import GraphBase from "../Graph";
+import GraphBase from "../../Graph";
+import FigureLabel from "../FigureLabel";
 
 interface PropTypes {
   items: Array<Organization>;
@@ -60,12 +61,11 @@ const Graph: FC<PropTypes> = ({ items, year, unit }) => {
 
   return (
     <>
-      <h3 className="figure-label">
+      <FigureLabel
+        subtitle={`Antall kurstimer per år, etter ${unit.toLowerCase()}`}
+      >
         {unit}enes kurstimer i {lastYear} og {year}
-      </h3>
-      <p className="subtitle">
-        Antall kurstimer per år, etter {unit.toLowerCase()}
-      </p>
+      </FigureLabel>
       <GraphBase options={options} />
     </>
   );
