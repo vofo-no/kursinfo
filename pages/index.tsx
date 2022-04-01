@@ -4,7 +4,6 @@ import { GetStaticProps } from "next";
 import { FC } from "react";
 
 import Layout from "../components/Layout";
-import PageHeading from "../components/PageHeading";
 import dataIndex from "../data/index.json";
 
 interface IndexProps {
