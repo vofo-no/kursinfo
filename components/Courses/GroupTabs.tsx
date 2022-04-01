@@ -64,8 +64,8 @@ const GroupTabs: FC<GroupTabsProps> = ({
           key={tab}
           className={({ selected }) =>
             selected
-              ? "inline-block p-2 font-bold text-brand-blue rounded-t-lg border-b-2 border-brand-blue active"
-              : "inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-primary-darker hover:border-gray-300 print:hidden"
+              ? "inline-block p-2 -mb-px font-bold text-brand-blue rounded-t-lg border-b-2 border-brand-blue active"
+              : "inline-block p-2 -mb-px rounded-t-lg border-b-2 border-transparent hover:text-primary-darker hover:border-gray-300 print:hidden"
           }
         >
           {tabLabels[tab]}
