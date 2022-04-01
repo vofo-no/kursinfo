@@ -1,4 +1,6 @@
+import Container from "components/Containers/Container";
 import Footer from "components/Containers/Footer";
+import WhiteBox from "components/Containers/WhiteBox";
 import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
 import Head from "next/head";
@@ -61,59 +63,65 @@ const Courses = (
           {title} - {tenantName}
         </title>
       </Head>
-      <main className="max-w-screen-full-hd mx-auto my-2">
-        <div className="p-4 bg-white shadow">
-          <PageHeading>{title}</PageHeading>
-          <Filter
-            {...props}
-            setCounty={setCounty}
-            setYear={setYear}
-            setOrganization={setOrganization}
-          />
-          <GroupTabs
-            group={group}
-            nav={nav}
-            county={county}
-            organization={organization}
-          >
-            <CoursesTable {...props} />
-          </GroupTabs>
-          <style jsx global>
-            {`
-              button.transparent {
-                background: transparent;
-                border: 0;
-                cursor: pointer;
-              }
-              button.tight {
-                border-radius: 50%;
-                padding: 0;
-                line-height: 0;
-              }
-              button.transparent:hover,
-              button.transparent:focus {
-                background: lightgray;
-              }
-              button.transparent:active {
-                color: gray;
-              }
-            `}
-          </style>
-        </div>
-        <div className="text-right ml-auto mt-2 mr-2 text-xs">
-          Sist oppdatert{" "}
-          <FormattedDate
-            value={Date.parse(buildTime)}
-            timeStyle="short"
-            dateStyle="medium"
-            timeZone="Europe/Oslo"
-          />
-        </div>
+      <main className="my-4">
+        <Container noPadding>
+          <WhiteBox noPadding>
+            <div className="overflow-x-auto print:overflow-x-visible relative">
+              <Container>
+                <PageHeading>{title}</PageHeading>
+                <Filter
+                  {...props}
+                  setCounty={setCounty}
+                  setYear={setYear}
+                  setOrganization={setOrganization}
+                />
+                <GroupTabs
+                  group={group}
+                  nav={nav}
+                  county={county}
+                  organization={organization}
+                >
+                  <CoursesTable {...props} />
+                </GroupTabs>
+                <style jsx global>
+                  {`
+                    button.transparent {
+                      background: transparent;
+                      border: 0;
+                      cursor: pointer;
+                    }
+                    button.tight {
+                      border-radius: 50%;
+                      padding: 0;
+                      line-height: 0;
+                    }
+                    button.transparent:hover,
+                    button.transparent:focus {
+                      background: lightgray;
+                    }
+                    button.transparent:active {
+                      color: gray;
+                    }
+                  `}
+                </style>
+              </Container>
+            </div>
+          </WhiteBox>
+          <div className="text-right ml-auto mt-2 mr-2 text-xs">
+            Sist oppdatert{" "}
+            <FormattedDate
+              value={Date.parse(buildTime)}
+              timeStyle="short"
+              dateStyle="medium"
+              timeZone="Europe/Oslo"
+            />
+          </div>
+        </Container>
       </main>
       <Footer>
-        <div className="grid grid-cols-1 tablet:grid-cols-2 items-end gap-4">
-          <div>
-            <p>
+        <div className="flex tablet:items-end gap-4 flex-col items-center tablet:flex-row">
+          <div className="flex-grow">
+            <p className="mt-0">
               Statistikk for <strong>{tenantName}</strong>
             </p>
             <p className="text-sm">
@@ -129,7 +137,9 @@ const Courses = (
               grunnlag av data fra studieforbundets kurssystem.
             </p>
           </div>
-          <FooterSponsor />
+          <div className="flex-shrink-0 not-prose">
+            <FooterSponsor />
+          </div>
         </div>
       </Footer>
     </>

@@ -15,7 +15,7 @@ interface ReportHeadingProps {
 }
 
 const ReportHeading: FC<ReportHeadingProps> = ({ name, year, type }) => (
-  <h1 className="self-start mt-10 mb-auto font-open-sans font-semibold text-gray-800 text-xl tablet:text-2xl">
+  <h1 className="self-start mb-auto font-open-sans font-semibold text-gray-800 text-xl tablet:text-2xl">
     <div>
       <span className="inline-block bg-primary text-white px-4 py-2 -mx-4 my-2 text-lg tablet:text-xl">
         {typeName[type]}

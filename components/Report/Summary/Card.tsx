@@ -8,7 +8,7 @@ interface CardProps {
 }
 
 const Card: FC<CardProps> = ({ Icon, children, label }) => (
-  <div className="flex flex-col justify-start items-center">
+  <div className="flex flex-col justify-start items-center text-center">
     <Icon size={48} />
     <span className="font-open-sans text-4xl font-bold text-primary">
       {children}

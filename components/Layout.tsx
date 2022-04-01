@@ -26,8 +26,8 @@ const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
         {LayoutHead}
         <SuperHeader />
         <Header />
-        <main>
-          <Container>{children}</Container>
+        <main className="my-4">
+          <Container noPadding>{children}</Container>
         </main>
         <Footer>
           <div className="text-center">

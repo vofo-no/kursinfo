@@ -71,7 +71,9 @@ const ListLinkItem: FC<{ url: string; title: string; bold?: boolean }> = ({
 }) => (
   <Link href={url}>
     <a className="no-underline">
-      <span className={`block px-6 py-2 ${bold ? "font-bold" : ""}`}>
+      <span
+        className={`block px-2 tablet:px-6 py-2 ${bold ? "font-bold" : ""}`}
+      >
         {title}
       </span>
     </a>
@@ -104,7 +106,7 @@ const YearIndex: FC<ReportIndexProps> = ({
           <h2 className="my-2">Fylker</h2>
           <p>Kursvirksomheten i de ulike fylkene og hele landet.</p>
         </div>
-        <ul className="list-none p-0 mt-4 -mx-6">
+        <ul className="list-none p-0 mt-4 -mx-2 tablet:-mx-6">
           {regionReports.map(([key, value]) => (
             <li key={key} className="border-t-gray-300 border-t">
               <ListLinkItem url={`/${year}/${key}`} title={value} />
@@ -122,7 +124,7 @@ const YearIndex: FC<ReportIndexProps> = ({
           <h2 className="my-2">Studieforbund</h2>
           <p>Kursvirksomheten i de ulike studieforbundene.</p>
         </div>
-        <ul className="list-none p-0 mt-4 -mx-6">
+        <ul className="list-none p-0 mt-4 -mx-2 tablet:-mx-6">
           {associationReports.map(([key, value]) => (
             <li key={key} className="border-t-gray-300 border-t">
               <ListLinkItem url={`/${year}/${key}`} title={value} />
