@@ -1,11 +1,9 @@
-import "react-tabs/style/react-tabs.css";
-
+import { Tab } from "@headlessui/react";
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
 } from "lib/constants";
 import { FC } from "react";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { CoursesParams } from "types/courses";
 
 import { GroupType, isDefaultCounty, isDefaultOrganization } from "./constants";
@@ -51,25 +49,31 @@ const GroupTabs: FC<GroupTabsProps> = ({
   nav,
   children,
 }) => (
-  <Tabs
+  <Tab.Group
     selectedIndex={tabs.indexOf(group) || 0}
-    onSelect={(i) =>
+    onChange={(i) =>
       nav({
         group: tabs[i],
         ...unsetSpecific(tabs[i], { organization, county }),
       })
     }
   >
-    <TabList>
+    <Tab.List className="text-center border-b border-gray-200 flex flex-wrap items-start gap-2 mb-4">
       {tabs.map((tab) => (
-        <Tab key={tab}>{tabLabels[tab]}</Tab>
+        <Tab
+          key={tab}
+          className={({ selected }) =>
+            selected
+              ? "inline-block p-2 font-bold text-brand-blue rounded-t-lg border-b-2 border-brand-blue active"
+              : "inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-primary-darker hover:border-gray-300 print:hidden"
+          }
+        >
+          {tabLabels[tab]}
+        </Tab>
       ))}
-    </TabList>
-    {tabs.map((tab) => (
-      <TabPanel key={tab} />
-    ))}
+    </Tab.List>
     {children}
-  </Tabs>
+  </Tab.Group>
 );
 
 export default GroupTabs;
