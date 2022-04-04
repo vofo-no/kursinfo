@@ -53,7 +53,7 @@ function Table({
     <>
       <div className="mt-8 mb-3">
         <h3
-          className="before:content-['Tabell_'counter(tables)':_'] font-open-sans font-bold text-2xl"
+          className="before:content-['Tabell_'counter(tables)':_'] font-open-sans font-bold text-xl tablet:text-2xl"
           style={{ counterIncrement: "tables" }}
         >
           {title}
