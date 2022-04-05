@@ -5,14 +5,17 @@ import FooterSponsor from "components/FooterSponsor";
 import PageHeading from "components/PageHeading";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { FormattedDate } from "react-intl";
 import { CoursesParams } from "types/courses";
 
 import { CoursesProps } from "./constants";
 import CoursesTable from "./CoursesTable";
 import Filter from "./Filter";
-import GroupTabs from "./GroupTabs";
+import GroupTabs, { tabs } from "./GroupTabs";
 import getUrlObject from "./helpers/getUrlObject";
+import { unsetSpecific } from "./helpers/unsetSpecific";
+import LoadingIndicator from "./LoadingIndicator";
 
 function makeTitle(
   year: string,
@@ -54,6 +57,25 @@ const Courses = (
   const setCounty = (county: string) => nav({ county });
   const setOrganization = (organization: string) => nav({ organization });
 
+  const propsTabIndex = tabs.indexOf(group) || 0;
+  const [tabIndex, setTabIndex] = useState(propsTabIndex);
+
+  // Update tabIndex on prop change.
+  useEffect(() => {
+    setTabIndex(propsTabIndex);
+  }, [propsTabIndex]);
+
+  // Update state and navigate on change.
+  function setTabIndexAndNavigate(newTabIndex: number) {
+    setTabIndex(newTabIndex);
+    nav({
+      group: tabs[newTabIndex],
+      ...unsetSpecific(tabs[newTabIndex], { organization, county }),
+    });
+  }
+
+  const isLoadingISR = tabIndex !== propsTabIndex;
+
   const title = makeTitle(year, county, countyOptions);
 
   return (
@@ -76,12 +98,13 @@ const Courses = (
                   setOrganization={setOrganization}
                 />
                 <GroupTabs
-                  group={group}
-                  nav={nav}
-                  county={county}
-                  organization={organization}
+                  tabIndex={tabIndex}
+                  setTabIndex={setTabIndexAndNavigate}
                 >
-                  <CoursesTable {...props} />
+                  <div className="relative">
+                    <CoursesTable {...props} />
+                    <LoadingIndicator delay={100} show={isLoadingISR} />
+                  </div>
                 </GroupTabs>
                 <style jsx global>
                   {`
