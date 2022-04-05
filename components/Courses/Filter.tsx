@@ -28,7 +28,7 @@ const Select = ({ options = [], value, callback, ...props }: SelectProps) => (
   <select
     value={value}
     onChange={(e) => callback(e.target.value)}
-    className="mr-1 py-1 px-2 border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+    className="mr-1 py-1 px-2 border bg-white rounded-md border-gray-300 shadow-sm focus:border-crimson-300 focus:ring focus:ring-crimson-200 focus:ring-opacity-50"
     {...props}
   >
     {options.map((opt) => {
