@@ -1,17 +1,14 @@
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
 import { useEffect } from "react";
-import { GLOBAL, GlobalReportProps } from "types/reports";
+import { GlobalReportProps } from "types/reports";
 
 import Associations from "./Associations";
 import Counties from "./Counties";
-import Footer from "./Footer";
+import FrontPage from "./FrontPage";
 import Municipalities from "./Municipalities";
 import Participants from "./Participants";
-import ReportHeading from "./ReportHeading";
-import ReportPage from "./ReportPage";
 import Subjects from "./Subjects";
-import Summary from "./Summary";
 
 const GlobalReport = ({
   year,
@@ -26,32 +23,14 @@ const GlobalReport = ({
   summary,
   participantsHistogram,
   participantsHistogramSums,
+  type,
 }: GlobalReportProps) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
   return (
     <Layout title={`${name}: Kursstatistikk ${year}`}>
-      <ReportPage>
-        <ReportHeading name={name} year={year} type={GLOBAL} />
-        <Summary {...summary} />
-        <div className="prose mx-auto">
-          <p>
-            Statistikken viser kursvirksomhet i studieforbund som er godkjent og
-            får tilskudd etter{" "}
-            <a href="https://lovdata.no/dokument/NL/lov/2009-06-19-95">
-              voksenopplæringsloven
-            </a>
-            . Denne rapporten viser kurs som er gjennomført i {year}.
-          </p>
-          <p>
-            For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
-            eller kontakt Vofo på <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>
-            .
-          </p>
-          <Footer />
-        </div>
-      </ReportPage>
+      <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
         year={year}

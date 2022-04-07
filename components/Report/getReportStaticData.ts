@@ -15,6 +15,7 @@ import {
   REGION,
   RegionReportProps,
   ReportParams,
+  ReportPropsType,
 } from "types/reports";
 
 import getCountiesFromData from "./helpers/getCountiesFromData";
@@ -38,14 +39,7 @@ function recordToArray<T>(
 export const getReportStaticData = async ({
   year,
   report,
-}: ReportParams): Promise<
-  GetStaticPropsResult<
-    | RegionReportProps
-    | AssociationReportProps
-    | ComboReportProps
-    | GlobalReportProps
-  >
-> => {
+}: ReportParams): Promise<GetStaticPropsResult<ReportPropsType>> => {
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data: IDataFile = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];

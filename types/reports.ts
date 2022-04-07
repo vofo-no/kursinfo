@@ -191,6 +191,12 @@ export interface GlobalReportProps extends ReportPropsBase {
   associations: Array<Organization>;
 }
 
+export type ReportPropsType =
+  | RegionReportProps
+  | AssociationReportProps
+  | ComboReportProps
+  | GlobalReportProps;
+
 /** CompactValues is an array of courses, hours, participants and courses per capita --
  * in that order.
  */
