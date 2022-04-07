@@ -154,10 +154,10 @@ const Courses = (
               <br />
               <a href={contactUrl}>{contactUrl}</a>
             </p>
-            <p className="text-sm">
-              Kursstatistikken utarbeides av{" "}
-              <a href="http://www.vofo.no">Voksenopplæringsforbundet</a> på
-              grunnlag av data fra studieforbundets kurssystem.
+            <p className="text-sm mb-0">
+              Statistikken lages av{" "}
+              <a href="http://www.vofo.no">Voksenopplæringsforbundet</a> med
+              data fra studieforbundets kurssystem.
             </p>
           </div>
           <div className="flex-shrink-0 not-prose">
