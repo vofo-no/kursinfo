@@ -76,6 +76,11 @@ async function main() {
       subjects: subjectSums,
       topSubjects: han.topAges(subjectSums),
       mainSubjects: han.mainSubjectSums(dataSet),
+      participantsHistogram: han.participantsHistogram(
+        dataSet,
+        dataSetHistory[0]
+      ),
+      participantsHistogramSums: han.participantsHistogramSums(dataSet),
     };
 
     switch (type) {

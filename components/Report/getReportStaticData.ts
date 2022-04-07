@@ -98,6 +98,8 @@ export const getReportStaticData = async ({
         .length,
       allMunicipalitiesLength: municipalityKeys.length,
     },
+    participantsHistogram: reportData.participantsHistogram || null,
+    participantsHistogramSums: reportData.participantsHistogramSums || null,
   };
 
   switch (reportData.type) {

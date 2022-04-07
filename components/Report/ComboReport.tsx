@@ -7,6 +7,7 @@ import Associations from "./Associations";
 import Counties from "./Counties";
 import Footer from "./Footer";
 import Municipalities from "./Municipalities";
+import Participants from "./Participants";
 import ReportHeading from "./ReportHeading";
 import ReportPage from "./ReportPage";
 import Subjects from "./Subjects";
@@ -24,6 +25,8 @@ const ComboReport = ({
   ageSetHistory,
   municipalities,
   summary,
+  participantsHistogram,
+  participantsHistogramSums,
 }: ComboReportProps) => {
   useEffect(() => {
     initializeGraphs();
@@ -66,6 +69,12 @@ const ComboReport = ({
         ageSetHistory={ageSetHistory}
         year={year}
         name={name}
+      />
+      <Participants
+        year={year}
+        participantsHistogram={participantsHistogram}
+        participantsHistogramSums={participantsHistogramSums}
+        courses={summary.courses}
       />
       <Municipalities items={municipalities} year={year} name={name} />
     </Layout>

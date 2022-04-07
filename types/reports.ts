@@ -47,6 +47,8 @@ export interface IReportBase {
   subjects: Record<string, Subject>;
   topSubjects: AgeSet<Array<string>>;
   mainSubjects: Record<string, MainSubject>;
+  participantsHistogram?: Array<ParticipantsHistogramType>;
+  participantsHistogramSums?: ParticipantsHistogramType;
 }
 
 export interface IRegionReport extends IReportBase {
@@ -118,6 +120,20 @@ export interface Subject {
 
 export type AgeSet<T> = [T, T, T, T, T, T];
 
+export type ParticipantsHistogramType = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number
+];
+
 export interface ReportMunicipality {
   name: string;
   values: CompactValues;
@@ -151,6 +167,8 @@ export interface ReportPropsBase {
   ageSetHistory: Array<AgeSet<number>>;
   municipalities: Array<ReportMunicipality>;
   summary: SummaryProps;
+  participantsHistogram: Array<ParticipantsHistogramType> | null;
+  participantsHistogramSums: ParticipantsHistogramType | null;
 }
 
 export interface RegionReportProps extends ReportPropsBase {

@@ -7,6 +7,7 @@ import Associations from "./Associations";
 import Counties from "./Counties";
 import Footer from "./Footer";
 import Municipalities from "./Municipalities";
+import Participants from "./Participants";
 import ReportHeading from "./ReportHeading";
 import ReportPage from "./ReportPage";
 import Subjects from "./Subjects";
@@ -23,6 +24,8 @@ const GlobalReport = ({
   ageSetHistory,
   municipalities,
   summary,
+  participantsHistogram,
+  participantsHistogramSums,
 }: GlobalReportProps) => {
   useEffect(() => {
     initializeGraphs();
@@ -66,6 +69,12 @@ const GlobalReport = ({
         ageSetHistory={ageSetHistory}
         year={year}
         name={name.toLowerCase()}
+      />
+      <Participants
+        year={year}
+        participantsHistogram={participantsHistogram}
+        participantsHistogramSums={participantsHistogramSums}
+        courses={summary.courses}
       />
       <Municipalities
         items={municipalities}
