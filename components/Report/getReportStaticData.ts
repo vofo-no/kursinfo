@@ -115,6 +115,7 @@ export const getReportStaticData = async ({
         type: reportData.type,
         organizations: getNamedOrganizationsFromData(
           reportData.key,
+          Number(year),
           associations
         ),
         historicalAll: reportData.historicalAll,

@@ -1,17 +1,25 @@
-import { existsSync, readFileSync } from "fs";
-import { join } from "path";
 import { Association, INamed, Organization } from "types/reports";
+
+import organizations from "../../../data/names/organizations.json";
 
 export default function getNamedOrganizationsFromData(
   sf: string,
+  year: number,
   associations: Array<Association & { key: string }>
 ): Array<Organization> {
-  const namePath = join(process.cwd(), `data/names/orgs/${sf}.json`);
+  if (!(sf in organizations)) return [];
 
-  if (!existsSync(namePath)) return [];
+  const nameSet = organizations[sf as keyof typeof organizations];
+  const yearSet = Object.keys(nameSet).filter(
+    (nameSetYear) => Number(nameSetYear) <= year
+  );
 
-  const names: Record<string, INamed> = JSON.parse(
-    readFileSync(namePath, "utf-8")
+  const names: Record<string, INamed> = yearSet.reduce(
+    (oldNames, key) => ({
+      ...oldNames,
+      ...nameSet[key as keyof typeof nameSet],
+    }),
+    {}
   );
 
   return associations.map((item) => ({
