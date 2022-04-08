@@ -1,17 +1,16 @@
-import Associations from "components/Associations";
-import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
-import Municipalities from "components/Municipalities";
-import ReportHeading from "components/ReportHeading";
-import Subjects from "components/Subjects";
-import Summary from "components/Summary";
-import { FC, useEffect } from "react";
-import { COMBO, ComboReportProps } from "types/reports";
+import { useEffect } from "react";
+import { ComboReportProps } from "types/reports";
 
-import Footer from "./Footer";
+import Associations from "./Associations";
+import Counties from "./Counties";
+import FrontPage from "./FrontPage";
+import Municipalities from "./Municipalities";
+import Participants from "./Participants";
+import Subjects from "./Subjects";
 
-const ComboReport: FC<ComboReportProps> = ({
+const ComboReport = ({
   year,
   name,
   associations,
@@ -23,30 +22,16 @@ const ComboReport: FC<ComboReportProps> = ({
   ageSetHistory,
   municipalities,
   summary,
-}) => {
+  participantsHistogram,
+  participantsHistogramSums,
+  type,
+}: ComboReportProps) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
   return (
     <Layout title={`${name}: Kursstatistikk ${year}`}>
-      <section className="page">
-        <div className="container">
-          <ReportHeading name={name} year={year} type={COMBO} />
-          <Summary {...summary} />
-          <p>
-            Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
-            godkjente studieforbund. Virksomheten måles i antall arrangerte
-            kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {name} i {year}.
-          </p>
-          <p>
-            For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
-            eller kontakt Voksenopplæringsforbundet på{" "}
-            <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
-          </p>
-          <Footer />
-        </div>
-      </section>
+      <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
         year={year}
@@ -62,6 +47,12 @@ const ComboReport: FC<ComboReportProps> = ({
         ageSetHistory={ageSetHistory}
         year={year}
         name={name}
+      />
+      <Participants
+        year={year}
+        participantsHistogram={participantsHistogram}
+        participantsHistogramSums={participantsHistogramSums}
+        courses={summary.courses}
       />
       <Municipalities items={municipalities} year={year} name={name} />
     </Layout>

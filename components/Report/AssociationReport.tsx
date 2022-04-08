@@ -1,17 +1,16 @@
-import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
-import Municipalities from "components/Municipalities";
-import Organizations from "components/Organizations";
-import ReportHeading from "components/ReportHeading";
-import Subjects from "components/Subjects";
-import Summary from "components/Summary";
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { AssociationReportProps } from "types/reports";
 
-import Footer from "./Footer";
+import Counties from "./Counties";
+import FrontPage from "./FrontPage";
+import Municipalities from "./Municipalities";
+import Organizations from "./Organizations";
+import Participants from "./Participants";
+import Subjects from "./Subjects";
 
-const AssociationReport: FC<AssociationReportProps> = ({
+const AssociationReport = ({
   year,
   name,
   organizations,
@@ -23,30 +22,17 @@ const AssociationReport: FC<AssociationReportProps> = ({
   ageSetHistory,
   municipalities,
   summary,
-}) => {
+  participantsHistogram,
+  participantsHistogramSums,
+  type,
+}: AssociationReportProps) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
+
   return (
     <Layout title={`${name}: Studieforbundstatistikk ${year}`}>
-      <section className="page">
-        <div className="container">
-          <ReportHeading name={name} year={year} type="ASSOCIATION" />
-          <Summary {...summary} />
-          <p>
-            Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
-            godkjente studieforbund. Virksomheten måles i antall arrangerte
-            kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {name} i {year}.
-          </p>
-          <p>
-            For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
-            eller kontakt Voksenopplæringsforbundet på{" "}
-            <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
-          </p>
-          <Footer />
-        </div>
-      </section>
+      <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
         year={year}
@@ -62,6 +48,12 @@ const AssociationReport: FC<AssociationReportProps> = ({
         ageSetHistory={ageSetHistory}
         year={year}
         name={name}
+      />
+      <Participants
+        year={year}
+        participantsHistogram={participantsHistogram}
+        participantsHistogramSums={participantsHistogramSums}
+        courses={summary.courses}
       />
       <Municipalities items={municipalities} year={year} name={name} />
     </Layout>

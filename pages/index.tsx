@@ -1,10 +1,9 @@
-import { Box } from "@vofo-no/design";
+import WhiteBox from "components/Containers/WhiteBox";
 import GridLinks from "components/GridLinks";
 import { GetStaticProps } from "next";
 import { FC } from "react";
 
 import Layout from "../components/Layout";
-import PageHeading from "../components/PageHeading";
 import dataIndex from "../data/index.json";
 
 interface IndexProps {
@@ -22,13 +21,15 @@ export const getStaticProps: GetStaticProps<IndexProps> = async () => {
 const Index: FC<IndexProps> = ({ years }) => {
   return (
     <Layout title={`Statistikk`} header>
-      <Box variant="light" p={3} boxShadow="small">
-        <PageHeading>Statistikk</PageHeading>
-        <p>
-          Her finner du Vofos nasjonale og regionale statistikkrapporter for
-          studieforbundenes kursvirksomhet.
-        </p>
-      </Box>
+      <WhiteBox>
+        <div className="prose">
+          <h1 className="text-4xl mb-0">Statistikk</h1>
+          <p>
+            Her finner du Vofos nasjonale og regionale statistikkrapporter for
+            studieforbundenes kursvirksomhet.
+          </p>
+        </div>
+      </WhiteBox>
       <GridLinks items={years.map((year) => [`/${year}`, year])} />
     </Layout>
   );

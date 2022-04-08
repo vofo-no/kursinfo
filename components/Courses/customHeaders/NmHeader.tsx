@@ -1,26 +1,19 @@
-import { Box } from "@vofo-no/design";
+import Container from "components/Containers/Container";
+import WhiteBox from "components/Containers/WhiteBox";
 
 const NmHeader: React.FC<Record<string, never>> = () => (
-  <Box variant="primary" boxShadow="small">
-    <Box backgroundColor="#00AC58" px={2} py={1}>
-      <Box container>
-        <a className="brand" href="https://www.naturogmiljo.no">
+  <WhiteBox noPadding>
+    <div className="bg-[#00AC58] py-3 px-2 tablet:px-6">
+      <Container noPadding>
+        <a
+          className=" text-white text-xl font-['Helvetica_Neue',_Helvetica,_Arial,_sans-serif] no-underline hover:text-[#cceede]"
+          href="https://www.naturogmiljo.no"
+        >
           Studieforbundet natur og miljø
         </a>
-      </Box>
-    </Box>
-    <style jsx>{`
-      a.brand {
-        font-size: 20px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        color: #fff;
-        text-decoration: none;
-      }
-      a.brand:hover {
-        color: #cceede;
-      }
-    `}</style>
-  </Box>
+      </Container>
+    </div>
+  </WhiteBox>
 );
 
 export default NmHeader;

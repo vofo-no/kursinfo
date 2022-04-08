@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ChevronDown, ChevronRight } from "react-feather";
 import { FormattedNumber } from "react-intl";
 import {
   Cell,
@@ -15,8 +16,6 @@ import {
 } from "react-table";
 import { CourseStatus, IndexedCourseItem } from "types/courses";
 
-import ArrowDown from "./ArrowDown";
-import ArrowRight from "./ArrowRight";
 import getExcelFromTable from "./helpers/getExcelFromTable";
 import Pagination from "./Pagination";
 
@@ -80,9 +79,16 @@ const CellRender = ({
     } else {
       return (
         <>
-          <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? <ArrowDown /> : <ArrowRight />}
-          </span>{" "}
+          <span
+            {...row.getToggleRowExpandedProps()}
+            className="inline-block -ml-1.5 align-middle hover:text-primary-darker"
+          >
+            {row.isExpanded ? (
+              <ChevronDown size={16} />
+            ) : (
+              <ChevronRight size={16} />
+            )}
+          </span>
           {cell.render("Cell")}
         </>
       );
@@ -95,7 +101,7 @@ const CellRender = ({
   return <>{cell.render("Cell")}</>;
 };
 
-const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
+const Table = (props: TableOptions<IndexedCourseItem>) => {
   const router = useRouter();
 
   const {
@@ -172,7 +178,10 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
 
   return (
     <>
-      <table {...getTableProps()}>
+      <table
+        {...getTableProps()}
+        className="w-full border-collapse leading-none"
+      >
         <thead>
           {headerGroups.map((headerGroup) => {
             const { key: headerGroupKey, ...headerGroupProps } =
@@ -189,12 +198,20 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
                       {...headerA11yProps(column)}
                     >
                       {column.canSort ? (
-                        <div className="flex">
+                        <div
+                          className={`flex gap-1 ${
+                            column.aggregate === "sum"
+                              ? "justify-end"
+                              : "justify-between"
+                          }`}
+                        >
                           <span>{column.render("Header")}</span>
                           <Arrow column={column} />
                         </div>
                       ) : (
-                        column.render("Header")
+                        <div className="text-center">
+                          {column.render("Header")}
+                        </div>
                       )}
                     </th>
                   );
@@ -258,7 +275,7 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
         </tfoot>
       </table>
       {pageOptions.length > 1 ? (
-        <>
+        <div className="flex items-center justify-between my-4 flex-wrap">
           <div>
             Viser{" "}
             <strong>
@@ -279,9 +296,11 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
               pageIndex={pageIndex}
             />
           </nav>
-        </>
+        </div>
       ) : null}
       <button
+        className="py-2 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-darker focus:z-10 focus:border-crimson-300 focus:ring focus:ring-crimson-200 focus:ring-opacity-50 print:hidden"
+        type="button"
         onClick={() =>
           getExcelFromTable(
             String(router.query.group),
@@ -294,10 +313,6 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
         Lagre som Excel-fil
       </button>
       <style jsx>{`
-        table {
-          border-collapse: collapse;
-          line-height: 1;
-        }
         td,
         th {
           padding: 4px 8px;
@@ -315,10 +330,6 @@ const Table: FC<TableOptions<IndexedCourseItem>> = (props) => {
         thead th {
           border-bottom: 1px solid gray;
           white-space: nowrap;
-        }
-        thead th .flex {
-          display: flex;
-          justify-content: space-between;
         }
         tbody {
           background: #fff;

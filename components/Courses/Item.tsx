@@ -1,6 +1,3 @@
-import { Text } from "@vofo-no/design";
-import { FC } from "react";
-
 import { ExtendedICourseItem } from "./constants";
 import ExportSchema from "./ExportSchema";
 
@@ -9,30 +6,30 @@ interface ItemProps {
   reportSchema?: string;
 }
 
-const Item: FC<ItemProps> = ({ course, reportSchema }) => {
+const Item = ({ course, reportSchema }: ItemProps) => {
   if (!course) return null;
   return (
-    <Text as="section">
+    <section>
       <dl>
-        <dt>Tittel</dt>
+        <dt className="text-xs font-bold mt-2 opacity-60">Tittel</dt>
         <dd>{course.title}</dd>
-        <dt>Saksnummer</dt>
+        <dt className="text-xs font-bold mt-2 opacity-60">Saksnummer</dt>
         <dd>{course.ID}</dd>
-        <dt>Kursperiode</dt>
+        <dt className="text-xs font-bold mt-2 opacity-60">Kursperiode</dt>
         <dd>
           {course.startDate}–{course.endDate}
         </dd>
-        <dt>Arrangør</dt>
+        <dt className="text-xs font-bold mt-2 opacity-60">Arrangør</dt>
         <dd>{course.organizer}</dd>
-        <dt>Studieplan</dt>
+        <dt className="text-xs font-bold mt-2 opacity-60">Studieplan</dt>
         <dd>{course.curriculum}</dd>
       </dl>
       {course.reportSchema && reportSchema && (
-        <p>
+        <div className="mt-4">
           <ExportSchema reportSchema={reportSchema} course={course} />
-        </p>
+        </div>
       )}
-    </Text>
+    </section>
   );
 };
 

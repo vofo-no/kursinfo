@@ -1,17 +1,16 @@
-import Associations from "components/Associations";
-import Counties from "components/Counties";
 import { initialize as initializeGraphs } from "components/Graph";
 import Layout from "components/Layout";
-import Municipalities from "components/Municipalities";
-import ReportHeading from "components/ReportHeading";
-import Subjects from "components/Subjects";
-import Summary from "components/Summary";
-import { FC, useEffect } from "react";
-import { GLOBAL, GlobalReportProps } from "types/reports";
+import { useEffect } from "react";
+import { GlobalReportProps } from "types/reports";
 
-import Footer from "./Footer";
+import Associations from "./Associations";
+import Counties from "./Counties";
+import FrontPage from "./FrontPage";
+import Municipalities from "./Municipalities";
+import Participants from "./Participants";
+import Subjects from "./Subjects";
 
-const GlobalReport: FC<GlobalReportProps> = ({
+const GlobalReport = ({
   year,
   name,
   associations,
@@ -22,30 +21,16 @@ const GlobalReport: FC<GlobalReportProps> = ({
   ageSetHistory,
   municipalities,
   summary,
-}) => {
+  participantsHistogram,
+  participantsHistogramSums,
+  type,
+}: GlobalReportProps) => {
   useEffect(() => {
     initializeGraphs();
   }, []);
   return (
     <Layout title={`${name}: Kursstatistikk ${year}`}>
-      <section className="page">
-        <div className="container">
-          <ReportHeading name={name} year={year} type={GLOBAL} />
-          <Summary {...summary} />
-          <p>
-            Statistikken viser tilskuddsberettiget kursvirksomhet i regi av
-            godkjente studieforbund. Virksomheten måles i antall arrangerte
-            kurs, antall deltakere og antall kurstimer. Denne rapporten viser
-            kurs som er gjennomført i {year}.
-          </p>
-          <p>
-            For mer informasjon, se <a href="http://www.vofo.no">vofo.no</a>{" "}
-            eller kontakt Voksenopplæringsforbundet på{" "}
-            <a href="mailto:vofo@vofo.no">vofo@vofo.no</a>.
-          </p>
-          <Footer />
-        </div>
-      </section>
+      <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
         year={year}
@@ -63,6 +48,12 @@ const GlobalReport: FC<GlobalReportProps> = ({
         ageSetHistory={ageSetHistory}
         year={year}
         name={name.toLowerCase()}
+      />
+      <Participants
+        year={year}
+        participantsHistogram={participantsHistogram}
+        participantsHistogramSums={participantsHistogramSums}
+        courses={summary.courses}
       />
       <Municipalities
         items={municipalities}

@@ -168,11 +168,69 @@ const historical = (rowset) => ({
   participants: rowset.map(sumParticipants).reverse(),
 });
 
+/**
+ *
+ * @param {Array<Array<Array<any>>>} datasets
+ */
+const participantsHistogram = (...datasets) => {
+  /** @type Array<import("../types/reports").ParticipantsHistogramType> */
+  const result = [];
+
+  datasets.forEach((rows) => {
+    /** @type import("../types/reports").ParticipantsHistogramType */
+    const histogram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 0-3, 4-7, ... 40+
+
+    rows.forEach((row) => {
+      const index = Math.trunc(
+        COL.MALES.concat(COL.FEMALES).reduce((acc, col) => acc + row[col], 0) /
+          4
+      );
+
+      if (index < 10) {
+        histogram[index]++;
+      } else {
+        histogram[10]++;
+      }
+    });
+
+    result.push(histogram);
+  });
+
+  return result;
+};
+
+/**
+ *
+ * @param {Array<Array<any>>} rows
+ */
+const participantsHistogramSums = (rows) => {
+  /** @type import("../types/reports").ParticipantsHistogramType */
+  const histogram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 0-3, 4-7, ... 40+
+
+  rows.forEach((row) => {
+    const participants = COL.MALES.concat(COL.FEMALES).reduce(
+      (acc, col) => acc + row[col],
+      0
+    );
+    const index = Math.trunc(participants / 4);
+
+    if (index < 10) {
+      histogram[index] += participants;
+    } else {
+      histogram[10] += participants;
+    }
+  });
+
+  return histogram;
+};
+
 module.exports = {
   sumHours,
   sumParticipants,
   historical,
   participants,
+  participantsHistogram,
+  participantsHistogramSums,
   participantsWithHistory,
   facilitated,
   countOrganizations,

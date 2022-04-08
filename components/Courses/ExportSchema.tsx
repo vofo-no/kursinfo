@@ -62,25 +62,13 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
 
   return (
     <button
-      style={{ cursor: "pointer" }}
+      type="button"
+      className="py-2 px-5 flex gap-2 items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-darker focus:z-10 focus:border-crimson-300 focus:ring focus:ring-crimson-200 focus:ring-opacity-50"
       tabIndex={0}
       onClick={() => exportToCSV(ID)}
     >
-      <span>
-        <Download />
-      </span>
+      <Download />
       Last ned rapportskjema
-      <style jsx>{`
-        button {
-          font-size: unset;
-          display: flex;
-          align-items: center;
-          padding: 5px 15px;
-        }
-        span {
-          margin-right: 10px;
-        }
-      `}</style>
     </button>
   );
 };

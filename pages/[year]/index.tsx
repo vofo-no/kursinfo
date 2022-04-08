@@ -1,4 +1,4 @@
-import { Box, Text } from "@vofo-no/design";
+import WhiteBox from "components/Containers/WhiteBox";
 import fs from "fs";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import { FC } from "react";
 import { ASSOCIATION, COMBO, GLOBAL, REGION } from "types/reports";
 
 import Layout from "../../components/Layout";
-import PageHeading from "../../components/PageHeading";
 import dataIndex from "../../data/index.json";
 
 type ArrayOfStringTuple = Array<[string, string]>;
@@ -71,16 +70,12 @@ const ListLinkItem: FC<{ url: string; title: string; bold?: boolean }> = ({
   bold = false,
 }) => (
   <Link href={url}>
-    <a style={{ textDecoration: "none" }}>
-      <Text
-        py={2}
-        px={3}
-        as="span"
-        display="block"
-        fontWeight={bold ? "bold" : "normal"}
+    <a className="no-underline">
+      <span
+        className={`block px-2 tablet:px-6 py-2 ${bold ? "font-bold" : ""}`}
       >
         {title}
-      </Text>
+      </span>
     </a>
   </Link>
 );
@@ -93,81 +88,56 @@ const YearIndex: FC<ReportIndexProps> = ({
   associationReports,
 }) => (
   <Layout title={`Statistikk ${year}`} header>
-    <Box variant="light" p={3} boxShadow="small">
-      <PageHeading>Statistikk {year}</PageHeading>
-      <p>
-        Her finner du statistikkrapporter for {year}.{" "}
-        <Link href="/">
-          <a>(Velg et annet år)</a>
-        </Link>
-      </p>
-    </Box>
-    <Box
-      display="grid"
-      gridTemplateColumns={["1fr", "1fr 1fr"]}
-      gridGap={3}
-      mt={3}
-    >
-      <div>
-        <Box variant="light" boxShadow="small">
-          <Box px={3}>
-            <Text as="h2" my={0}>
-              Fylker
-            </Text>
-            <p>Kursvirksomheten i de ulike fylkene og hele landet.</p>
-          </Box>
-          <ul className="link-list">
-            {regionReports.map(([key, value]) => (
-              <li key={key}>
-                <ListLinkItem url={`/${year}/${key}`} title={value} />
-              </li>
-            ))}
-            {globalReports.map(([key, value]) => (
-              <li key={key}>
-                <ListLinkItem url={`/${year}/${key}`} title={value} bold />
-              </li>
-            ))}
-          </ul>
-        </Box>
+    <WhiteBox>
+      <div className="prose">
+        <h1 className="text-4xl mb-0">Statistikk {year}</h1>
+        <p>
+          Her finner du statistikkrapporter for {year}.{" "}
+          <Link href="/">
+            <a>(Velg et annet år)</a>
+          </Link>
+        </p>
       </div>
-      <div>
-        <Box variant="light" boxShadow="small">
-          <Box px={3}>
-            <Text as="h2" my={0}>
-              Studieforbund
-            </Text>
-            <p>Kursvirksomheten i de ulike studieforbundene.</p>
-          </Box>
-          <ul className="link-list">
-            {associationReports.map(([key, value]) => (
-              <li key={key}>
-                <ListLinkItem url={`/${year}/${key}`} title={value} />
-              </li>
-            ))}
-            {comboReports.map(([key, value]) => (
-              <li key={key}>
-                <ListLinkItem url={`/${year}/${key}`} title={value} bold />
-              </li>
-            ))}
-          </ul>
-        </Box>
-      </div>
-    </Box>
-    <style jsx>{`
-      ul.link-list {
-        padding: 0;
-        margin: 0;
-      }
-      ul.link-list li {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        border-top: 1px solid silver;
-      }
-      ul.link-list li a {
-        text-decoration: none;
-      }
-    `}</style>
+    </WhiteBox>
+
+    <div className="grid tablet:grid-cols-2 gap-4 mt-4">
+      <WhiteBox>
+        <div className="prose">
+          <h2 className="my-2">Fylker</h2>
+          <p>Kursvirksomheten i de ulike fylkene og hele landet.</p>
+        </div>
+        <ul className="list-none p-0 mt-4 -mx-2 tablet:-mx-6">
+          {regionReports.map(([key, value]) => (
+            <li key={key} className="border-t-gray-300 border-t">
+              <ListLinkItem url={`/${year}/${key}`} title={value} />
+            </li>
+          ))}
+          {globalReports.map(([key, value]) => (
+            <li key={key} className="border-t-gray-300 border-t">
+              <ListLinkItem url={`/${year}/${key}`} title={value} bold />
+            </li>
+          ))}
+        </ul>
+      </WhiteBox>
+      <WhiteBox>
+        <div className="prose">
+          <h2 className="my-2">Studieforbund</h2>
+          <p>Kursvirksomheten i de ulike studieforbundene.</p>
+        </div>
+        <ul className="list-none p-0 mt-4 -mx-2 tablet:-mx-6">
+          {associationReports.map(([key, value]) => (
+            <li key={key} className="border-t-gray-300 border-t">
+              <ListLinkItem url={`/${year}/${key}`} title={value} />
+            </li>
+          ))}
+          {comboReports.map(([key, value]) => (
+            <li key={key} className="border-t-gray-300 border-t">
+              <ListLinkItem url={`/${year}/${key}`} title={value} bold />
+            </li>
+          ))}
+        </ul>
+      </WhiteBox>
+    </div>
   </Layout>
 );
 

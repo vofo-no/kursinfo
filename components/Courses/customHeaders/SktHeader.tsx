@@ -1,31 +1,19 @@
-import { Box } from "@vofo-no/design";
+import Container from "components/Containers/Container";
+import WhiteBox from "components/Containers/WhiteBox";
 
 const SktHeader: React.FC<Record<string, never>> = () => (
-  <Box variant="light" boxShadow="small">
-    <div className="c-header">
-      <Box px={2} py={1}>
-        <Box container>
-          <a className="brand" href="https://www.kulturogtradisjon.no/">
-            Studieforbundet kultur og tradisjon
-          </a>
-        </Box>
-      </Box>
+  <WhiteBox noPadding>
+    <div className="border-b-4 border-b-[#c53283] py-3 px-2 tablet:px-6">
+      <Container noPadding>
+        <a
+          className="text-[#c53283] text-xl font-['Helvetica_Neue',_Helvetica,_Arial,_sans-serif] no-underline hover:text-[#942662]"
+          href="https://www.kulturogtradisjon.no/"
+        >
+          Studieforbundet kultur og tradisjon
+        </a>
+      </Container>
     </div>
-    <style jsx>{`
-      .c-header {
-        border-bottom: 4px solid #c53283;
-      }
-      a.brand {
-        font-size: 20px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        color: #c53283;
-        text-decoration: none;
-      }
-      a.brand:hover {
-        color: #942662;
-      }
-    `}</style>
-  </Box>
+  </WhiteBox>
 );
 
 export default SktHeader;

@@ -1,4 +1,4 @@
-import { Dispatch, FC } from "react";
+import { Dispatch } from "react";
 
 import { CoursesProps } from "./constants";
 
@@ -23,9 +23,14 @@ interface FilterProps
   setOrganization: Dispatch<string>;
 }
 
-const Select: FC<SelectProps> = ({ options = [], value, callback }) => (
+const Select = ({ options = [], value, callback, ...props }: SelectProps) => (
   // eslint-disable-next-line jsx-a11y/no-onchange
-  <select value={value} onChange={(e) => callback(e.target.value)}>
+  <select
+    value={value}
+    onChange={(e) => callback(e.target.value)}
+    className="mr-1 py-1 px-2 border bg-white rounded-md border-gray-300 shadow-sm focus:border-crimson-300 focus:ring focus:ring-crimson-200 focus:ring-opacity-50"
+    {...props}
+  >
     {options.map((opt) => {
       if (typeof opt === "string") return <option key={opt}>{opt}</option>;
       return (
@@ -37,7 +42,7 @@ const Select: FC<SelectProps> = ({ options = [], value, callback }) => (
   </select>
 );
 
-const Filter: FC<FilterProps> = ({
+const Filter = ({
   county,
   countyOptions,
   organization,
@@ -47,9 +52,9 @@ const Filter: FC<FilterProps> = ({
   setYear,
   year,
   yearOptions,
-}) => (
-  <fieldset>
-    <legend>Filter</legend>
+}: FilterProps) => (
+  <fieldset className="my-3">
+    <legend className="sr-only">Filter</legend>
     <Select
       aria-label="Velg årstall"
       value={year}
@@ -68,28 +73,6 @@ const Filter: FC<FilterProps> = ({
       options={countyOptions}
       callback={setCounty}
     />
-    <style jsx>
-      {`
-        fieldset {
-          border: 0;
-          padding: 0;
-          margin: 0;
-        }
-        fieldset legend {
-          border: 0 !important;
-          clip: rect(1px, 1px, 1px, 1px) !important;
-          -webkit-clip-path: inset(50%) !important;
-          clip-path: inset(50%) !important;
-          height: 1px !important;
-          margin: -1px !important;
-          overflow: hidden !important;
-          padding: 0 !important;
-          position: absolute !important;
-          width: 1px !important;
-          white-space: nowrap !important;
-        }
-      `}
-    </style>
   </fieldset>
 );
 
