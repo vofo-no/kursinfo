@@ -9,6 +9,7 @@ export interface Course {
   curriculumTitle: string;
   endDate?: string;
   endYear?: string;
+  extraGrant?: number;
   facilitationGrant?: number;
   grant?: number;
   hours: number;

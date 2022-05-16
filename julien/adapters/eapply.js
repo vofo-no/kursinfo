@@ -84,6 +84,7 @@ class EapplyAdapter extends Adapter {
             curriculumTitle: i.coursePlanTitle,
             endDate: i.endDate,
             endYear: i.endYear?.toString(),
+            extraGrant: i.extraGrant,
             facilitationGrant: i.facilitationGrant,
             grant: typeof i.totalGrant === "number" ? i.totalGrant : undefined,
             hours: i.hours,

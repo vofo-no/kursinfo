@@ -5,20 +5,24 @@ const CourseStatuses = {
 
 const configDefaults = {
   useTitleColumn: false,
+  hideExtraGrants: false,
   hidePlannedGrants: false,
   showFacilitationGrants: false,
 };
 
 /**
- * 
- * @param {*} config 
- * @returns {{
-      hidePlannedGrants?: boolean;
-      reportSchema?: string;
-      showFacilitationGrants?: boolean;
-      useTitleColumn?: boolean;
-    }
- }
+ * @typedef {object} Config
+ * @property {boolean} hideExtraGrants
+ * @property {boolean} hidePlannedGrants
+ * @property {string} [reportSchema]
+ * @property {boolean} showFacilitationGrants
+ * @property {boolean} useTitleColumn
+ */
+
+/**
+ * Merges partial config with default values.
+ * @param {Partial<Config>} config
+ * @returns {Config}
  */
 function getConfig(config = {}) {
   return { ...configDefaults, ...config };

@@ -35,6 +35,7 @@ const getData = async (tenant, year, adapter) => {
   const data = await adapter.get(tenant.id, year);
 
   const {
+    hideExtraGrants,
     hidePlannedGrants,
     reportSchema,
     showFacilitationGrants,
@@ -111,6 +112,11 @@ const getData = async (tenant, year, adapter) => {
 
     if (hidePlannedGrants && item.status === CourseStatuses.PLANNED) {
       delete item.grant;
+    }
+
+    if (hideExtraGrants) {
+      if (item.grant && item.extraGrant) item.grant -= item.extraGrant;
+      delete item.extraGrant;
     }
 
     if (!showFacilitationGrants) {
