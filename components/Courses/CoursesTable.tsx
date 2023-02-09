@@ -1,6 +1,6 @@
 import AlertDialog from "components/AlertDialog";
 import { useRouter } from "next/router";
-import React, { Dispatch, ReactNode, useMemo, useState } from "react";
+import React, { Dispatch, ReactElement, useMemo, useState } from "react";
 import { Info } from "react-feather";
 import { FormattedNumber } from "react-intl";
 import { CellProps, Column, HeaderProps } from "react-table";
@@ -48,9 +48,9 @@ interface IStatusProps {
 }
 
 const withStatus = <P extends IStatusProps>(
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.FunctionComponent<P>,
   status: CourseStatus
-): ((props: P) => ReactNode) => {
+): ((props: P) => JSX.Element) => {
   const WithStatus = (props: P) => (
     <WrappedComponent {...props} status={status} />
   );
@@ -88,6 +88,7 @@ const numCol = (
   aggregate: "sum",
   sortDescFirst: true,
   className: "num",
+  // @ts-ignore
   Footer: (p: HeaderProps<IndexedCourseItem>) => {
     return p.rows
       .reduce(
@@ -151,17 +152,18 @@ const aggCol = (
   Cell: withStatus<NumCellProps>(NumCell, status),
 });
 
-const FuncCell = ({ value, row, column }: CellProps<IndexedCourseItem>) => {
+function FuncCell(props: CellProps<IndexedCourseItem>): ReactElement {
+  const { value, row, column } = props;
   if (
     (typeof value === "string" || typeof value === "number") &&
     column?.makeValue
   )
-    return column.makeValue(value);
-  if (row.isGrouped) return null;
-  return "(Ukjent)";
-};
+    return <>{column.makeValue(value)}</>;
+  if (row.isGrouped) return <></>;
+  return <>(Ukjent)</>;
+}
 
-const DateCell = ({ value }: { value?: string }) => remixISODate(value);
+const DateCell = ({ value }: { value?: string }) => <>{remixISODate(value)}</>;
 
 const statusText: Record<CourseStatus, string> = {
   [CourseStatus.PLANNED]: "Planlagt",

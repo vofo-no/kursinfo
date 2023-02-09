@@ -1,6 +1,4 @@
 import {
-  HeaderProps,
-  Renderer,
   UseColumnOrderInstanceProps,
   UseColumnOrderState,
   UseExpandedHooks,
@@ -70,7 +68,6 @@ declare module "react-table" {
   > extends UseGroupByColumnOptions<D>,
       UseSortByColumnOptions<D> {
     className?: string;
-    Footer?: Renderer<HeaderProps<D>>;
     makeHref?: (param: string) => UrlObject;
     makeValue?: (
       param: string | number | IndexedCourseItem["status"]
