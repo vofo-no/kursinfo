@@ -35,9 +35,10 @@ class EapplyAdapter extends Adapter {
       signal: controller.signal,
     };
 
-    const LIMIT = 250;
+    const LIMIT = 2_000;
+    const LIMIT_MAX = 25_000;
 
-    for (let offset = 0; offset < LIMIT * 1000; offset += LIMIT) {
+    for (let offset = 0; offset < LIMIT_MAX; offset += LIMIT) {
       if (result.length < offset) break;
 
       const url = `${process.env.EAPPLY_URL}/api/v1/courses?offset=${offset}&limit=${LIMIT}&tenantId=${tenantId}&endDateFrom=01.01.${year}&endDateTo=31.12.${year}`;
