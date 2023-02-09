@@ -21,7 +21,7 @@ const PlannedNum = ({
 }): JSX.Element => (
   <>
     <span>
-      <FormattedNumber value={Number(value)} />
+      <FormattedNumber value={Number(value)} maximumFractionDigits={0} />
     </span>
     <style jsx>{`
       span:before {
@@ -63,7 +63,7 @@ const NumCell = ({ value, row, status }: NumCellProps) => {
     CourseStatus.PLANNED ? (
     <PlannedNum value={value} />
   ) : (
-    <FormattedNumber value={value} />
+    <FormattedNumber value={value} maximumFractionDigits={0} />
   );
 };
 
@@ -75,7 +75,7 @@ const AggNumFooter = ({ groupedRows, column, status }: AggNumHeaderProps) => {
   return status === CourseStatus.PLANNED ? (
     <PlannedNum value={outVal} />
   ) : (
-    <FormattedNumber value={outVal} />
+    <FormattedNumber value={outVal} maximumFractionDigits={0} />
   );
 };
 
@@ -110,6 +110,7 @@ const numCol = (
                 <FormattedNumber
                   key={`${p.column.id}-foot-done`}
                   value={Number(v)}
+                  maximumFractionDigits={0}
                 />
               )
             );
