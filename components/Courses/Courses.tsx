@@ -81,9 +81,7 @@ const Courses = (
   return (
     <>
       <Head>
-        <title>
-          {title} - {tenantName}
-        </title>
+        <title>{`${title} - ${tenantName}`}</title>
       </Head>
       <main className="my-4">
         <Container noPadding>

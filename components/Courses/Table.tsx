@@ -73,7 +73,7 @@ const CellRender = ({
     if (cell.column.makeHref && cell.value !== null) {
       return (
         <Link href={cell.column.makeHref(String(cell.value))}>
-          <a>{cell.render("Cell")}</a>
+          {cell.render("Cell")}
         </Link>
       );
     } else {

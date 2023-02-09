@@ -8,10 +8,11 @@ interface PropTypes {
 
 export const LinkBox = ({ url, title }: PropTypes) => (
   <WhiteBox key={url} noPadding>
-    <Link href={url}>
-      <a className="w-full h-[100px] flex justify-center items-center no-underline text-2xl">
-        <span>{title}</span>
-      </a>
+    <Link
+      href={url}
+      className="w-full h-[100px] flex justify-center items-center no-underline text-2xl"
+    >
+      <span>{title}</span>
     </Link>
   </WhiteBox>
 );

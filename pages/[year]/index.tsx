@@ -69,14 +69,10 @@ const ListLinkItem: FC<{ url: string; title: string; bold?: boolean }> = ({
   title,
   bold = false,
 }) => (
-  <Link href={url}>
-    <a className="no-underline">
-      <span
-        className={`block px-2 tablet:px-6 py-2 ${bold ? "font-bold" : ""}`}
-      >
-        {title}
-      </span>
-    </a>
+  <Link href={url} className="no-underline">
+    <span className={`block px-2 tablet:px-6 py-2 ${bold ? "font-bold" : ""}`}>
+      {title}
+    </span>
   </Link>
 );
 
@@ -93,9 +89,7 @@ const YearIndex: FC<ReportIndexProps> = ({
         <h1 className="text-4xl mb-0">Statistikk {year}</h1>
         <p>
           Her finner du statistikkrapporter for {year}.{" "}
-          <Link href="/">
-            <a>(Velg et annet år)</a>
-          </Link>
+          <Link href="/">(Velg et annet år)</Link>
         </p>
       </div>
     </WhiteBox>

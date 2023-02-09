@@ -1,6 +1,6 @@
 import { Logo } from "@vofo-no/ui";
 import Head from "next/head";
-import { FC } from "react";
+import { PropsWithChildren } from "react";
 
 import Container from "./Containers/Container";
 import Footer from "./Containers/Footer";
@@ -13,7 +13,8 @@ interface LayoutProps {
   header?: boolean;
 }
 
-const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
+export default function Layout(props: PropsWithChildren<LayoutProps>) {
+  const { title, children, header = false } = props;
   const LayoutHead = (
     <Head>
       <title>{title}</title>
@@ -65,5 +66,4 @@ const Layout: FC<LayoutProps> = ({ title, children, header = false }) => {
       </footer>
     </>
   );
-};
-export default Layout;
+}

@@ -11,9 +11,7 @@ function Header() {
         <div className="flex items-stretch">
           <div className="tablet:ml-4">
             <Link href="/">
-              <a>
-                <Logo className="w-[160px] tablet:w-[218px]" />
-              </a>
+              <Logo className="w-[160px] tablet:w-[218px]" />
             </Link>
           </div>
         </div>
