@@ -1,18 +1,9 @@
-/**
- * Set up plugins
- */
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
-
-const plugins = [withBundleAnalyzer];
-
-/**
- * Set up Next.js configuration
- */
 const defaultParams = require("./lib/getDefaultParams");
 const SFS = ["nm", "skt", "funkis", "msf", "k-stud"];
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfiguration = {
   async rewrites() {
     const paths = [];
@@ -45,5 +36,4 @@ const nextConfiguration = {
   },
 };
 
-const withPlugins = require("next-compose-plugins");
-module.exports = withPlugins([...plugins], nextConfiguration);
+module.exports = nextConfiguration;
