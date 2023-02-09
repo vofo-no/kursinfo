@@ -16,7 +16,7 @@ export const GROUPS = [
   "fylker",
   "studieplaner",
 ] as const;
-export type GroupType = typeof GROUPS[number];
+export type GroupType = (typeof GROUPS)[number];
 
 export function isDefaultCounty(val: string): boolean {
   return val === DEFAULT_COUNTY_PARAM;

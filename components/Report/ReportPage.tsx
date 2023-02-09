@@ -7,7 +7,7 @@ const COLORS = {
 } as const;
 
 interface ReportPageProps {
-  color?: typeof COLORS[keyof typeof COLORS];
+  color?: (typeof COLORS)[keyof typeof COLORS];
   title?: string;
 }
 
