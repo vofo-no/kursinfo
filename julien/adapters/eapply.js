@@ -97,7 +97,8 @@ class EapplyAdapter extends Adapter {
                 : i.tenantName,
             organizerId: i.applicantOrganizationId,
             organizerName: i.applicantName,
-            participants: i.participantsTotal,
+            participants: i.validParticipantsTotal,
+            participantsAll: i.participantsTotal,
             startDate: i.startDate,
             status:
               i.amountApproved > 0

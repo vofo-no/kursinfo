@@ -20,6 +20,7 @@ export interface Course {
   organizerId: string;
   organizerName: string;
   participants?: number;
+  participantsAll?: number;
   startDate: string;
   status: CourseStatus;
   title: string;

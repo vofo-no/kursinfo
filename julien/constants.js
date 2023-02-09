@@ -4,10 +4,11 @@ const CourseStatuses = {
 };
 
 const configDefaults = {
-  useTitleColumn: false,
   hideExtraGrants: false,
   hidePlannedGrants: false,
   showFacilitationGrants: false,
+  useAllParticipants: false,
+  useTitleColumn: false,
 };
 
 /**
@@ -16,6 +17,7 @@ const configDefaults = {
  * @property {boolean} hidePlannedGrants
  * @property {string} [reportSchema]
  * @property {boolean} showFacilitationGrants
+ * @property {boolean} useAllParticipants
  * @property {boolean} useTitleColumn
  */
 

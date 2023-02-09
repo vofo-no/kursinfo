@@ -5,7 +5,7 @@
       "name": "Studieforbundet natur og miljø",
       "adapter": "eapply",
       "dataTarget": "2539",
-      "config": { "hidePlannedGrants": true }
+      "config": { "hidePlannedGrants": true, "useAllParticipants": true }
     },
     {
       "id": "73E12C2A-64A4-4EAC-A80A-898F3F3BFEF3",

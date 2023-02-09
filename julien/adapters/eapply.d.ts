@@ -47,6 +47,9 @@ export interface EapplyCourse {
   tenantId: string;
   tenantName: string;
   totalGrant?: number;
+  validParticipantsFemale?: number;
+  validParticipantsMale?: number;
+  validParticipantsTotal?: number;
 }
 
 export enum EapplyApplicationStatus {

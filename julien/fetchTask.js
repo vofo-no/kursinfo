@@ -39,6 +39,7 @@ const getData = async (tenant, year, adapter) => {
     hidePlannedGrants,
     reportSchema,
     showFacilitationGrants,
+    useAllParticipants,
     useTitleColumn,
   } = getConfig(tenant.config);
 
@@ -125,7 +126,7 @@ const getData = async (tenant, year, adapter) => {
       delete item.facilitationGrant;
     }
 
-    const filterKeys = ["endDate", "endYear", "grant", "participants"];
+    const filterKeys = ["endDate", "endYear", "grant"];
 
     const optionalProps = Object.fromEntries(
       Object.entries(item).filter(([key]) => filterKeys.includes(key))
@@ -140,6 +141,9 @@ const getData = async (tenant, year, adapter) => {
       locationCode: item.locationCode,
       organizationCode: item.organizationCode,
       organizerIndex,
+      participants: useAllParticipants
+        ? item.participantsAll
+        : item.participants,
       reportSchema: reportSchema && item.status === CourseStatuses.PLANNED,
       startDate: item.startDate,
       status: item.status,
