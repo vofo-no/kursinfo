@@ -35,7 +35,7 @@ class EapplyAdapter extends Adapter {
       signal: controller.signal,
     };
 
-    const LIMIT = 2_000;
+    const LIMIT = 500;
     const LIMIT_MAX = 25_000;
 
     for (let offset = 0; offset < LIMIT_MAX; offset += LIMIT) {
