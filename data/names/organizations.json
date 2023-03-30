@@ -38,6 +38,28 @@
       "65": { "name": "Norges Handikapforbunds Ungdom" },
       "66": { "name": "Foreningen Norges Døvblinde" },
       "70": { "name": "Folkets Hus Landsforbund" }
+    },
+    "2022": {
+      "0": { "name": "Studieforbundet AOF Norge" },
+      "1": { "name": "Fellesforbundet" },
+      "2": { "name": "Arbeiderbevegelsens Rus- og Sosialpolitiske Forbund" },
+      "5": { "name": "Arbeiderpartiet" },
+      "7": { "name": "Forbundet for Ledelse og Teknikk" },
+      "9": { "name": "Framfylkingen" },
+      "10": { "name": "Handel og Kontor i Norge" },
+      "11": { "name": "Industri Energi" },
+      "16": { "name": "Norges Handikapforbund" },
+      "19": { "name": "Norsk Arbeidsmandsforbund" },
+      "21": { "name": "Norsk Folkehjelp" },
+      "24": { "name": "Norsk Nærings- og Nytelsesmiddelarbeiderforbund" },
+      "25": { "name": "Norsk Sjømannsforbund" },
+      "29": { "name": "EL & IT Forbundet" },
+      "31": { "name": "Fagforbundet" },
+      "34": { "name": "Pensjonistforbundet" },
+      "36": { "name": "Stiftelsen Elden" },
+      "37": { "name": "Kulturstiftelsen Kanalen" },
+      "72": { "name": "Norsk Flygerforbund" },
+      "74": { "name": "Stiftinga Herøyspelet" }
     }
   },
   "2503": {
