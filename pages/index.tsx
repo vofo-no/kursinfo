@@ -24,9 +24,18 @@ const Index: FC<IndexProps> = ({ years }) => {
       <WhiteBox>
         <div className="prose">
           <h1 className="text-4xl mb-0">Statistikk</h1>
-          <p>
-            Her finner du Vofos nasjonale og regionale statistikkrapporter for
+          <p className="lead">
+            Her finner du Vofos nasjonale og regionale statistikkrapporter om
             studieforbundenes kursvirksomhet.
+          </p>
+          <p>
+            Rapportene viser omfanget og utviklingen av tilskuddsberettiget
+            kursvirksomhet i ulike studieforbund og fylker. Kilde til rapportene
+            er Statistisk sentralbyrå (SSB) sin offisielle statistikk over{" "}
+            <a href="https://ssb.no/voppl">
+              studieforbundenes opplæringsvirksomhet
+            </a>
+            .
           </p>
         </div>
       </WhiteBox>
