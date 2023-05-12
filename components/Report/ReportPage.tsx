@@ -18,7 +18,7 @@ function ReportPage({
 }: PropsWithChildren<ReportPageProps>) {
   return (
     <section
-      className={`${color} break-after-page grid break-before-page tablet:min-h-screen snap-start p-2 py-8 print:p-0 overflow-auto`}
+      className={`${color} break-after-page grid break-before-page tablet:min-h-screen snap-start p-2 py-8 print:p-0 overflow-auto print:overflow-visible`}
     >
       <div className="max-w-fit mx-auto my-auto print:m-0 print:w-full print:max-w-none">
         {title && (
