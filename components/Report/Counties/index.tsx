@@ -51,7 +51,7 @@ const Counties = ({
         {counties.map(
           (
             { name, courses, participants, hours, coursesPerCapita, isCurrent },
-            i
+            i,
           ) => (
             <TableRow key={name} highlight={isCurrent} index={i} title={name}>
               <FormattedNumber key="courses" value={courses} />
@@ -64,7 +64,7 @@ const Counties = ({
                 maximumFractionDigits={1}
               />
             </TableRow>
-          )
+          ),
         )}
       </Table>
     </ReportPage>

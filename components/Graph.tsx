@@ -32,8 +32,8 @@ function Graph({
           style: { fontFamily: "'Lato',sans-serif", fontSize: "14px" },
         },
       },
-      options
-    )
+      options,
+    ),
   );
   return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 }

@@ -1,7 +1,7 @@
 import { CourseStatuses } from "julien/constants";
 import { ParsedUrlQuery } from "querystring";
 
-import { GroupType } from "../components/Courses/constants";
+import { GroupType } from "../components/CoursesV2/constants";
 
 export interface Course {
   curriculumCode?: string;

@@ -31,7 +31,7 @@ function getAssociationName(key: string): INamed {
 }
 
 function recordToArray<T>(
-  records: Record<string, T>
+  records: Record<string, T>,
 ): Array<T & { key: string }> {
   return Object.keys(records).map((key) => ({ ...records[key], key }));
 }
@@ -55,12 +55,12 @@ export const getReportStaticData = async ({
   const municipalities = getMunicipalitiesFromData(
     data.municipalities,
     municipalityKeys,
-    reportData.municipalityValues
+    reportData.municipalityValues,
   );
 
   const topSubjects = getTopSubjectsFromData(
     reportData.subjects,
-    reportData.topSubjects
+    reportData.topSubjects,
   );
 
   const associations = recordToArray(reportData.associations)
@@ -116,7 +116,7 @@ export const getReportStaticData = async ({
         organizations: getNamedOrganizationsFromData(
           reportData.key,
           Number(year),
-          associations
+          associations,
         ),
         historicalAll: reportData.historicalAll,
       };

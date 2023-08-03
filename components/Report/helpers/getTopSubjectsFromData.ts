@@ -3,7 +3,7 @@ import { IReportBase, ReportPropsBase } from "types/reports";
 function unpack(
   keys: Array<string>,
   ageSetIndex: number,
-  subjects: IReportBase["subjects"]
+  subjects: IReportBase["subjects"],
 ) {
   return keys.map((key) => ({
     key,
@@ -13,7 +13,7 @@ function unpack(
 
 export default function getTopSubjectsFromData(
   subjects: IReportBase["subjects"],
-  topSubjects: IReportBase["topSubjects"]
+  topSubjects: IReportBase["topSubjects"],
 ): ReportPropsBase["topSubjects"] {
   return [
     unpack(topSubjects[0], 0, subjects),

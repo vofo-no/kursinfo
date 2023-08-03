@@ -15,7 +15,7 @@ const perCapita = (courses: number, population = 0) => {
 export default function getCountiesFromData(
   reports: IDataFile["reports"],
   regions: IDataFile["regions"],
-  reportKey: string
+  reportKey: string,
 ): Array<Counties> {
   const reportData = reports[reportKey];
 
@@ -58,26 +58,26 @@ export default function getCountiesFromData(
           }
           case COMBO: {
             const aKeys = Object.keys(associations).filter((key) =>
-              reportData.keys.includes(key)
+              reportData.keys.includes(key),
             );
 
             return {
               name,
               courses: aKeys.reduce(
                 (sum, a) => sum + associations[a].courses,
-                0
+                0,
               ),
               participants: aKeys.reduce(
                 (sum, a) =>
                   sum +
                   associations[a].participants.males +
                   associations[a].participants.females,
-                0
+                0,
               ),
               hours: aKeys.reduce((sum, a) => sum + associations[a].hours, 0),
               coursesPerCapita: perCapita(
                 aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
-                population
+                population,
               ),
               isCurrent: false,
             };
@@ -93,12 +93,12 @@ export default function getCountiesFromData(
               isCurrent: municipalities.every(
                 (m) =>
                   "municipalities" in reportData &&
-                  reportData.municipalities.includes(m)
+                  reportData.municipalities.includes(m),
               ),
             };
           }
         }
-      }
+      },
     )
     .sort((a, b) => Number(b.coursesPerCapita) - Number(a.coursesPerCapita));
 }
