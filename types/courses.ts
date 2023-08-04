@@ -39,7 +39,6 @@ export interface IndexedCourseItem {
   organizationCode: string;
   organizerIndex: number;
   participants?: number;
-  reportSchema: boolean;
   startDate: string;
   status: CourseStatus;
   title: string;
@@ -70,6 +69,6 @@ export interface ITenantData {
   organizationParams: Array<string>;
   organizations: Array<string>;
   organizers: Array<string>;
-  reportSchema: string;
+  reportSchema?: string;
   useTitleColumn?: boolean;
 }

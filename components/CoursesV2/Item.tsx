@@ -1,3 +1,5 @@
+import { CourseStatus } from "types/courses";
+
 import { ExtendedICourseItem } from "./constants";
 import ExportSchema from "./ExportSchema";
 
@@ -24,7 +26,7 @@ const Item = ({ course, reportSchema }: ItemProps) => {
         <dt className="text-xs font-bold mt-2 opacity-60">Studieplan</dt>
         <dd>{course.curriculum}</dd>
       </dl>
-      {course.reportSchema && reportSchema && (
+      {reportSchema && course.status === CourseStatus.PLANNED && (
         <div className="mt-4">
           <ExportSchema reportSchema={reportSchema} course={course} />
         </div>

@@ -80,26 +80,26 @@ const getData = async (tenant, year, adapter) => {
       // Index organizationCode
       organizations[Number(organizationCode)] = smartCase(organizationName);
       organizationCodes.add(organizationCode);
-    }
+    },
   );
 
   // Sort curriculums alphabetically
   const sortedCurriculumIds = Object.keys(curriculumIds).sort((a, b) =>
-    curriculumIds[a].localeCompare(curriculumIds[b], "nb")
+    curriculumIds[a].localeCompare(curriculumIds[b], "nb"),
   );
   const curriculums = sortedCurriculumIds.map((key) =>
-    String(curriculumIds[key])
+    String(curriculumIds[key]),
   );
 
   // Sort organizers alphabetically
   const sortedOrganizerIds = Object.keys(organizerIds).sort((a, b) =>
-    organizerIds[a].localeCompare(organizerIds[b], "nb")
+    organizerIds[a].localeCompare(organizerIds[b], "nb"),
   );
   const organizers = sortedOrganizerIds.map((key) => String(organizerIds[key]));
 
   // Sort organizations alphabetically
   const organizationParams = Array.from(organizationCodes).sort((a, b) =>
-    organizations[Number(a)].localeCompare(organizations[Number(b)], "nb")
+    organizations[Number(a)].localeCompare(organizations[Number(b)], "nb"),
   );
 
   /** @type {Array<import("../types/courses").IndexedCourseItem>} */
@@ -129,7 +129,7 @@ const getData = async (tenant, year, adapter) => {
     const filterKeys = ["endDate", "endYear", "grant"];
 
     const optionalProps = Object.fromEntries(
-      Object.entries(item).filter(([key]) => filterKeys.includes(key))
+      Object.entries(item).filter(([key]) => filterKeys.includes(key)),
     );
 
     return {
@@ -144,7 +144,6 @@ const getData = async (tenant, year, adapter) => {
       participants: useAllParticipants
         ? item.participantsAll
         : item.participants,
-      reportSchema: reportSchema && item.status === CourseStatuses.PLANNED,
       startDate: item.startDate,
       status: item.status,
       title: item.title,
@@ -195,8 +194,8 @@ async function fetchTask({ tenant, year }, adapter, force) {
           chalk.blue(tenant.name) +
           " (" +
           chalk.blue(year) +
-          ")], hopper over."
-      )
+          ")], hopper over.",
+      ),
     );
   } else {
     const loopJobName = chalk.green(
@@ -204,14 +203,14 @@ async function fetchTask({ tenant, year }, adapter, force) {
         chalk.blue(tenant.name) +
         " (" +
         chalk.blue(year) +
-        ")]"
+        ")]",
     );
     console.time(loopJobName);
 
     console.log(
       `=> Henter data for [${chalk.blue(tenant.name)} (${chalk.blue(
-        year
-      )})] fra [${chalk.blue(adapter)}]...`
+        year,
+      )})] fra [${chalk.blue(adapter)}]...`,
     );
 
     const data = await getData(tenant, year, adapter);
