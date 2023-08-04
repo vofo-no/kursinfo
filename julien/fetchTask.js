@@ -54,8 +54,13 @@ const getData = async (tenant, year, adapter) => {
   const counties = countyData.map(({ region }) => region);
   const countyParams = countyData.map(({ param }) => param);
 
+  /**
+   *
+   * @param {number} locationCode 3-4 digits municipality code
+   * @returns {number} index for county in countyData, -1 otherwise
+   */
   const getCountyIndex = (locationCode) => {
-    if (isNaN(locationCode)) return null;
+    if (isNaN(locationCode)) return -1;
     const countyCode = Math.floor(locationCode / 100);
     return countyData.findIndex(({ keys }) => keys.has(countyCode));
   };
