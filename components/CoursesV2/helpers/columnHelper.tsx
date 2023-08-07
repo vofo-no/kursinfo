@@ -137,16 +137,11 @@ function PlannedNum({
 }): JSX.Element {
   return (
     <>
-      <span>{intl.formatNumber(value, { maximumFractionDigits: 0 })}</span>
-      <style jsx>{`
-        span:before {
-          content: "${prefix}";
-        }
-        span:after {
-          content: ")";
-          position: absolute;
-        }
-      `}</style>
+      <span
+        className={`before:content-['${prefix}'] after:content-[')'] after:absolute`}
+      >
+        {intl.formatNumber(value, { maximumFractionDigits: 0 })}
+      </span>
     </>
   );
 }
