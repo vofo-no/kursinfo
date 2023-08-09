@@ -1,5 +1,5 @@
+import intl from "lib/intl";
 import { Clock, Layers, Map, Share2, UserCheck, Users } from "react-feather";
-import { FormattedNumber } from "react-intl";
 import { SummaryProps } from "types/reports";
 
 import Card from "./Card";
@@ -16,23 +16,22 @@ const Summary = ({
   <>
     <div className="grid grid-cols-2 tablet:grid-cols-3 gap-6 gap-y-10 my-12">
       <Card Icon={Layers} label="kurs">
-        <FormattedNumber value={courses} />
+        {intl.formatNumber(courses)}
       </Card>
       <Card Icon={UserCheck} label="tilrettelagte kurs">
-        <FormattedNumber
-          style="percent"
-          minimumFractionDigits={0}
-          value={facilitatedCourses / courses}
-        />
+        {intl.formatNumber(facilitatedCourses / courses, {
+          style: "percent",
+          minimumFractionDigits: 0,
+        })}
       </Card>
       <Card Icon={Users} label="deltakere">
-        <FormattedNumber value={participants} />
+        {intl.formatNumber(participants)}
       </Card>
       <Card Icon={Clock} label="kurstimer">
-        <FormattedNumber value={hours} />
+        {intl.formatNumber(hours)}
       </Card>
       <Card Icon={Share2} label="frivillige og ideelle organisasjoner">
-        <FormattedNumber value={organizations} />
+        {intl.formatNumber(organizations)}
       </Card>
       <Card Icon={Map} label="kommuner med kursvirksomhet">
         <>

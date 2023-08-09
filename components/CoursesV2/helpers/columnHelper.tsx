@@ -1,4 +1,5 @@
 import { CellContext, createColumnHelper } from "@tanstack/react-table";
+import classNames from "classnames";
 import intl from "lib/intl";
 import React from "react";
 import { CourseStatus, IndexedCourseItem } from "types/courses";
@@ -133,12 +134,18 @@ function PlannedNum({
   prefix = "(",
 }: {
   value: number;
-  prefix?: string;
+  prefix?: "(" | "(+";
 }): JSX.Element {
   return (
     <>
       <span
-        className={`before:content-['${prefix}'] after:content-[')'] after:absolute`}
+        className={classNames(
+          {
+            "before:content-['(']": prefix === "(",
+            "before:content-['(+']": prefix === "(+",
+          },
+          "after:content-[')'] after:absolute",
+        )}
       >
         {intl.formatNumber(value, { maximumFractionDigits: 0 })}
       </span>

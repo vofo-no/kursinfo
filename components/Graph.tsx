@@ -1,8 +1,10 @@
+"use client";
+
 import merge from "deepmerge";
 import Highcharts from "highcharts";
 import HCSeriesLabel from "highcharts/modules/series-label";
 import HighchartsReact from "highcharts-react-official";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 if (typeof Highcharts === "object") {
   HCSeriesLabel(Highcharts);
@@ -35,10 +37,15 @@ function Graph({
       options,
     ),
   );
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
   return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 }
 
-export const initialize = (): void => {
+const initialize = (): void => {
   const beforePrint = function () {
     Highcharts.charts.forEach((chart) => {
       if (chart) {

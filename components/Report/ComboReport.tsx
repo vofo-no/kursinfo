@@ -1,6 +1,3 @@
-import { initialize as initializeGraphs } from "components/Graph";
-import Layout from "components/Layout";
-import { useEffect } from "react";
 import { ComboReportProps } from "types/reports";
 
 import Associations from "./Associations";
@@ -26,11 +23,8 @@ const ComboReport = ({
   participantsHistogramSums,
   type,
 }: ComboReportProps) => {
-  useEffect(() => {
-    initializeGraphs();
-  }, []);
   return (
-    <Layout title={`${name}: Kursstatistikk ${year}`}>
+    <>
       <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
@@ -55,7 +49,7 @@ const ComboReport = ({
         courses={summary.courses}
       />
       <Municipalities items={municipalities} year={year} name={name} />
-    </Layout>
+    </>
   );
 };
 

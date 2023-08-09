@@ -1,4 +1,4 @@
-import { FormattedNumber } from "react-intl";
+import intl from "lib/intl";
 
 import ReportPage from "../ReportPage";
 import Table, { TableRow } from "../Table";
@@ -54,15 +54,15 @@ const Counties = ({
             i,
           ) => (
             <TableRow key={name} highlight={isCurrent} index={i} title={name}>
-              <FormattedNumber key="courses" value={courses} />
-              <FormattedNumber key="hours" value={hours} />
-              <FormattedNumber key="participants" value={participants} />
-              <FormattedNumber
-                key="perCapita"
-                value={coursesPerCapita * 1000}
-                minimumFractionDigits={1}
-                maximumFractionDigits={1}
-              />
+              <span key="courses">{intl.formatNumber(courses)}</span>
+              <span key="hours">{intl.formatNumber(hours)}</span>
+              <span key="participants">{intl.formatNumber(participants)}</span>
+              <span key="perCapita">
+                {intl.formatNumber(coursesPerCapita * 1000, {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+              </span>
             </TableRow>
           ),
         )}

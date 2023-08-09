@@ -1,28 +1,22 @@
 import WhiteBox from "components/Containers/WhiteBox";
 import GridLinks from "components/GridLinks";
-import { GetStaticProps } from "next";
+import dataIndex from "data/index.json";
+import { Metadata } from "next";
 import Image from "next/image";
-import { FC } from "react";
 
-import Layout from "../components/Layout";
-import dataIndex from "../data/index.json";
-import illustration from "../public/undraw_upgrade_re_gano.svg";
+import illustration from "../../public/undraw_upgrade_re_gano.svg";
 
-interface IndexProps {
-  years: Array<string>;
-}
-
-export const getStaticProps: GetStaticProps<IndexProps> = async () => {
-  return {
-    props: {
-      years: dataIndex.years,
-    },
-  };
+export const metadata: Metadata = {
+  title: "Statistikk",
+  description:
+    "Her finner du Vofos nasjonale og regionale statistikkrapporter om studieforbundenes kursvirksomhet.",
 };
 
-const Index: FC<IndexProps> = ({ years }) => {
+export default function Page() {
+  const years = dataIndex.years;
+
   return (
-    <Layout title={`Statistikk`} header>
+    <>
       <WhiteBox>
         <div className="prose">
           <h1 className="text-4xl mb-0">Statistikk</h1>
@@ -50,8 +44,6 @@ const Index: FC<IndexProps> = ({ years }) => {
         </div>
       </WhiteBox>
       <GridLinks items={years.map((year) => [`/${year}`, year])} />
-    </Layout>
+    </>
   );
-};
-
-export default Index;
+}
