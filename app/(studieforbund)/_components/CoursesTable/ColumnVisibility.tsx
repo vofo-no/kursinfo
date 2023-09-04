@@ -5,7 +5,7 @@ import AlertDialog from "components/AlertDialog";
 import { useState } from "react";
 import { Settings as SettingsIcon } from "react-feather";
 
-import { getColumnName } from "./helpers/getColumnName";
+import { getColumnName } from "../../_helpers/getColumnName";
 
 interface ColumnVisibilityProps {
   columns: Column<any, unknown>[];

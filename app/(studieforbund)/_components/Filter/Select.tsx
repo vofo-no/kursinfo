@@ -3,7 +3,7 @@
 import getHref from "app/(studieforbund)/_helpers/getHref";
 import injectDefaultParams from "app/(studieforbund)/_helpers/injectDefaultParams";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { ChangeEvent, useCallback, useEffect } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { CoursesParams } from "types/courses";
 
 interface SelectProps {

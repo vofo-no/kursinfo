@@ -23,7 +23,10 @@
       "name": "Studieforbundet Funkis",
       "adapter": "eapply",
       "dataTarget": "2508",
-      "config": { "showFacilitationGrants": true }
+      "config": {
+        "showFacilitationGrants": true,
+        "showGrantsSpecifications": true
+      }
     },
     {
       "id": "932CB889-D194-423F-BA3B-D35864282219",

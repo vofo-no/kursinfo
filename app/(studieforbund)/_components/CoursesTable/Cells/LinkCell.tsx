@@ -6,7 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { CoursesParams } from "types/courses";
 
-import getHref from "../../app/(studieforbund)/_helpers/getHref";
+import getHref from "../../../_helpers/getHref";
 
 export default function LinkCell({
   params,

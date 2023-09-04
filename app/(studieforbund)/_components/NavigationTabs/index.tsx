@@ -1,11 +1,11 @@
 "use client";
 
+import { GroupType } from "app/(studieforbund)/_components/CoursesTable/constants";
 import getHref from "app/(studieforbund)/_helpers/getHref";
 import injectDefaultParams from "app/(studieforbund)/_helpers/injectDefaultParams";
 import { unsetSpecific } from "app/(studieforbund)/_helpers/unsetSpecific";
-import { GroupType } from "components/CoursesV2/constants";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 export const tabs: GroupType[] = [
   "organisasjoner",

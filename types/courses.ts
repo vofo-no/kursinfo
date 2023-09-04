@@ -1,7 +1,7 @@
 import { CourseStatuses } from "julien/constants";
 import { ParsedUrlQuery } from "querystring";
 
-import { GroupType } from "../components/CoursesV2/constants";
+import { GroupType } from "../app/(studieforbund)/_components/CoursesTable/constants";
 
 export interface Course {
   curriculumCode?: string;
@@ -71,4 +71,6 @@ export interface ITenantData {
   organizers: Array<string>;
   reportSchema?: string;
   useTitleColumn?: boolean;
+  showFacilitationGrants?: boolean;
+  showGrantsSpecifications?: boolean;
 }

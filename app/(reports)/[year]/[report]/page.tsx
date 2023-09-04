@@ -1,19 +1,10 @@
-import WhiteBox from "components/Containers/WhiteBox";
-import ListLinkItem from "components/ListLinkItem";
 import Report from "components/Report";
 import getReportStaticData from "components/Report/getReportStaticData";
 import dataIndex from "data/index.json";
 import fs from "fs";
 import { Metadata } from "next";
-import Link from "next/link";
 import path from "path";
-import {
-  ASSOCIATION,
-  COMBO,
-  GLOBAL,
-  REGION,
-  ReportPropsType,
-} from "types/reports";
+import { ReportPropsType } from "types/reports";
 
 interface PageProps {
   params: {

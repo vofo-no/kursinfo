@@ -3,7 +3,7 @@ import React from "react";
 import { ChevronDown, ChevronRight } from "react-feather";
 import { IndexedCourseItem } from "types/courses";
 
-import LinkCell from "../LinkCell";
+import LinkCell from "./LinkCell";
 
 export function cellRender(
   cell: Cell<IndexedCourseItem, unknown>,

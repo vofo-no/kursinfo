@@ -1,4 +1,4 @@
-import { GROUPS } from "components/CoursesV2/constants";
+import { GROUPS } from "app/(studieforbund)/_components/CoursesTable/constants";
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,

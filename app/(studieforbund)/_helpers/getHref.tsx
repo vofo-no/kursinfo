@@ -6,7 +6,6 @@ export default function getHref(
   prefix: string,
   oldParams: StudieforbundParams,
   newParams: Partial<StudieforbundParams>,
-  page: string | number | undefined = undefined,
 ): string {
   if (!newParams.group) {
     if (

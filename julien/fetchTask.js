@@ -39,6 +39,7 @@ const getData = async (tenant, year, adapter) => {
     hidePlannedGrants,
     reportSchema,
     showFacilitationGrants,
+    showGrantsSpecifications,
     useAllParticipants,
     useTitleColumn,
   } = getConfig(tenant.config);
@@ -166,6 +167,8 @@ const getData = async (tenant, year, adapter) => {
     items,
     reportSchema,
     useTitleColumn,
+    showFacilitationGrants,
+    showGrantsSpecifications,
   };
 };
 
