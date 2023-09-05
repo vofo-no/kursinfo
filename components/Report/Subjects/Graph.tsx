@@ -17,7 +17,7 @@ const Graph = ({ year, ages }: SubjectsGraphProps) => {
       height: 300,
     },
     yAxis: {
-      title: undefined,
+      title: { text: null },
       endOnTick: false,
     },
     xAxis: {
