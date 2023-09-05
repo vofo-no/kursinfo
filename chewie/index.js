@@ -45,11 +45,11 @@ async function main() {
       makeName = (name) => String(name),
       makeParam = luke.parameterize,
       municipalityKeys = [],
-    } = {}
+    } = {},
   ) => {
     const dataSet = data.filter(datafilter);
     const dataSetHistory = dataHistory.map((dataHistoryYear) =>
-      dataHistoryYear.filter(datafilter)
+      dataHistoryYear.filter(datafilter),
     );
 
     const assocSummary = han.associationSummer(dataSet, dataSetHistory[0]);
@@ -66,7 +66,7 @@ async function main() {
       participants: han.participantsWithHistory([dataSet, ...dataSetHistory]),
       municipalityValues: han.getCompactMunicipalityData(
         dataSet,
-        municipalities
+        municipalities,
       ),
       organizations: han.countOrganizations(dataSet),
       associations: config.associations.reduce((obj, key) => {
@@ -78,7 +78,7 @@ async function main() {
       mainSubjects: han.mainSubjectSums(dataSet),
       participantsHistogram: han.participantsHistogram(
         dataSet,
-        dataSetHistory[0]
+        dataSetHistory[0],
       ),
       participantsHistogramSums: han.participantsHistogramSums(dataSet),
     };
@@ -93,7 +93,7 @@ async function main() {
           municipalities: municipalityKeys,
           population: municipalityKeys.reduce(
             (acc, key) => acc + municipalities[key].pop,
-            0
+            0,
           ),
           historicalAll: han.historical([data, ...dataHistory]),
         });
@@ -103,9 +103,9 @@ async function main() {
         const orgs = Array.from(
           new Set(
             [...dataSet, ...(dataSetHistory[0] || [])].map(
-              (row) => row[han.COL.ORGANIZATION]
-            )
-          )
+              (row) => row[han.COL.ORGANIZATION],
+            ),
+          ),
         );
 
         r2.setAssociationReport(paramName, {
@@ -148,7 +148,8 @@ async function main() {
 
   const makeRegStat = (k) => {
     const ks = config.regions[k];
-    const ksFilter = (value) => ks.includes(Math.floor(value / 100));
+    const ksFilter = (value) =>
+      ks.includes(Math.floor(value / 100)) || ks.includes(Number(value));
     const ksRowFilter = (row) => ksFilter(row[han.COL.MUNICIPALITY]);
     const municipalityKeys = Object.keys(municipalities).filter(ksFilter);
 
