@@ -1,4 +1,4 @@
-import { Logo } from "@vofo-no/ui";
+import { Logo } from "components/Logo";
 import Link from "next/link";
 import React from "react";
 

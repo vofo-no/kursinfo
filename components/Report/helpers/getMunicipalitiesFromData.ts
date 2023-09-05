@@ -10,7 +10,7 @@ const noValues: CompactValues = [0, 0, 0, 0];
 export default function getMunicipalitiesFromData(
   municipalities: IDataFile["municipalities"],
   municipalityKeys: Array<string>,
-  municipalityValues: IReportBase["municipalityValues"]
+  municipalityValues: IReportBase["municipalityValues"],
 ): Array<ReportMunicipality> {
   return municipalityKeys
     .map((key) => ({

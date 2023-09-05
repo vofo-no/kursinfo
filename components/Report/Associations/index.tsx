@@ -1,5 +1,5 @@
 import { showName } from "components/names";
-import { FormattedNumber } from "react-intl";
+import intl from "lib/intl";
 import { Organization } from "types/reports";
 
 import GraphOrgs from "../GraphOrgs";
@@ -23,12 +23,11 @@ const Associations = ({ items, year, name }: PropTypes) => {
         {items.map(({ courses, participants, hours, key, ...rest }, i) => {
           return (
             <TableRow key={key} index={i} title={showName(rest)}>
-              <FormattedNumber key="courses" value={courses} />
-              <FormattedNumber key="hours" value={hours} />
-              <FormattedNumber
-                key="participants"
-                value={participants.males + participants.females}
-              />
+              <span key="courses">{intl.formatNumber(courses)}</span>
+              <span key="hours">{intl.formatNumber(hours)}</span>
+              <span key="participants">
+                {intl.formatNumber(participants.males + participants.females)}
+              </span>
             </TableRow>
           );
         })}

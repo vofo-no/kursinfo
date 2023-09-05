@@ -27,7 +27,7 @@ yargs(hideBin(process.argv))
         choices: allTargets,
       });
     },
-    fetchCommand
+    fetchCommand,
   )
   .option("a", {
     alias: "adapter",
@@ -51,21 +51,21 @@ yargs(hideBin(process.argv))
 async function fetchCommand(argv) {
   try {
     const programExecutionTimer = chalk.green(
-      "✅ By the power vested in me, by the law of the jungle, blah, blah, blah, blah... Be gone!"
+      "✅ By the power vested in me, by the law of the jungle, blah, blah, blah, blah... Be gone!",
     );
     console.time(programExecutionTimer);
 
     console.log(
       chalk.blueBright(
-        "🥥 [robot voice] I am very clever king... tok tok tok tok... I am super genius... I am robot king of the monkey thing... compute... compute."
-      )
+        "🥥 [robot voice] I am very clever king... tok tok tok tok... I am super genius... I am robot king of the monkey thing... compute... compute.",
+      ),
     );
 
     const tasks = [];
 
     argv.sf.map((sf) => {
       const tenant = settings.tenants.find(
-        (tenant) => tenant.dataTarget === sf
+        (tenant) => tenant.dataTarget === sf,
       );
 
       argv.years.map((year) => tasks.push({ tenant, year }));

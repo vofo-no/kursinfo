@@ -17,7 +17,7 @@ const Graph = ({ year, ages }: SubjectsGraphProps) => {
       height: 300,
     },
     yAxis: {
-      title: undefined,
+      title: { text: null },
       endOnTick: false,
     },
     xAxis: {
@@ -25,7 +25,7 @@ const Graph = ({ year, ages }: SubjectsGraphProps) => {
         rangeDescription: `Årstall fra ${startYear} til ${year}`,
       },
       categories: Array(year - startYear + 1).map((_, i) =>
-        String(startYear + i)
+        String(startYear + i),
       ),
     },
     legend: {

@@ -24,7 +24,7 @@ const Graph: FC<PropTypes> = ({ items, year, unit }) => {
     },
     yAxis: {
       min: 0,
-      title: undefined,
+      title: { text: null },
       endOnTick: false,
     },
     legend: {

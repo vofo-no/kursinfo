@@ -1,6 +1,5 @@
 import associationNames from "data/names/associations.json";
 import fs from "fs";
-import { GetStaticPropsResult } from "next";
 import path from "path";
 import {
   ASSOCIATION,
@@ -31,15 +30,15 @@ function getAssociationName(key: string): INamed {
 }
 
 function recordToArray<T>(
-  records: Record<string, T>
+  records: Record<string, T>,
 ): Array<T & { key: string }> {
   return Object.keys(records).map((key) => ({ ...records[key], key }));
 }
 
-export const getReportStaticData = async ({
+export function getReportStaticData({
   year,
   report,
-}: ReportParams): Promise<GetStaticPropsResult<ReportPropsType>> => {
+}: ReportParams): ReportPropsType {
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data: IDataFile = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];
@@ -55,12 +54,12 @@ export const getReportStaticData = async ({
   const municipalities = getMunicipalitiesFromData(
     data.municipalities,
     municipalityKeys,
-    reportData.municipalityValues
+    reportData.municipalityValues,
   );
 
   const topSubjects = getTopSubjectsFromData(
     reportData.subjects,
-    reportData.topSubjects
+    reportData.topSubjects,
   );
 
   const associations = recordToArray(reportData.associations)
@@ -107,7 +106,7 @@ export const getReportStaticData = async ({
         })),
         historicalAll: reportData.historicalAll,
       };
-      return { props };
+      return props;
     }
     case ASSOCIATION: {
       const props: AssociationReportProps = {
@@ -116,11 +115,11 @@ export const getReportStaticData = async ({
         organizations: getNamedOrganizationsFromData(
           reportData.key,
           Number(year),
-          associations
+          associations,
         ),
         historicalAll: reportData.historicalAll,
       };
-      return { props };
+      return props;
     }
     case COMBO: {
       const props: ComboReportProps = {
@@ -132,7 +131,7 @@ export const getReportStaticData = async ({
         })),
         historicalAll: reportData.historicalAll,
       };
-      return { props };
+      return props;
     }
     case GLOBAL: {
       const props: GlobalReportProps = {
@@ -143,9 +142,9 @@ export const getReportStaticData = async ({
           ...getAssociationName(item.key),
         })),
       };
-      return { props };
+      return props;
     }
   }
-};
+}
 
 export default getReportStaticData;

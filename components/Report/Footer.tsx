@@ -1,4 +1,4 @@
-import { Logo } from "@vofo-no/ui";
+import { Logo } from "components/Logo";
 
 const PageFooter = () => (
   <div className="mt-auto pt-6 flex flex-col items-center">

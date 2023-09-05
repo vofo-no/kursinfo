@@ -1,7 +1,7 @@
 import { CourseStatuses } from "julien/constants";
 import { ParsedUrlQuery } from "querystring";
 
-import { GroupType } from "../components/Courses/constants";
+import { GroupType } from "../app/(studieforbund)/_components/CoursesTable/constants";
 
 export interface Course {
   curriculumCode?: string;
@@ -39,7 +39,6 @@ export interface IndexedCourseItem {
   organizationCode: string;
   organizerIndex: number;
   participants?: number;
-  reportSchema: boolean;
   startDate: string;
   status: CourseStatus;
   title: string;
@@ -70,6 +69,8 @@ export interface ITenantData {
   organizationParams: Array<string>;
   organizations: Array<string>;
   organizers: Array<string>;
-  reportSchema: string;
+  reportSchema?: string;
   useTitleColumn?: boolean;
+  showFacilitationGrants?: boolean;
+  showGrantsSpecifications?: boolean;
 }

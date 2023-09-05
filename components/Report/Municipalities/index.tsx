@@ -1,5 +1,7 @@
+"use client";
+
+import intl from "lib/intl";
 import { useState } from "react";
-import { FormattedNumber } from "react-intl";
 import { ReportMunicipality } from "types/reports";
 
 import ReportPage from "../ReportPage";
@@ -44,15 +46,15 @@ const Municipalities = ({
           ] = values;
           return (
             <TableRow key={name} title={name} index={i}>
-              <FormattedNumber key="courses" value={courses} />
-              <FormattedNumber key="hours" value={hours} />
-              <FormattedNumber key="participants" value={participants} />
-              <FormattedNumber
-                key="perCapita"
-                value={coursesPerCapita * 1000}
-                minimumFractionDigits={1}
-                maximumFractionDigits={1}
-              />
+              <span key="courses">{intl.formatNumber(courses)}</span>
+              <span key="hours">{intl.formatNumber(hours)}</span>
+              <span key="participants">{intl.formatNumber(participants)}</span>
+              <span key="perCapita">
+                {intl.formatNumber(coursesPerCapita * 1000, {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })}
+              </span>
             </TableRow>
           );
         })}

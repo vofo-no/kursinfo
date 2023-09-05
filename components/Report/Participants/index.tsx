@@ -1,4 +1,4 @@
-import { FormattedNumber } from "react-intl";
+import intl from "lib/intl";
 import { ParticipantsHistogramType } from "types/reports";
 
 import ReportPage from "../ReportPage";
@@ -54,14 +54,13 @@ const Participants = ({
               kurs.{" "}
               <span className="whitespace-nowrap">
                 <strong>
-                  <FormattedNumber value={participantsHistogram[0][0]} /> kurs
+                  {intl.formatNumber(participantsHistogram[0][0])} kurs
                 </strong>{" "}
                 (
-                <FormattedNumber
-                  style="percent"
-                  minimumFractionDigits={0}
-                  value={participantsHistogram[0][0] / courses}
-                />
+                {intl.formatNumber(participantsHistogram[0][0] / courses, {
+                  style: "percent",
+                  minimumFractionDigits: 0,
+                })}
                 )
               </span>{" "}
               har fått dispensasjon fra kravet om minste antall deltakere.

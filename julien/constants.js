@@ -7,6 +7,7 @@ const configDefaults = {
   hideExtraGrants: false,
   hidePlannedGrants: false,
   showFacilitationGrants: false,
+  showGrantsSpecifications: false,
   useAllParticipants: false,
   useTitleColumn: false,
 };
@@ -17,6 +18,7 @@ const configDefaults = {
  * @property {boolean} hidePlannedGrants
  * @property {string} [reportSchema]
  * @property {boolean} showFacilitationGrants
+ * @property {boolean} showGrantsSpecifications
  * @property {boolean} useAllParticipants
  * @property {boolean} useTitleColumn
  */

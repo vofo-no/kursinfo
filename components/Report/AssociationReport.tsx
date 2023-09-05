@@ -1,6 +1,3 @@
-import { initialize as initializeGraphs } from "components/Graph";
-import Layout from "components/Layout";
-import { useEffect } from "react";
 import { AssociationReportProps } from "types/reports";
 
 import Counties from "./Counties";
@@ -26,12 +23,8 @@ const AssociationReport = ({
   participantsHistogramSums,
   type,
 }: AssociationReportProps) => {
-  useEffect(() => {
-    initializeGraphs();
-  }, []);
-
   return (
-    <Layout title={`${name}: Studieforbundstatistikk ${year}`}>
+    <>
       <FrontPage name={name} year={year} type={type} summary={summary} />
       <Counties
         counties={counties}
@@ -56,7 +49,7 @@ const AssociationReport = ({
         courses={summary.courses}
       />
       <Municipalities items={municipalities} year={year} name={name} />
-    </Layout>
+    </>
   );
 };
 
