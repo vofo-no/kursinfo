@@ -1,5 +1,5 @@
 {
-  "2022": {
+  "2020": {
     "futureRegions": [
       "Akershus",
       "Buskerud",
@@ -45,32 +45,6 @@
         31, 1, 3001, 3002, 3003, 3004, 3011, 3017, 3018, 3015, 3014, 3016, 3013,
         3012
       ],
-      "Viken": [30, 1, 2, 6]
-    },
-    "combos": {
-      "KD-studieforbund": [2501, 2503, 2538, 2545],
-      "KUD-studieforbund": [
-        2504, 2508, 2510, 2521, 2525, 2534, 2535, 2536, 2539, 2542
-      ]
-    },
-    "associations": [
-      2501, 2503, 2504, 2508, 2510, 2521, 2525, 2534, 2535, 2536, 2538, 2539,
-      2542, 2545
-    ]
-  },
-  "2020": {
-    "futureRegions": [],
-    "regions": {
-      "Troms og Finnmark": [19, 20, 21, 54],
-      "Nordland": [18],
-      "Trøndelag": [16, 17, 50],
-      "Møre og Romsdal": [15],
-      "Vestland": [12, 14, 46],
-      "Rogaland": [11],
-      "Agder": [9, 10, 42],
-      "Vestfold og Telemark": [7, 8, 38],
-      "Innlandet": [4, 5, 34],
-      "Oslo": [3],
       "Viken": [30, 1, 2, 6]
     },
     "combos": {
