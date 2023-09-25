@@ -57,6 +57,9 @@ async function main() {
     const subjectSums = han.subjectSums(dataSet);
 
     const paramName = makeParam(key);
+
+    const addParticipantHistogram = Number(year) >= 2021;
+
     const reportData = {
       name: makeName(key),
       courses: dataSet.length,
@@ -76,11 +79,12 @@ async function main() {
       subjects: subjectSums,
       topSubjects: han.topAges(subjectSums),
       mainSubjects: han.mainSubjectSums(dataSet),
-      participantsHistogram: han.participantsHistogram(
-        dataSet,
-        dataSetHistory[0],
-      ),
-      participantsHistogramSums: han.participantsHistogramSums(dataSet),
+      participantsHistogram: addParticipantHistogram
+        ? han.participantsHistogram(dataSet, dataSetHistory[0])
+        : undefined,
+      participantsHistogramSums: addParticipantHistogram
+        ? han.participantsHistogramSums(dataSet)
+        : undefined,
     };
 
     switch (type) {
