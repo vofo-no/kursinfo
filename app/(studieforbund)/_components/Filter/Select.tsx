@@ -1,7 +1,7 @@
 "use client";
 
 import getHref from "app/(studieforbund)/_helpers/getHref";
-import injectDefaultParams from "app/(studieforbund)/_helpers/injectDefaultParams";
+import { StudieforbundParams } from "app/(studieforbund)/types";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useCallback } from "react";
 import { CoursesParams } from "types/courses";
@@ -18,8 +18,8 @@ export default function Select({
   propName,
   ...props
 }: SelectProps) {
+  const params = useParams<StudieforbundParams>();
   const prefix = usePathname()?.split("/", 2)[1] || "";
-  const params = injectDefaultParams(useParams());
   const router = useRouter();
 
   const handleChange = useCallback(

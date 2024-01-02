@@ -1,13 +1,11 @@
+import { StudieforbundParams } from "app/(studieforbund)/types";
 import { Suspense } from "react";
 
 import CoursesTableSkeleton from "./CoursesTableSkeleton";
 import CoursesTableWrapper from "./CoursesTableWrapper";
 
 interface Props {
-  year: string;
-  county: string;
-  group: string;
-  organization: string;
+  params: StudieforbundParams;
   tenant: string;
 }
 

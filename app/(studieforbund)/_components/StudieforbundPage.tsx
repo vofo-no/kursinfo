@@ -3,7 +3,6 @@ import WhiteBox from "components/Containers/WhiteBox";
 import PageHeading from "components/PageHeading";
 import { Suspense } from "react";
 
-import injectDefaultParams from "../_helpers/injectDefaultParams";
 import { makeTitle } from "../_helpers/makeTitle";
 import { StudieforbundParams } from "../types";
 import BuildTime from "./BuildTime";
@@ -19,9 +18,9 @@ export function StudieforbundGenerateMetadata({
   return async function generateMetadata({
     params,
   }: {
-    params: Partial<StudieforbundParams>;
+    params: StudieforbundParams;
   }) {
-    const { year, county } = injectDefaultParams(params);
+    const { year, county } = params;
     {
       const title = makeTitle(year, county);
 
@@ -33,13 +32,8 @@ export function StudieforbundGenerateMetadata({
 }
 
 export function StudieforbundPage({ tenant }: { tenant: string }) {
-  return async function Page({
-    params,
-  }: {
-    params: Partial<StudieforbundParams>;
-  }) {
-    const { year, county, group, organization } = injectDefaultParams(params);
-    const title = makeTitle(year, county);
+  return async function Page({ params }: { params: StudieforbundParams }) {
+    const title = makeTitle(params.year, params.county);
 
     return (
       <Container noPadding>
@@ -47,21 +41,10 @@ export function StudieforbundPage({ tenant }: { tenant: string }) {
           <div className="overflow-x-auto print:overflow-x-visible relative">
             <Container>
               <PageHeading>{title}</PageHeading>
-              <Filter
-                year={year}
-                county={county}
-                organization={organization}
-                tenant={tenant}
-              />
+              <Filter params={params} tenant={tenant} />
               <NavigationTabs />
               <div className="relative">
-                <CoursesTableWrapper
-                  year={year}
-                  county={county}
-                  group={group}
-                  organization={organization}
-                  tenant={tenant}
-                />
+                <CoursesTableWrapper params={params} tenant={tenant} />
               </div>
             </Container>
           </div>
@@ -72,7 +55,7 @@ export function StudieforbundPage({ tenant }: { tenant: string }) {
               <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
             }
           >
-            <BuildTime tenant={tenant} year={year} />
+            <BuildTime tenant={tenant} year={params.year} />
           </Suspense>
         </div>
       </Container>

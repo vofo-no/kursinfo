@@ -1,9 +1,9 @@
 "use client";
 
 import getHref from "app/(studieforbund)/_helpers/getHref";
-import injectDefaultParams from "app/(studieforbund)/_helpers/injectDefaultParams";
 import { isDefaultCounty } from "app/(studieforbund)/_helpers/isDefaultCounty";
 import { isDefaultOrganization } from "app/(studieforbund)/_helpers/isDefaultOrganization";
+import { StudieforbundParams } from "app/(studieforbund)/types";
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
@@ -13,7 +13,7 @@ import { useParams, usePathname } from "next/navigation";
 import { AlertTriangle } from "react-feather";
 
 export default function CoursesTableEmpty() {
-  const params = injectDefaultParams(useParams());
+  const params = useParams<StudieforbundParams>();
   const prefix = usePathname()?.split("/")[1] || "";
 
   return (

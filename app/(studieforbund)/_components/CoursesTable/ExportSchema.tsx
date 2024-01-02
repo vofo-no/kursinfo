@@ -26,7 +26,7 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
         const { Workbook } = await import("exceljs");
         const wbBase = new Workbook();
         wbBase.xlsx.load(buffer).then((wb) => {
-          const ws = wb.getWorksheet("Rapport");
+          const ws = wb.getWorksheet("Rapport")!;
           ws.eachRow((row) => {
             row.eachCell((cell) => {
               switch (cell.value?.toString()) {

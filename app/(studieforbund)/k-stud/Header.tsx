@@ -12,7 +12,6 @@ function KstudHeader() {
           <Image
             width={155}
             height={48}
-            layout="intrinsic"
             src="/KstudLogo.png"
             alt="Kristelig studieforbund"
           />

@@ -1,26 +1,23 @@
 import { getTableData } from "app/(studieforbund)/_utils/getTableData";
 import sumTableData from "app/(studieforbund)/_utils/sumTableData";
+import { StudieforbundParams } from "app/(studieforbund)/types";
 import { notFound } from "next/navigation";
 
 import ClientTable from "./ClientTable";
 import CoursesTableEmpty from "./CoursesTableEmpty";
 
 interface Props {
-  year: string;
-  county: string;
-  group: string;
-  organization: string;
+  params: StudieforbundParams;
   tenant: string;
 }
 
-export default async function CoursesTableWrapper({
-  year,
-  county,
-  organization,
-  tenant,
-  group,
-}: Props) {
-  const data = await getTableData(tenant, year, county, organization);
+export default async function CoursesTableWrapper({ params, tenant }: Props) {
+  const data = await getTableData(
+    tenant,
+    params.year,
+    params.county,
+    params.organization,
+  );
 
   if (!data) notFound();
 
@@ -28,5 +25,5 @@ export default async function CoursesTableWrapper({
 
   const sums = sumTableData(data.items);
 
-  return <ClientTable {...data} group={group} sums={sums} />;
+  return <ClientTable {...data} group={params.group} sums={sums} />;
 }
