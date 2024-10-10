@@ -1,0 +1,63 @@
+{
+  "name": "statistikk",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "check-types": "tsc --noEmit",
+    "start": "next start",
+    "chewie": "node chewie",
+    "lint": "next lint",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "maintained node versions"
+  ],
+  "dependencies": {
+    "@formatjs/intl": "^2.10.7",
+    "@formatjs/intl-datetimeformat": "^6.13.0",
+    "@formatjs/intl-numberformat": "^8.11.0",
+    "@headlessui/react": "^1.7.19",
+    "@kursinfo/julien": "workspace:*",
+    "@tanstack/react-table": "^8.20.5",
+    "@vofo-no/ui": "^0.4.0",
+    "abort-controller": "^3.0.0",
+    "async-sema": "^3.1.1",
+    "chalk": "^4.1.2",
+    "classnames": "^2.5.1",
+    "deepmerge": "^4.3.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "highcharts": "^11.4.8",
+    "highcharts-react-official": "^3.2.1",
+    "next": "^14.2.15",
+    "node-fetch": "^2.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-feather": "^2.0.10",
+    "react-intl": "^6.7.2",
+    "react-paginate": "^8.2.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@kursinfo/typescript-config": "workspace:*",
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^18.19.55",
+    "@types/react": "^18.3.11",
+    "@types/react-paginate": "^7.1.4",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
+    "eslint-config-prettier": "^8.10.0",
+    "papaparse": "^5.4.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "latest"
+  }
+}

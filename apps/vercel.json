@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/update?target=2504",
+      "schedule": "4 6,16 * * 1-5"
+    },
+    {
+      "path": "/api/update?target=2508",
+      "schedule": "8 6,16 * * 1-5"
+    },
+    {
+      "path": "/api/update?target=2510",
+      "schedule": "10 6,16 * * 1-5"
+    },
+    {
+      "path": "/api/update?target=2525",
+      "schedule": "25 6,16 * * 1-5"
+    },
+    {
+      "path": "/api/update?target=2539",
+      "schedule": "39 6,16 * * 1-5"
+    }
+  ]
+}

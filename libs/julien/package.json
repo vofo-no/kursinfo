@@ -1,0 +1,25 @@
+{
+  "name": "@kursinfo/julien",
+  "version": "2.0.0",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kursinfo/eapply-sdk": "workspace:*",
+    "@vercel/blob": "^0.24.1",
+    "chalk": "^4.1.2",
+    "compress-json": "^3.1.0"
+  },
+  "devDependencies": {
+    "@kursinfo/ssb-sdk": "workspace:*",
+    "@kursinfo/typescript-config": "workspace:*",
+    "@types/node": "^18.19.55",
+    "@types/papaparse": "^5.3.14",
+    "papaparse": "^5.4.1",
+    "typescript": "latest"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./constants": "./src/constants.ts"
+  }
+}
