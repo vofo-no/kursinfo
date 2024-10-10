@@ -12,8 +12,6 @@ async function getTenantData(tenant: string, year: string) {
   if (response.ok) {
     const data = await response.text();
     return cachedUncompressTenantData(data);
-  } else {
-    undefined;
   }
 }
 
