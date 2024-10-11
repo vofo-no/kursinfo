@@ -1,1 +1,3 @@
-export { EapplyClient } from "./client";
+import { eapply } from "./client";
+
+export default eapply;

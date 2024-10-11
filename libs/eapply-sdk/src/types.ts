@@ -51,29 +51,30 @@ export interface EapplyCourse {
 }
 
 export interface EapplyDocument {
-  id: string;
   caseId: string;
   caseNumber: string;
-  formType?: string;
+  course?: EapplyCourse;
+  created: string;
   documentNumber: number;
+  formType?: string;
+  id: string;
+  participants: EapplyParticipant[];
   revisionNumber: number;
   status: string;
-  created: string;
   title?: string;
-  participants: [
-    {
-      role: string;
-      roleCode: string;
-      sortOrder: number;
-      name: string;
-      city?: string;
-      zip?: string;
-      phoneNumber?: string;
-      emailAddress?: string;
-      gender?: "Female" | "Male";
-      yearOfBirth?: number;
-    },
-  ];
+}
+
+interface EapplyParticipant {
+  city?: string;
+  emailAddress?: string;
+  gender?: "Female" | "Male";
+  name: string;
+  phoneNumber?: string;
+  role: string;
+  roleCode: string;
+  sortOrder: number;
+  yearOfBirth?: number;
+  zip?: string;
 }
 
 export enum EapplyApplicationStatus {

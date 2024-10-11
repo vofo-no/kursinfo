@@ -12,6 +12,7 @@ export interface IndexedCourseItem {
   endYear?: string;
   facilitationGrant?: number;
   grant?: number;
+  hasTeacher?: boolean;
   hours: number;
   ID: string;
   locationCode: string;

@@ -1,4 +1,4 @@
-import { EapplyClient } from "@kursinfo/eapply-sdk";
+import eapply from "@kursinfo/eapply-sdk";
 
 import { CourseStatuses } from "../constants";
 import { Adapter, Course } from "../types";
@@ -9,7 +9,7 @@ export class EapplyAdapter implements Adapter {
   }
 
   async get(tenantId: string, year: string) {
-    const client = new EapplyClient(tenantId);
+    const client = eapply(tenantId);
 
     return client.getAllCoursesInYear(year).then((data) =>
       data
@@ -29,6 +29,7 @@ export class EapplyAdapter implements Adapter {
             extraGrant: i.extraGrant,
             facilitationGrant: i.facilitationGrant,
             grant: typeof i.totalGrant === "number" ? i.totalGrant : undefined,
+            hasTeacher: !!i.hoursWithTeacher,
             hours: i.hours || 0,
             ID: i.caseNumber,
             locationCode: i.locationCode || "0000",
