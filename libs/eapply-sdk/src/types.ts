@@ -50,6 +50,32 @@ export interface EapplyCourse {
   validParticipantsTotal?: number;
 }
 
+export interface EapplyDocument {
+  id: string;
+  caseId: string;
+  caseNumber: string;
+  formType?: string;
+  documentNumber: number;
+  revisionNumber: number;
+  status: string;
+  created: string;
+  title?: string;
+  participants: [
+    {
+      role: string;
+      roleCode: string;
+      sortOrder: number;
+      name: string;
+      city?: string;
+      zip?: string;
+      phoneNumber?: string;
+      emailAddress?: string;
+      gender?: "Female" | "Male";
+      yearOfBirth?: number;
+    },
+  ];
+}
+
 export enum EapplyApplicationStatus {
   Draft = "Draft",
   New = "New",

@@ -1,1 +1,1 @@
-export { getCoursesByYear } from "./eapply";
+export { EapplyClient } from "./client";

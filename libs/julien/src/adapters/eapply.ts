@@ -1,4 +1,4 @@
-import { getCoursesByYear } from "@kursinfo/eapply-sdk";
+import { EapplyClient } from "@kursinfo/eapply-sdk";
 
 import { CourseStatuses } from "../constants";
 import { Adapter, Course } from "../types";
@@ -9,7 +9,9 @@ export class EapplyAdapter implements Adapter {
   }
 
   async get(tenantId: string, year: string) {
-    return getCoursesByYear(tenantId, year).then((data) =>
+    const client = new EapplyClient(tenantId);
+
+    return client.getAllCoursesInYear(year).then((data) =>
       data
         .filter((item) => item.hours)
         .filter(

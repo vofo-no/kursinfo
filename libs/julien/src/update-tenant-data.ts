@@ -291,7 +291,12 @@ async function fetchTask(
     });
   } else {
     console.log(`=> Sletter [${chalk.blue(outpath)}] (ingen kurs)...`);
-    del(outpath);
+    try {
+      del(outpath);
+    } catch (e) {
+      const err = e as Error;
+      console.log(`=> ${err.name}`);
+    }
   }
 
   console.timeEnd(loopJobName);
