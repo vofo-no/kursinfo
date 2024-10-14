@@ -27,7 +27,7 @@ async function checkedTenantYear(tenant?: string) {
   if (years.length < 3) return year.toString();
 
   const hitCurrentYear = await getTenantData(tenant, year.toString()).then(
-    Boolean,
+    (data) => Boolean(data?.items.length),
   );
 
   return hitCurrentYear ? year.toString() : (year - 1).toString();

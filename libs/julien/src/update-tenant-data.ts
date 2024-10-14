@@ -1,4 +1,4 @@
-import { del, put } from "@vercel/blob";
+import { put } from "@vercel/blob";
 import chalk from "chalk";
 import { compress, trimUndefinedRecursively } from "compress-json";
 
@@ -282,22 +282,12 @@ async function fetchTask(
     });
   }
 
-  if (data.items.length) {
-    console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
-    trimUndefinedRecursively(data);
-    await put(outpath, JSON.stringify(compress(data)), {
-      access: "public",
-      addRandomSuffix: false,
-    });
-  } else {
-    console.log(`=> Sletter [${chalk.blue(outpath)}] (ingen kurs)...`);
-    try {
-      del(outpath);
-    } catch (e) {
-      const err = e as Error;
-      console.log(`=> ${err.name}`);
-    }
-  }
+  console.log(`=> Lagrer data i [${chalk.blue(outpath)}]...`);
+  trimUndefinedRecursively(data);
+  await put(outpath, JSON.stringify(compress(data)), {
+    access: "public",
+    addRandomSuffix: false,
+  });
 
   console.timeEnd(loopJobName);
 }
