@@ -21,18 +21,27 @@ export function eapply(tenantId: string) {
     path: eApplyPath | string,
     queryParams?: Record<string, string>,
   ) {
-    return fetch(
-      `${process.env.EAPPLY_URL}/api/v1/${path}?${new URLSearchParams({
-        ...queryParams,
-        tenantId,
-      })}`,
-      {
-        ...options,
-        signal: AbortSignal.timeout(15000),
-      },
-    )
-      .catch((res) => res.statusText)
-      .then((res) => res.json());
+    try {
+      const response = await fetch(
+        `${process.env.EAPPLY_URL}/api/v1/${path}?${new URLSearchParams({
+          ...queryParams,
+          tenantId,
+        })}`,
+        {
+          ...options,
+          signal: AbortSignal.timeout(15000),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.error((error as Error).message);
+    }
   }
 
   return {
