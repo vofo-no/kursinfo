@@ -17,9 +17,9 @@
     "maintained node versions"
   ],
   "dependencies": {
-    "@formatjs/intl": "^2.10.7",
-    "@formatjs/intl-datetimeformat": "^6.13.0",
-    "@formatjs/intl-numberformat": "^8.11.0",
+    "@formatjs/intl": "^2.10.8",
+    "@formatjs/intl-datetimeformat": "^6.14.0",
+    "@formatjs/intl-numberformat": "^8.12.0",
     "@headlessui/react": "^1.7.19",
     "@kursinfo/julien": "workspace:*",
     "@tanstack/react-table": "^8.20.5",
@@ -38,7 +38,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-feather": "^2.0.10",
-    "react-intl": "^6.7.2",
+    "react-intl": "^6.8.0",
     "react-paginate": "^8.2.0",
     "yargs": "^17.7.2"
   },
@@ -57,7 +57,7 @@
     "eslint-config-prettier": "^8.10.0",
     "papaparse": "^5.4.1",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
+    "tailwindcss": "^3.4.14",
     "typescript": "latest"
   }
 }
