@@ -6,7 +6,7 @@
   },
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^18.19.55",
+    "@types/node": "^20.17.6",
     "typescript": "latest"
   },
   "exports": {
