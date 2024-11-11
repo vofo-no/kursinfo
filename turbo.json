@@ -3,7 +3,21 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "env": [
+        "BLOB_READ_WRITE_TOKEN",
+        "CRON_SECRET",
+        "EAPPLY_TOKEN",
+        "EAPPLY_URL",
+        "EAPPLY_USER"
+      ],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
@@ -13,10 +27,14 @@
     },
     "dev": {
       "persistent": true,
-      "cache": false
-    },
-    "start": {
-      "dependsOn": ["build"]
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
     }
   }
 }

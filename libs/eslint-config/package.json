@@ -1,0 +1,8 @@
+{
+  "name": "@kursinfo/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "eslint-config-turbo": "latest"
+  }
+}

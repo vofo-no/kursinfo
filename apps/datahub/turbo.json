@@ -1,0 +1,15 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "AUTH_COOKIE_NAME",
+        "AUTH_COOKIE_SIGNATURE_KEY_CURRENT",
+        "AUTH_COOKIE_SIGNATURE_KEY_PREVIOUS",
+        "USE_SECURE_COOKIES",
+        "FIREBASE_CLIENT_EMAIL",
+        "FIREBASE_PRIVATE_KEY"
+      ]
+    }
+  }
+}
