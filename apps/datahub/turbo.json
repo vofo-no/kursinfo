@@ -6,9 +6,12 @@
         "AUTH_COOKIE_NAME",
         "AUTH_COOKIE_SIGNATURE_KEY_CURRENT",
         "AUTH_COOKIE_SIGNATURE_KEY_PREVIOUS",
-        "USE_SECURE_COOKIES",
+        "EAPPLY_TOKEN",
+        "EAPPLY_URL",
+        "EAPPLY_USER",
         "FIREBASE_CLIENT_EMAIL",
-        "FIREBASE_PRIVATE_KEY"
+        "FIREBASE_PRIVATE_KEY",
+        "USE_SECURE_COOKIES"
       ]
     }
   }
