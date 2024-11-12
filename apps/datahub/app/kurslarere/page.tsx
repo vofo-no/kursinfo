@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getBlob, ref } from "firebase/storage";
+import { CloudDownloadIcon, LoaderCircleIcon } from "lucide-react";
 
 import { storage } from "@/lib/firebase/clientApp";
 import { getTeachersDataUrl } from "@/lib/utils";
@@ -23,7 +24,7 @@ import { Teacher } from "../types";
 import { columns } from "./columns";
 import { dates, monthFormat } from "./helper";
 
-export const maxDuration = 120;
+export const maxDuration = 360;
 
 const numberFormat = new Intl.NumberFormat("nb-NO", {
   maximumFractionDigits: 1,
@@ -108,8 +109,22 @@ export default function TeachersPage() {
             variant="destructive"
             onClick={updateTeachersHandler}
             disabled={loading}
+            className={loading ? "animate-bounce" : ""}
           >
-            Oppdater lærere
+            <span className="flex gap-2">
+              {loading
+                ? [
+                    <LoaderCircleIcon
+                      className="animate-spin"
+                      key="updTButtonIconLoading"
+                    />,
+                    "Oppdaterer lærere...",
+                  ]
+                : [
+                    <CloudDownloadIcon key="updTButtonIcon" />,
+                    "Oppdater lærere",
+                  ]}
+            </span>
           </Button>
         </CardFooter>
       </Card>
