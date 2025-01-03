@@ -18,7 +18,7 @@ export default function RouteBreadcrumbs({
   items?: RouteBreadcrumbItem[];
 }) {
   return (
-    <Breadcrumb className="hidden md:flex">
+    <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>

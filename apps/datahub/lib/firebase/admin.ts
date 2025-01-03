@@ -2,13 +2,12 @@ import "server-only";
 
 import admin from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage";
-
-import { getTeachersDataUrl } from "@/lib/utils";
+import { getFirestore } from "firebase/firestore";
 
 import { clientConfig } from "./config.client";
 import { serverConfig } from "./config.server";
+import { getUserRecordByUid } from "./firestore";
+import { getAuthenticatedAppForUser } from "./serverApp";
 
 function initializeApp() {
   return admin.initializeApp({
@@ -25,63 +24,38 @@ function getFirebaseAdminApp() {
   return initializeApp();
 }
 
-export function getFirebaseAdminStorage() {
-  return getStorage(getFirebaseAdminApp());
+function getAdminAuth() {
+  return getAuth(getFirebaseAdminApp());
 }
 
-function getFirebaseAdminFirestore() {
-  return getFirestore(getFirebaseAdminApp());
-}
+export async function refreshCurrentUserScopeClaim() {
+  const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
 
-export async function setUserScopeClaimByIdToken(idToken: string) {
-  const claims = await getAuth().verifyIdToken(idToken, true);
-
-  if (typeof claims.email !== "undefined") {
-    return setUserScopeClaimByUid(claims.sub, claims.scope);
+  if (!currentUser) {
+    throw new Error("Unauthenticated");
   }
 
-  throw new Error("Not allowed");
-}
-
-async function setUserScopeClaimByUid(uid: string, currentScope?: string) {
-  const db = getFirebaseAdminFirestore();
-  const userRef = db.doc(["users", uid].join("/"));
-  const userDoc = await userRef.get();
-
-  const { scopes, scopeIndex } = (userDoc.data() || {}) as {
-    scopes?: string[];
-    scopeIndex?: number;
-  };
-
-  const scope = (scopes?.length && scopes[scopeIndex || 0]) || null;
-
-  if (scope !== currentScope) {
-    await getAuth().setCustomUserClaims(uid, {
-      scope,
-    });
+  if (typeof currentUser.email === "undefined") {
+    throw new Error("Not allowed");
   }
-}
 
-export function putFileForTenant(
-  tenantId: string,
-  year: number,
-  month: number,
-  content: string,
-) {
-  const fileUrl = getTeachersDataUrl(tenantId, year, month);
+  const db = getFirestore(firebaseServerApp);
+  const { scopes, currentScope } =
+    (await getUserRecordByUid(db, currentUser.uid)) || {};
 
-  if (!/^25\d\d\/\d{4}\-\d{2}\.json$/.test(fileUrl) || !content)
-    throw "Argument error";
+  if (scopes?.length) {
+    const claimedScope =
+      currentScope && scopes.includes(currentScope) ? currentScope : undefined;
 
-  const storage = getFirebaseAdminStorage();
-  const file = storage.bucket().file(fileUrl);
+    if (claimedScope !== currentUser.customClaims["scope"]) {
+      const auth = getAdminAuth();
+      await auth.setCustomUserClaims(currentUser.uid, {
+        scope: claimedScope || null,
+      });
 
-  file.save(content, {
-    contentType: "application/json",
-    metadata: {
-      owner: tenantId,
-    },
-  });
+      return { updatedClaims: true };
+    }
+  }
 
-  return file.name;
+  return { updatedClaims: false };
 }

@@ -15,6 +15,8 @@ export default function Footer() {
       >
         Personvern
       </a>
+      <br />
+      <span>Vi bruker informasjonskapsler (cookies) for å logge deg inn.</span>
     </p>
   );
 }

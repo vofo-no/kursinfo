@@ -1,7 +1,21 @@
 "use server";
 
-import { setUserScopeClaimByIdToken } from "@/lib/firebase/admin";
+import { cookies, headers } from "next/headers";
+import { refreshServerCookies } from "next-firebase-auth-edge/lib/next/cookies";
 
-export async function updateClaim(idToken: string) {
-  setUserScopeClaimByIdToken(idToken);
+import { refreshCurrentUserScopeClaim } from "@/lib/firebase/admin";
+import { clientConfig } from "@/lib/firebase/config.client";
+import { serverConfig } from "@/lib/firebase/config.server";
+
+export async function updateClaim() {
+  const result = await refreshCurrentUserScopeClaim();
+  if (result.updatedClaims) {
+    await refreshServerCookies(cookies(), new Headers(headers()), {
+      apiKey: clientConfig.apiKey,
+      cookieName: serverConfig.cookieName,
+      cookieSerializeOptions: serverConfig.cookieSerializeOptions,
+      cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+      serviceAccount: serverConfig.serviceAccount,
+    });
+  }
 }

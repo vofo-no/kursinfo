@@ -5,10 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getTeachersDataUrl(
-  scope: string,
-  year: number,
-  month?: number,
-) {
-  return `${scope}/${year}-${String(month).padStart(2, "0")}.json`;
+export function arrUnique<T>(arr: T[]) {
+  return arr.filter((v, i, a) => a.indexOf(v) == i);
 }

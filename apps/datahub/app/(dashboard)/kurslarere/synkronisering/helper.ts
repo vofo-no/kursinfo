@@ -11,6 +11,13 @@ export function getMonthKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
+export function monthKeyToFormat(monthKey: string) {
+  const keyParts = monthKey.split("-");
+  const d = new Date(Number(keyParts[0]), Number(keyParts[1]) - 1, 1);
+
+  return monthFormat.format(d);
+}
+
 const today = new Date();
 
 export const dates = [
@@ -25,3 +32,12 @@ export const dates = [
   addMonths(today, -9),
   addMonths(today, -10),
 ];
+
+export function getDates() {
+  const today = new Date();
+
+  return [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24,
+  ].map((d) => addMonths(today, -d));
+}

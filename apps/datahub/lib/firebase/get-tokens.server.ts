@@ -2,13 +2,23 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { getTokens, Tokens } from "next-firebase-auth-edge";
-import { filterStandardClaims } from "next-firebase-auth-edge/lib/auth/claims";
+import { filterStandardClaims } from "next-firebase-auth-edge/auth/claims";
 
-import { clientConfig } from "@/lib/firebase/config.client";
-import { serverConfig } from "@/lib/firebase/config.server";
 import { User } from "@/components/auth/auth-context";
 
-const toUser = ({ decodedToken }: Tokens): User => {
+import { clientConfig } from "./config.client";
+import { serverConfig } from "./config.server";
+
+export async function getTokensFromCookies() {
+  return await getTokens(cookies(), {
+    apiKey: clientConfig.apiKey,
+    cookieName: serverConfig.cookieName,
+    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+    serviceAccount: serverConfig.serviceAccount,
+  });
+}
+
+export const tokensToUser = ({ decodedToken }: Tokens): User => {
   const {
     uid,
     email,
@@ -32,13 +42,3 @@ const toUser = ({ decodedToken }: Tokens): User => {
     customClaims,
   };
 };
-
-export async function userFromCookies() {
-  const tokens = await getTokens(cookies(), {
-    apiKey: clientConfig.apiKey,
-    cookieName: serverConfig.cookieName,
-    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
-    serviceAccount: serverConfig.serviceAccount,
-  });
-  return tokens ? toUser(tokens) : null;
-}
