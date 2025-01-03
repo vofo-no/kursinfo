@@ -6,3 +6,4 @@ export {
 export { isValidTarget, updateStatistics } from "./update-tenant-data";
 export { afterMaxLastYear } from "./helpers/after-max-last-year";
 export { getTenantId } from "./get-tenant-id";
+export type { ITenantData } from "./types";
