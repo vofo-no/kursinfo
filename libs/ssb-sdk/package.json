@@ -4,12 +4,9 @@
   "scripts": {
     "check-types": "tsc --noEmit"
   },
-  "dependencies": {
-    "async-sema": "^3.1.1"
-  },
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^20.17.6",
+    "@types/node": "^20.17.11",
     "typescript": "latest"
   },
   "exports": {

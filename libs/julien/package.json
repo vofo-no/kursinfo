@@ -6,14 +6,14 @@
   },
   "dependencies": {
     "@kursinfo/eapply-sdk": "workspace:*",
-    "@vercel/blob": "^0.24.1",
+    "@vercel/blob": "^0.27.0",
     "chalk": "^4.1.2",
-    "compress-json": "^3.1.0"
+    "compress-json": "^3.1.1"
   },
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^20.17.6",
+    "@types/node": "^20.17.11",
     "@types/papaparse": "^5.3.15",
     "papaparse": "^5.4.1",
     "typescript": "latest"
