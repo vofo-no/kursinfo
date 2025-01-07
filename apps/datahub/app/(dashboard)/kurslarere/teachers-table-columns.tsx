@@ -1,11 +1,23 @@
 "use client";
 
 import { ColumnDef, HeaderContext } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  MailIcon,
+  MinusIcon,
+  PhoneIcon,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Teacher } from "@/app/types";
 
 const currentYear = new Date().getFullYear();
@@ -73,13 +85,45 @@ export const teachersTableColumns: ColumnDef<Teacher>[] = [
   },
   {
     accessorKey: "emailAddress",
-    header: "E-postadresse",
+    header: () => <span className="sr-only">E-postadresse</span>,
     enableGlobalFilter: false,
+    cell: ({ row }) => {
+      const value = row.getValue("emailAddress");
+      if (typeof value === "string" && value)
+        return (
+          <HoverCard>
+            <HoverCardTrigger>
+              <a href={`mailto:${value}`}>
+                <MailIcon className="size-4" />
+                <span className="sr-only">{value}</span>
+              </a>
+            </HoverCardTrigger>
+            <HoverCardContent>{value}</HoverCardContent>
+          </HoverCard>
+        );
+      return <MinusIcon className="size-4 opacity-20" />;
+    },
   },
   {
     accessorKey: "phoneNumber",
-    header: "Telefonnummer",
+    header: () => <span className="sr-only">Telefonnummer</span>,
     enableGlobalFilter: false,
+    cell: ({ row }) => {
+      const value = row.getValue("phoneNumber");
+      if (typeof value === "string" && value)
+        return (
+          <HoverCard>
+            <HoverCardTrigger>
+              <a href={`tel:${value}`}>
+                <PhoneIcon className="size-4" />
+                <span className="sr-only">{value}</span>
+              </a>
+            </HoverCardTrigger>
+            <HoverCardContent>{value}</HoverCardContent>
+          </HoverCard>
+        );
+      return <MinusIcon className="size-4 opacity-20" />;
+    },
   },
   {
     id: "subjects",
