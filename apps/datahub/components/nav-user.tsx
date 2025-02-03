@@ -1,10 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
 import { ChevronsUpDown, LogOut } from "lucide-react";
 import { useLoadingCallback } from "react-loading-hook";
 
-import { signOut } from "@/lib/firebase/auth";
+import { logout } from "@/lib/firebase/api";
+import { getFirebaseAuth } from "@/lib/firebase/firebase";
 import { getInitials } from "@/lib/string-to-initials";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,15 +23,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/components/auth/auth-context";
-import { logout } from "@/app/actions/auth";
+import { useAuth } from "@/app/auth/auth-context";
 
 export function NavUser() {
   const { user } = useAuth();
   const { isMobile } = useSidebar();
   const router = useRouter();
   const [handleLogout, isLogoutLoading] = useLoadingCallback(async () => {
-    await signOut();
+    const auth = getFirebaseAuth();
+    await signOut(auth);
     await logout();
 
     router.refresh();

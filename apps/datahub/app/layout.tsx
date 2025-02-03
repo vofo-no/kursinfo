@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 
-import { userFromCookies } from "@/lib/user-from-cookies";
-import { AuthProvider } from "@/components/auth/auth-provider";
-import LoginPage from "@/components/login-page";
+import { getServerUserRecord } from "@/lib/firebase/firebase.server";
+import { getTokensFromCookies } from "@/lib/get-tokens-from-cookies";
+import { toUser } from "@/lib/user";
+
+import { AuthProvider } from "./auth/auth-provider";
 
 export const metadata: Metadata = {
   title: { template: "%s | Datahub fra Vofo", default: "Datahub fra Vofo" },
@@ -15,12 +17,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await userFromCookies();
+  const tokens = await getTokensFromCookies();
+  const userRecord = await getServerUserRecord();
+
+  const user = tokens ? toUser(tokens, userRecord) : null;
 
   return (
     <html lang="nb">
       <body className="min-h-svh bg-background font-sans antialiased">
-        {!user && <LoginPage />}
         <AuthProvider user={user}>
           <div className="relative flex min-h-svh flex-col bg-background">
             {children}

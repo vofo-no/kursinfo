@@ -2,11 +2,13 @@
 
 import { getTenantDataUrl, uncompressTenantData } from "@kursinfo/julien";
 
-import { userFromCookies } from "@/lib/user-from-cookies";
+import { getTokensFromCookies } from "@/lib/get-tokens-from-cookies";
+import { toUser } from "@/lib/user";
 
 export async function fetchStatisticsData(year: number) {
-  const user = await userFromCookies();
-  const scope = user?.customClaims.scope;
+  const tokens = await getTokensFromCookies();
+  const user = tokens ? toUser(tokens) : null;
+  const { scope } = user?.customClaims || {};
 
   if (!scope) throw "Not allowed";
   if (year < 2020 || year > new Date().getFullYear()) throw "Invalid year arg";

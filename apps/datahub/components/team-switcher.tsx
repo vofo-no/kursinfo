@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { CheckIcon, ChevronsUpDown, DatabaseIcon } from "lucide-react";
-import { useLoadingCallback } from "react-loading-hook";
 
 import { associations } from "@/lib/associations";
-import { setScopeOnUserRecordByUid } from "@/lib/firebase/firestore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,30 +18,29 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/components/auth/auth-context";
-import { updateClaim } from "@/app/actions/updateClaim";
+import { updateClaim } from "@/app/actions/update-claim";
+import { useAuth } from "@/app/auth/auth-context";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
-  const { user, userRecord } = useAuth();
+  const { user, setNextScope } = useAuth();
+  const router = useRouter();
 
-  const [handleSetScope, isSettingScope] = useLoadingCallback(
-    async (nextScope: string) => {
-      if (!user) return;
-
-      await setScopeOnUserRecordByUid(user.uid, nextScope);
-      await updateClaim();
+  const handleSetScope = React.useCallback(
+    (nextScope: string) => {
+      if (setNextScope) setNextScope(nextScope);
+      updateClaim(nextScope).then(() => {
+        router.replace(`/${nextScope}`);
+      });
     },
+    [router, setNextScope],
   );
 
-  if (!user || !userRecord || typeof userRecord.scopes === "undefined")
-    return null;
+  if (!user || !user.scopes) return null;
 
-  if (!userRecord.currentScope) return null;
-
-  const teams = userRecord.scopes.map((scope) => ({
+  const teams = user.scopes.map((scope) => ({
     name: associations[scope] || `Ukjent (${scope})`,
-    isCurrent: scope === userRecord.currentScope,
+    isCurrent: scope === user.currentScope,
     scope,
   }));
 
@@ -81,7 +79,7 @@ export function TeamSwitcher() {
             {teams.map((team) => (
               <DropdownMenuItem
                 key={team.name}
-                disabled={team.isCurrent || isSettingScope}
+                disabled={team.isCurrent}
                 onClick={() => handleSetScope(team.scope)}
                 className="gap-2 p-2"
               >

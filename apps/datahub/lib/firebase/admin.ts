@@ -1,60 +1,23 @@
 import "server-only";
 
-import admin from "firebase-admin";
-import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirebaseAuth } from "next-firebase-auth-edge";
 
-import { clientConfig } from "./config.client";
-import { serverConfig } from "./config.server";
-import { getUserRecordByUid } from "./firestore";
-import { getAuthenticatedAppForUser } from "./serverApp";
+import { authConfig } from "./config.server";
+import { getServerUserRecord } from "./firebase.server";
 
-function initializeApp() {
-  return admin.initializeApp({
-    credential: admin.credential.cert(serverConfig.serviceAccount),
-    storageBucket: clientConfig.storageBucket,
-  });
-}
+const { setCustomUserClaims } = getFirebaseAuth({
+  serviceAccount: authConfig.serviceAccount,
+  apiKey: authConfig.apiKey,
+  enableCustomToken: authConfig.enableCustomToken,
+});
 
-function getFirebaseAdminApp() {
-  if (admin.apps.length > 0) {
-    return admin.apps[0] as admin.app.App;
-  }
+export async function setCurrentUserClaims() {
+  const { scopes, currentScope, uid } = (await getServerUserRecord()) || {};
 
-  return initializeApp();
-}
-
-function getAdminAuth() {
-  return getAuth(getFirebaseAdminApp());
-}
-
-export async function refreshCurrentUserScopeClaim() {
-  const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
-
-  if (!currentUser) {
-    throw new Error("Unauthenticated");
-  }
-
-  if (typeof currentUser.email === "undefined") {
-    throw new Error("Not allowed");
-  }
-
-  const db = getFirestore(firebaseServerApp);
-  const { scopes, currentScope } =
-    (await getUserRecordByUid(db, currentUser.uid)) || {};
-
-  if (scopes?.length) {
-    const claimedScope =
-      currentScope && scopes.includes(currentScope) ? currentScope : undefined;
-
-    if (claimedScope !== currentUser.customClaims["scope"]) {
-      const auth = getAdminAuth();
-      await auth.setCustomUserClaims(currentUser.uid, {
-        scope: claimedScope || null,
-      });
-
-      return { updatedClaims: true };
-    }
+  if (scopes && currentScope && uid) {
+    const scope = scopes.includes(currentScope) ? currentScope : undefined;
+    await setCustomUserClaims(uid, { scope });
+    return { updatedClaims: true };
   }
 
   return { updatedClaims: false };

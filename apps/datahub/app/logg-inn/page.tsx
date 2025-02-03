@@ -6,8 +6,8 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@/components/ui/dialog";
+import Footer from "@/components/footer";
 
-import Footer from "./footer";
 import { LoginForm } from "./login-form";
 
 export default function LoginPage() {

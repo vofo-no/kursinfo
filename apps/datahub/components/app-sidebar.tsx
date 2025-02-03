@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { navMain } from "@/lib/nav-main";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +13,11 @@ import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  navMain: React.ComponentProps<typeof NavMain>["items"];
+}
+
+export function AppSidebar({ navMain, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

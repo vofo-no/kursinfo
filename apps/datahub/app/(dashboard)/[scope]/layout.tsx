@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
-import { navMain } from "@/lib/nav-main";
+import { useNavMain } from "@/lib/nav-main";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,39 +19,27 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { useAuth } from "@/components/auth/auth-context";
-import TeamSetupDialog from "@/components/team-setup-dialog";
-
-import { SwitchLoader } from "./switch-loader";
+import { SwitchLoader } from "@/components/switch-loader";
+import { useAuth } from "@/app/auth/auth-context";
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user, userRecord, ready } = useAuth();
+  const { user, nextScope } = useAuth();
   const path = usePathname();
+  const navMain = useNavMain();
+  const { scope } = useParams();
 
-  if (!ready)
-    return (
-      <div className="text-xs text-muted-foreground/60">🛰 Et øyeblikk...</div>
-    );
-
-  if (!user || !userRecord)
+  if (!user)
     return (
       <div className="text-xs text-muted-foreground/60">
         😱 Noe er galt i oppsettet av kontoen din.
       </div>
     );
 
-  if (
-    !user.customClaims.scope ||
-    !userRecord.currentScope ||
-    !userRecord.scopes?.includes(userRecord.currentScope)
-  )
-    return <TeamSetupDialog />;
-
-  if (user.customClaims.scope !== userRecord.currentScope) {
+  if (nextScope && nextScope !== scope) {
     return <SwitchLoader />;
   }
 
@@ -63,7 +51,7 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar navMain={navMain} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">

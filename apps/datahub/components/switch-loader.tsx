@@ -15,9 +15,9 @@ export function SwitchLoader() {
             r="40"
             fill="none"
             stroke="currentColor"
-            stroke-width="5"
-            stroke-dasharray="60 150"
-            stroke-linecap="round"
+            strokeWidth="5"
+            strokeDasharray="60 150"
+            strokeLinecap="round"
             transform="rotate(-90 50 50)"
           >
             <animateTransform
@@ -41,9 +41,9 @@ export function SwitchLoader() {
             r="30"
             fill="none"
             stroke="currentColor"
-            stroke-width="3"
-            stroke-dasharray="30 90"
-            stroke-linecap="round"
+            strokeWidth="3"
+            strokeDasharray="30 90"
+            strokeLinecap="round"
             transform="rotate(90 50 50)"
           >
             <animateTransform

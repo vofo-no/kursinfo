@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useReducer } from "react";
+import { useParams } from "next/navigation";
 import { CourseStatuses } from "@kursinfo/julien/constants";
 import {
   CircleCheckBigIcon,
@@ -9,12 +10,12 @@ import {
 
 import { mergeTeachers } from "@/lib/teachers";
 import { arrUnique, cn } from "@/lib/utils";
+import { collectTeachers } from "@/app/actions/collect-teachers";
+import { fetchStatisticsData } from "@/app/actions/fetch-statistics-data";
+import { fetchTeachers } from "@/app/actions/fetch-teachers";
+import { uploadTeachers } from "@/app/actions/upload-teachers";
 import { Teacher } from "@/app/types";
 
-import { collectTeachers } from "../../../actions/collectTeachers";
-import { fetchStatisticsData } from "../../../actions/fetchStatisticsData";
-import { fetchTeachers } from "../../../actions/fetchTeachers";
-import { uploadTeachers } from "../../../actions/uploadTeachers";
 import { monthKeyToFormat } from "./helper";
 
 interface DatafilesUpdateProps {
@@ -189,6 +190,7 @@ export function DatafilesUpdate({ tasks }: DatafilesUpdateProps) {
     collectedYears: [],
   });
   const years = arrUnique(tasks.map((task) => task.split("-")[0]));
+  const { scope } = useParams<{ scope: string }>();
 
   useEffect(() => {
     if (state.lockYear) return;
@@ -256,14 +258,14 @@ export function DatafilesUpdate({ tasks }: DatafilesUpdateProps) {
 
     if (nextUpload) {
       dispatch({ type: "LOCK_UPLOAD", payload: nextUpload.taskId });
-      uploadTeachers(nextUpload.taskId, nextUpload.teachers).then(() => {
+      uploadTeachers(scope, nextUpload.taskId, nextUpload.teachers).then(() => {
         dispatch({
           type: "UPLOADED",
           payload: nextUpload.taskId,
         });
       });
     }
-  }, [state.lockUpload, state.tasks]);
+  }, [scope, state.lockUpload, state.tasks]);
 
   useEffect(() => {
     if (state.lockCollect) return;
@@ -278,6 +280,7 @@ export function DatafilesUpdate({ tasks }: DatafilesUpdateProps) {
     if (nextCollectYear) {
       dispatch({ type: "COLLECT_START", payload: nextCollectYear });
       collectTeachers(
+        scope,
         nextCollectYear,
         state.tasks.filter((task) =>
           task.taskId.startsWith(`${nextCollectYear}-`),
@@ -289,7 +292,7 @@ export function DatafilesUpdate({ tasks }: DatafilesUpdateProps) {
         });
       });
     }
-  }, [state.lockCollect, state.foundYears, state.tasks]);
+  }, [state.lockCollect, state.foundYears, state.tasks, scope]);
 
   return (
     <div className="space-y-3">

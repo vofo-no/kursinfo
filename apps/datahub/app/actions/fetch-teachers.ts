@@ -4,14 +4,16 @@ import eapply from "@kursinfo/eapply-sdk";
 import { getTenantId } from "@kursinfo/julien";
 import { metaphone } from "metaphone";
 
+import { getTokensFromCookies } from "@/lib/get-tokens-from-cookies";
 import { mergeTeachers } from "@/lib/teachers";
-import { userFromCookies } from "@/lib/user-from-cookies";
+import { toUser } from "@/lib/user";
 
 import { Teacher } from "../types";
 
 export async function fetchTeachers(ids: string[]) {
-  const user = await userFromCookies();
-  const scope = user?.customClaims.scope;
+  const tokens = await getTokensFromCookies();
+  const user = tokens ? toUser(tokens) : null;
+  const { scope } = user?.customClaims || {};
 
   if (!scope) throw "Not allowed";
 
