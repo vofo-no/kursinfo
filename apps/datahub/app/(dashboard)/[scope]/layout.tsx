@@ -1,17 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-
-import { useNavMain } from "@/lib/nav-main";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { getNavMain } from "@/lib/nav-main";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -19,35 +6,17 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SwitchLoader } from "@/components/switch-loader";
-import { useAuth } from "@/app/auth/auth-context";
+
+import { Breadcrumbs } from "./breadcrumbs";
 
 export default function DashboardLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { scope: string };
 }>) {
-  const { user, nextScope } = useAuth();
-  const path = usePathname();
-  const navMain = useNavMain();
-  const { scope } = useParams();
-
-  if (!user)
-    return (
-      <div className="text-xs text-muted-foreground/60">
-        😱 Noe er galt i oppsettet av kontoen din.
-      </div>
-    );
-
-  if (nextScope && nextScope !== scope) {
-    return <SwitchLoader />;
-  }
-
-  const navMainItem = navMain.find((item) => path.startsWith(item.url));
-  const navSubItem = navMainItem?.items
-    .slice()
-    .sort((a, b) => b.url.length - a.url.length)
-    .find((item) => path.startsWith(item.url));
+  const navMain = getNavMain(params.scope);
 
   return (
     <SidebarProvider>
@@ -57,35 +26,7 @@ export default function DashboardLayout({
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link href="/">Datahub</Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {navMainItem && navSubItem && (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink asChild>
-                        <Link href={navMainItem.url}>{navMainItem.title}</Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </>
-                )}
-                {(navMainItem || navSubItem) && (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>
-                        {navSubItem?.title || navMainItem?.title}
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </>
-                )}
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Breadcrumbs />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

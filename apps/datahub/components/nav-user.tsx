@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
+import {
+  LogoutLink,
+  useKindeBrowserClient,
+} from "@kinde-oss/kinde-auth-nextjs";
+import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { ChevronsUpDown, LogOut } from "lucide-react";
-import { useLoadingCallback } from "react-loading-hook";
 
-import { logout } from "@/lib/firebase/api";
-import { getFirebaseAuth } from "@/lib/firebase/firebase";
 import { getInitials } from "@/lib/string-to-initials";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -23,30 +23,23 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/app/auth/auth-context";
 
 export function NavUser() {
-  const { user } = useAuth();
+  const {
+    user,
+    isAuthenticated,
+  }: { user: KindeUser; isAuthenticated: boolean } = useKindeBrowserClient();
   const { isMobile } = useSidebar();
-  const router = useRouter();
-  const [handleLogout, isLogoutLoading] = useLoadingCallback(async () => {
-    const auth = getFirebaseAuth();
-    await signOut(auth);
-    await logout();
 
-    router.refresh();
-  });
+  if (!isAuthenticated) return null;
 
-  if (!user) return null;
+  const userName = `${user.given_name} ${user.family_name}`;
 
   const userAvatar = (
     <Avatar className="h-8 w-8 rounded-lg">
-      <AvatarImage
-        src={user.photoURL || undefined}
-        alt={user.displayName || "Ukjent bruker"}
-      />
+      <AvatarImage src={user.picture || undefined} alt={userName} />
       <AvatarFallback className="rounded-lg">
-        {getInitials(user.displayName || user.email || "?")}
+        {getInitials(userName)}
       </AvatarFallback>
     </Avatar>
   );
@@ -62,9 +55,7 @@ export function NavUser() {
             >
               {userAvatar}
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {user.displayName}
-                </span>
+                <span className="truncate font-semibold">{userName}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -80,17 +71,17 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 {userAvatar}
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {user.displayName}
-                  </span>
+                  <span className="truncate font-semibold">{userName}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled={isLogoutLoading} onClick={handleLogout}>
-              <LogOut className="size-4 me-2" />
-              Logg ut
+            <DropdownMenuItem asChild>
+              <LogoutLink>
+                <LogOut className="size-4 me-2" />
+                Logg ut
+              </LogoutLink>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

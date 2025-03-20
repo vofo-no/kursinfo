@@ -1,10 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { LoginLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import type {
+  KindeOrganization,
+  KindeOrganizations,
+} from "@kinde-oss/kinde-auth-nextjs/types";
 import { CheckIcon, ChevronsUpDown, DatabaseIcon } from "lucide-react";
 
-import { associations } from "@/lib/associations";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,34 +21,36 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { updateClaim } from "@/app/actions/update-claim";
-import { useAuth } from "@/app/auth/auth-context";
 
 export function TeamSwitcher() {
+  const {
+    organization,
+    userOrganizations,
+  }: {
+    organization?: KindeOrganization;
+    userOrganizations?: KindeOrganizations;
+  } = useKindeBrowserClient();
+
   const { isMobile } = useSidebar();
-  const { user, setNextScope } = useAuth();
-  const router = useRouter();
 
-  const handleSetScope = React.useCallback(
-    (nextScope: string) => {
-      if (setNextScope) setNextScope(nextScope);
-      updateClaim(nextScope).then(() => {
-        router.replace(`/${nextScope}`);
-      });
-    },
-    [router, setNextScope],
-  );
+  if (!userOrganizations?.orgs.length || !organization) return null;
 
-  if (!user || !user.scopes) return null;
-
-  const teams = user.scopes.map((scope) => ({
-    name: associations[scope] || `Ukjent (${scope})`,
-    isCurrent: scope === user.currentScope,
-    scope,
-  }));
-
-  const activeTeam = teams.find((team) => team.isCurrent);
-  if (!activeTeam) return null;
+  if (userOrganizations.orgs.length === 1) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <DatabaseIcon className="size-4" />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="line-clamp-2 text-balance font-semibold">
+              {organization.orgName}
+            </span>
+          </div>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
 
   return (
     <SidebarMenu>
@@ -61,7 +66,7 @@ export function TeamSwitcher() {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="line-clamp-2 text-balance font-semibold">
-                  {activeTeam.name}
+                  {organization.orgName || "???"}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -76,21 +81,23 @@ export function TeamSwitcher() {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               Studieforbund
             </DropdownMenuLabel>
-            {teams.map((team) => (
+            {userOrganizations.orgs.map((team) => (
               <DropdownMenuItem
                 key={team.name}
-                disabled={team.isCurrent}
-                onClick={() => handleSetScope(team.scope)}
+                disabled={team.code === organization.orgCode}
                 className="gap-2 p-2"
+                asChild
               >
-                <div className="flex size-6 items-center justify-center rounded-sm border">
-                  {team.isCurrent ? (
-                    <CheckIcon className="size-4 shrink-0" />
-                  ) : (
-                    <DatabaseIcon className="size-4 shrink-0" />
-                  )}
-                </div>
-                <span className="line-clamp-2 text-balance">{team.name}</span>
+                <LoginLink orgCode={team.code}>
+                  <div className="flex size-6 items-center justify-center rounded-sm border">
+                    {team.code === organization.orgCode ? (
+                      <CheckIcon className="size-4 shrink-0" />
+                    ) : (
+                      <DatabaseIcon className="size-4 shrink-0" />
+                    )}
+                  </div>
+                  <span className="line-clamp-2 text-balance">{team.name}</span>
+                </LoginLink>
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

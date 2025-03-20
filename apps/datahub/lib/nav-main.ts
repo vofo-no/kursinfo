@@ -1,8 +1,6 @@
-import { useParams } from "next/navigation";
 import { UsersIcon } from "lucide-react";
 
-export function useNavMain() {
-  const { scope } = useParams();
+export function getNavMain(scope: string) {
   return [
     {
       title: "Kurslærere",

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@kinde-oss/kinde-auth-nextjs": "^2.5.3",
     "@kursinfo/eapply-sdk": "workspace:*",
     "@kursinfo/julien": "workspace:*",
     "@radix-ui/react-avatar": "^1.1.2",

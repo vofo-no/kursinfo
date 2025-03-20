@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
+@theme {
   --background: #ffffff;
   --foreground: #171717;
 }
