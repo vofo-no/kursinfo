@@ -8,6 +8,8 @@ import {
 
 export const maxDuration = 60;
 
+const yearRegExp = /^20\d\d$/;
+
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -26,9 +28,15 @@ export async function GET(request: NextRequest) {
 
   const today = new Date();
   const currentYear = today.getFullYear();
-  const years = [currentYear, currentYear + (afterMaxLastYear() ? 1 : -1)].map(
+  let years = [currentYear, currentYear + (afterMaxLastYear() ? 1 : -1)].map(
     String,
   );
+
+  const overrideYear = searchParams.get("year");
+  
+  if (overrideYear && yearRexExp.test(overrideYear) && Number(overrideYear) <= currentYear + 1) {
+    years = [overrideYear]
+  }
 
   await updateStatistics([target], years, (sf, year) => {
     revalidateTag(`sf:${sf}:${year}`);
