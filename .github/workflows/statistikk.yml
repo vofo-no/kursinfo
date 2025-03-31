@@ -1,0 +1,29 @@
+name: Manuell oppdatering av statistikk
+
+on:
+  workflow_dispatch:
+   inputs:
+      studieforbund:
+        type: choice
+        description: Hvilket studieforbund som skal oppdateres
+        options: 
+        - "2504"
+        - "2508"
+        - "2510"
+        - "2525"
+        - "2539"
+        required: true
+      aarstall:
+        type: string
+        required: true
+
+jobs:
+  trigger_update:
+    runs-on: ubuntu-latest
+    env:
+      bearer_token: ${{ secrets.StatistikkCronSecret }}    
+    steps:
+      - name: Send forespørsel til statistikk.vofo.no
+        run: |
+          curl -G -d "target=${{ inputs.studieforbund }}" -d "year=${{ inputs.aarstall }}" "https://statistikk.vofo.no/api/update"
+            -H "Authorization: Bearer ${{ env.bearer_token }}"
