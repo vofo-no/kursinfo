@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   const overrideYear = searchParams.get("year");
   
-  if (overrideYear && yearRexExp.test(overrideYear) && Number(overrideYear) <= currentYear + 1) {
+  if (overrideYear && yearRegExp.test(overrideYear) && (Number(overrideYear) <= currentYear + 1)) {
     years = [overrideYear]
   }
 
