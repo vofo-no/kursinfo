@@ -21,9 +21,12 @@ jobs:
   trigger_update:
     runs-on: ubuntu-latest
     env:
-      bearer_token: ${{ secrets.StatistikkCronSecret }}    
+      bearer_token: ${{ secrets.STATISTIKKCRONSECRET }}    
     steps:
+      - if: ${{ env.bearer_token == '' }}
+        run: echo "Missing env config"
       - name: Send forespørsel til statistikk.vofo.no
+        if: ${{ env.bearer_token != '' }}
         run: |
           curl -G -d "target=${{ inputs.studieforbund }}" -d "year=${{ inputs.aarstall }}" "https://statistikk.vofo.no/api/update"
             -H "Authorization: Bearer ${{ env.bearer_token }}"
