@@ -25,5 +25,4 @@ jobs:
     steps:
       - name: Send forespørsel til statistikk.vofo.no
         run: |
-          curl -G -d "target=${{ inputs.studieforbund }}" -d "year=${{ inputs.aarstall }}" "https://statistikk.vofo.no/api/update"
-            -H "Authorization: Bearer $CRON_TOKEN"
+          curl -G -d "target=${{ inputs.studieforbund }}" -d "year=${{ inputs.aarstall }}" -H "Authorization: Bearer $CRON_TOKEN" "https://statistikk.vofo.no/api/update"
