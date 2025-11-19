@@ -9,6 +9,8 @@ export function smartCase(str: unknown) {
 
   // Temp fix for NK distriktsledd
   if (str === "NK distriktsledd") return "Norges Korforbund";
+  // Temp fix for Den Norske Turistforening Oslo og Omegn
+  if (str === "DEN NORSKE TURISTFORENING OSLO OG OMEGN") return "Den Norske Turistforening";
 
   if (str !== str.toUpperCase()) return str;
 
