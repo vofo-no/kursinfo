@@ -10,9 +10,9 @@ export function StudieforbundGenerateMetadata({
   return async function generateMetadata({
     params,
   }: {
-    params: StudieforbundParams;
+    params: Promise<StudieforbundParams>;
   }) {
-    const { year, county } = params;
+    const { year, county } = await params;
     {
       const title = makeTitle(year, county);
 
@@ -24,7 +24,11 @@ export function StudieforbundGenerateMetadata({
 }
 
 export function StudieforbundPage({ tenant }: { tenant: string }) {
-  return async function Page({ params }: { params: StudieforbundParams }) {
-    return <CoursesTableWrapper params={params} tenant={tenant} />;
+  return async function Page({
+    params,
+  }: {
+    params: Promise<StudieforbundParams>;
+  }) {
+    return <CoursesTableWrapper params={await params} tenant={tenant} />;
   };
 }

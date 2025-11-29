@@ -33,13 +33,17 @@ export async function GET(request: NextRequest) {
   );
 
   const overrideYear = searchParams.get("year");
-  
-  if (overrideYear && yearRegExp.test(overrideYear) && (Number(overrideYear) <= currentYear + 1)) {
-    years = [overrideYear]
+
+  if (
+    overrideYear &&
+    yearRegExp.test(overrideYear) &&
+    Number(overrideYear) <= currentYear + 1
+  ) {
+    years = [overrideYear];
   }
 
   await updateStatistics([target], years, (sf, year) => {
-    revalidateTag(`sf:${sf}:${year}`);
+    revalidateTag(`sf:${sf}:${year}`, "max");
   });
 
   return new Response("Success", { status: 200 });

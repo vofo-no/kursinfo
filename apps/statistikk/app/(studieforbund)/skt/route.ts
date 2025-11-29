@@ -7,7 +7,8 @@ import { config } from "./config";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Partial<StudieforbundParams> },
+  props: { params: Promise<Partial<StudieforbundParams>> }
 ) {
+  const params = await props.params;
   return redirectRoute(config.tenant, request.nextUrl.pathname, params);
 }

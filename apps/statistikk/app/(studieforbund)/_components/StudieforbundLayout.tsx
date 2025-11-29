@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import Container from "@/components/Containers/Container";
 import Footer from "@/components/Containers/Footer";
 import WhiteBox from "@/components/Containers/WhiteBox";
-import FooterSponsor from "@/components/FooterSponsor";
 import PageHeading from "@/components/PageHeading";
 
 import BuildTime from "./BuildTime";
@@ -17,19 +16,20 @@ export default function StudieforbundLayout({
   contactEmail,
   contactUrl,
 }: {
-  Header: () => React.ReactElement;
+  Header: () => React.ReactElement<any>;
   tenant: string;
   tenantName: string;
   contactEmail: string;
   contactUrl: string;
 }) {
-  return function Layout({
+  return async function Layout({
     children,
     params,
   }: {
     children: React.ReactNode;
-    params: { year: string };
+    params: Promise<{ year: string }>;
   }) {
+    const { year } = await params;
     return (
       <section>
         <Header />
@@ -38,8 +38,8 @@ export default function StudieforbundLayout({
             <WhiteBox noPadding>
               <div className="overflow-x-auto print:overflow-x-visible relative">
                 <Container>
-                  <PageHeading>Kursstatistikk {params.year}</PageHeading>
-                  <Filter year={params.year} tenant={tenant} />
+                  <PageHeading>Kursstatistikk {year}</PageHeading>
+                  <Filter year={year} tenant={tenant} />
                   <NavigationTabs />
                   <div className="relative">{children}</div>
                 </Container>
@@ -51,7 +51,7 @@ export default function StudieforbundLayout({
                   <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
                 }
               >
-                <BuildTime tenant={tenant} year={params.year} />
+                <BuildTime tenant={tenant} year={year} />
               </Suspense>
             </div>
           </Container>
@@ -74,9 +74,6 @@ export default function StudieforbundLayout({
                 <a href="http://www.vofo.no">Voksenopplæringsforbundet</a> med
                 data fra studieforbundets kurssystem.
               </p>
-            </div>
-            <div className="flex-shrink-0 not-prose">
-              <FooterSponsor />
             </div>
           </div>
         </Footer>

@@ -1,5 +1,3 @@
-import { FC } from "react";
-
 import {
   ASSOCIATION,
   AssociationReportProps,
@@ -16,12 +14,13 @@ import ComboReport from "./ComboReport";
 import GlobalReport from "./GlobalReport";
 import RegionReport from "./RegionReport";
 
-const Report: FC<
-  | RegionReportProps
-  | AssociationReportProps
-  | ComboReportProps
-  | GlobalReportProps
-> = (props) => {
+function Report(
+  props:
+    | RegionReportProps
+    | AssociationReportProps
+    | ComboReportProps
+    | GlobalReportProps,
+) {
   switch (props.type) {
     case ASSOCIATION:
       return <AssociationReport {...props} />;
@@ -32,6 +31,6 @@ const Report: FC<
     case REGION:
       return <RegionReport {...props} />;
   }
-};
+}
 
 export default Report;

@@ -1,5 +1,5 @@
-import { Dialog } from "@headlessui/react";
 import { PropsWithChildren } from "react";
+import { Dialog, DialogBackdrop, DialogTitle } from "@headlessui/react";
 import { X } from "react-feather";
 
 interface AlertDialogProps {
@@ -21,9 +21,9 @@ function AlertDialog({
       className="fixed z-10 inset-0 overflow-y-auto"
     >
       <div className="flex items-center justify-center min-h-screen">
-        <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 backdrop-filter backdrop-blur" />
+        <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-40 backdrop-filter backdrop-blur" />
         <div className="relative bg-white rounded max-w-screen-tablet mx-auto p-6">
-          <Dialog.Title className="text-xl">{title}</Dialog.Title>
+          <DialogTitle className="text-xl">{title}</DialogTitle>
           {children}
           <button
             tabIndex={0}

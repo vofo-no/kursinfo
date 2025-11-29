@@ -29,7 +29,7 @@ function Graph({
 }: {
   options: Partial<Highcharts.Options>;
   source?: dataSource;
-}): JSX.Element {
+}) {
   const [chartOptions] = useState(
     merge(
       {

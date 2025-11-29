@@ -1,5 +1,4 @@
 import FileSaver from "file-saver";
-import { FC } from "react";
 import { Download } from "react-feather";
 
 interface ExportSchemaProps {
@@ -14,7 +13,7 @@ interface ExportSchemaProps {
   reportSchema: string;
 }
 
-const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
+function ExportSchema({ course, reportSchema }: ExportSchemaProps) {
   const { ID, title, startDate, hours, endDate, organizer } = course;
   const exportToCSV = (fileName: string) => {
     const fileType =
@@ -71,6 +70,6 @@ const ExportSchema: FC<ExportSchemaProps> = ({ course, reportSchema }) => {
       Last ned rapportskjema
     </button>
   );
-};
+}
 
 export default ExportSchema;

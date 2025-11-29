@@ -8,14 +8,14 @@ import Report from "@/components/Report";
 import getReportStaticData from "@/components/Report/getReportStaticData";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     year: string;
     report: string;
-  };
+  }>;
 }
 
-export function generateStaticParams(): PageProps["params"][] {
-  const paths: PageProps["params"][] = [];
+export function generateStaticParams(): { year: string; report: string }[] {
+  const paths: { year: string; report: string }[] = [];
   const years = dataIndex.years;
 
   years.map((year) => {
@@ -43,7 +43,8 @@ function getTitleFromData({ type, name, year }: ReportPropsType) {
   }
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const data = getReportStaticData(params);
 
   const title = getTitleFromData(data);
@@ -51,7 +52,8 @@ export function generateMetadata({ params }: PageProps): Metadata {
   return { title };
 }
 
-export default function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const data = getReportStaticData(params);
 
   return <Report {...data} />;

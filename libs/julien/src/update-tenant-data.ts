@@ -278,6 +278,7 @@ async function fetchTask(
     await put(aggPath, JSON.stringify(aggData), {
       access: "public",
       addRandomSuffix: false,
+      allowOverwrite: true,
       cacheControlMaxAge: 43200, // 12 hours
     });
   }
@@ -287,6 +288,7 @@ async function fetchTask(
   await put(outpath, JSON.stringify(compress(data)), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
   });
 
   console.timeEnd(loopJobName);

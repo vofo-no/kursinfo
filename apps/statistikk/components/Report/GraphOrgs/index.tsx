@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type Options } from "highcharts";
 
 import { Organization } from "@/types/reports";
 
@@ -11,10 +11,10 @@ interface PropTypes {
   unit: "Studieforbund" | "Organisasjon";
 }
 
-const Graph: FC<PropTypes> = ({ items, year, unit }) => {
+function Graph({ items, year, unit }: PropTypes) {
   const lastYear = String(Number(year) - 1);
 
-  const options: Highcharts.Options = {
+  const options: Options = {
     chart: {
       type: "column",
       height: 180,
@@ -70,6 +70,6 @@ const Graph: FC<PropTypes> = ({ items, year, unit }) => {
       <GraphBase options={options} />
     </>
   );
-};
+}
 
 export default Graph;

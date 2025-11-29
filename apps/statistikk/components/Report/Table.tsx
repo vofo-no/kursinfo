@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactNode, type JSX } from "react";
 
 interface TableProps {
   title: string;

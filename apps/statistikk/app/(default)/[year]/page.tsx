@@ -32,12 +32,12 @@ function getData(year: string) {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     year: string;
-  };
+  }>;
 }
 
-export function generateStaticParams(): PageProps["params"][] {
+export function generateStaticParams(): { year: string }[] {
   const years = dataIndex.years;
 
   return years.map((year) => ({ year }));
@@ -45,11 +45,13 @@ export function generateStaticParams(): PageProps["params"][] {
 
 export const dynamicParams = false;
 
-export function generateMetadata({ params }: PageProps): Metadata {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   return { title: `Statistikk ${params.year}` };
 }
 
-export default function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const { year } = params;
   const { regionReports, globalReports, associationReports, comboReports } =
     getData(year);

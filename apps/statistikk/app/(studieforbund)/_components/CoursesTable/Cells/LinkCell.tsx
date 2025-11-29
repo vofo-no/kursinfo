@@ -1,6 +1,5 @@
 "use client";
 
-import { PropsWithChildren } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
@@ -12,7 +11,7 @@ import getHref from "../../../_helpers/getHref";
 export default function LinkCell({
   params,
   children,
-}: PropsWithChildren<{ params: Partial<CoursesParams> }>) {
+}: React.PropsWithChildren<{ params: Partial<CoursesParams> }>) {
   const oldParams = useParams<StudieforbundParams>();
   const prefix = usePathname()?.split("/", 2)[1] || "";
 

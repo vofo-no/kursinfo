@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 
 import Container from "@/components/Containers/Container";
 import Footer from "@/components/Containers/Footer";
-import FooterSponsor from "@/components/FooterSponsor";
 import Header from "@/components/Header";
 import SuperHeader from "@/components/SuperHeader";
 
@@ -42,7 +41,6 @@ export default function RootLayout({
             Statistikkbank for{" "}
             <a href="https://www.vofo.no/">Voksenopplæringsforbundet</a>
           </div>
-          <FooterSponsor />
         </Footer>
       </body>
     </html>

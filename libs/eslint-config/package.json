@@ -1,8 +1,16 @@
 {
   "name": "@kursinfo/eslint-config",
   "version": "0.0.0",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
   "private": true,
   "devDependencies": {
-    "eslint-config-turbo": "latest"
+    "@types/node": "^24.10.1",
+    "eslint-config-turbo": "latest",
+    "typescript": "latest"
+  },
+  "exports": {
+    ".": "./src/index.ts"
   }
 }

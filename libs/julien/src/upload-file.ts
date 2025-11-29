@@ -27,6 +27,7 @@ if (data) {
   put(outpath, JSON.stringify(compress(data)), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
   }).then((result) => console.log(`Uploaded: ${result.url}`));
 } else {
   console.error("No data");
