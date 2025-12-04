@@ -107,8 +107,8 @@ export default function ClientTable({
         ...course,
         startDate: remixISODate(course.startDate, true) || "",
         endDate: remixISODate(course.endDate, true) || undefined,
-        organizer: organizers[course.organizerIndex],
-        curriculum: curriculums[course.curriculumIndex],
+        organizer: organizers[course.organizerIndex] || "",
+        curriculum: curriculums[course.curriculumIndex] || "",
       });
     },
     [curriculums, organizers, items],

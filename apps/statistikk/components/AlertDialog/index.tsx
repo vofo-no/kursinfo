@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import { Dialog, DialogBackdrop, DialogTitle } from "@headlessui/react";
 import { X } from "react-feather";
 
@@ -13,7 +12,7 @@ function AlertDialog({
   close,
   title,
   children,
-}: PropsWithChildren<AlertDialogProps>) {
+}: React.PropsWithChildren<AlertDialogProps>) {
   return (
     <Dialog
       open={open}

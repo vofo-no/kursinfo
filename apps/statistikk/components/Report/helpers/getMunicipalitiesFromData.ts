@@ -14,7 +14,7 @@ export default function getMunicipalitiesFromData(
 ): Array<ReportMunicipality> {
   return municipalityKeys
     .map((key) => ({
-      name: municipalities[key].name,
+      name: municipalities[key]?.name || key,
       values: municipalityValues[key] || noValues,
       key,
     }))

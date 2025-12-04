@@ -8,8 +8,14 @@ interface Props {
 }
 
 export default function SelectCounty({ year }: Props) {
-  const counties = getCounties(year).map((c) => [c.param, c.region]);
-  const countyOptions = [[DEFAULT_COUNTY_PARAM, "Hele landet"], ...counties];
+  const counties: [string, string][] = getCounties(year).map((c) => [
+    c.param,
+    c.region,
+  ]);
+  const countyOptions: [string, string][] = [
+    [DEFAULT_COUNTY_PARAM, "Hele landet"],
+    ...counties,
+  ];
 
   return (
     <Select aria-label="Velg fylke" options={countyOptions} propName="county" />

@@ -1,5 +1,3 @@
-import { PropsWithChildren } from "react";
-
 const COLORS = {
   default: "bg-white",
   blue: "bg-blue-50",
@@ -15,7 +13,7 @@ function ReportPage({
   children,
   color = COLORS.default,
   title,
-}: PropsWithChildren<ReportPageProps>) {
+}: React.PropsWithChildren<ReportPageProps>) {
   return (
     <section
       className={`${color} break-after-page grid break-before-page tablet:min-h-screen snap-start p-2 py-8 print:p-0 overflow-auto print:overflow-visible`}

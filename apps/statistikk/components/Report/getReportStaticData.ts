@@ -30,10 +30,8 @@ function getAssociationName(key: string): INamed {
   return associationNames[key as AssociationNameKey];
 }
 
-function recordToArray<T>(
-  records: Record<string, T>,
-): Array<T & { key: string }> {
-  return Object.keys(records).map((key) => ({ ...records[key], key }));
+function recordToArray<T>(records: Record<string, T>) {
+  return Object.entries(records).map(([key, value]) => ({ ...value, key }));
 }
 
 export function getReportStaticData({
@@ -43,6 +41,12 @@ export function getReportStaticData({
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data: IDataFile = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];
+
+  if (!reportData) {
+    throw new Error(
+      `Report data not found for report: ${report} in year: ${year}`,
+    );
+  }
 
   const { name, historical } = reportData;
 

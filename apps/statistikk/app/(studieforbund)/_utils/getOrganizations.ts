@@ -14,5 +14,8 @@ export const getOrganizations = cache(async (tenant: string, year: string) => {
     year,
   )) || { organizationParams: [], organizations: [] };
 
-  return organizationParams.map((item) => [item, organizations[Number(item)]]);
+  return organizationParams.map<[string, string]>((item) => [
+    item,
+    organizations[Number(item)] || item,
+  ]);
 });

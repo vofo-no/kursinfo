@@ -1,9 +1,7 @@
-import { PropsWithChildren } from "react";
-
 function Container({
   children,
   noPadding,
-}: PropsWithChildren<{ noPadding?: boolean }>) {
+}: React.PropsWithChildren<{ noPadding?: boolean }>) {
   return (
     <div
       className={`max-w-screen-desktop mx-auto print:max-w-none print:w-100 ${

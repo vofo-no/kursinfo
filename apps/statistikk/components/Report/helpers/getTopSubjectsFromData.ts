@@ -4,11 +4,18 @@ function unpack(
   keys: Array<string>,
   ageSetIndex: number,
   subjects: IReportBase["subjects"],
-) {
-  return keys.map((key) => ({
-    key,
-    value: subjects[key].participants.ages[ageSetIndex],
-  }));
+): {
+  key: string;
+  value: number;
+}[] {
+  return keys
+    .filter(
+      (key) => subjects[key] && subjects[key].participants.ages[ageSetIndex],
+    )
+    .map((key) => ({
+      key,
+      value: subjects[key]!.participants.ages[ageSetIndex]!,
+    }));
 }
 
 export default function getTopSubjectsFromData(

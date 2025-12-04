@@ -1,12 +1,10 @@
-import { ReactNode } from "react";
-
 import { INamed } from "@/types/reports";
 
 function isNamed(item: unknown): item is INamed {
   return (item as INamed).name !== undefined;
 }
 
-export function showName(item: string | INamed, key?: string): ReactNode {
+export function showName(item: string | INamed, key?: string): React.ReactNode {
   if (isNamed(item)) {
     return (
       <>

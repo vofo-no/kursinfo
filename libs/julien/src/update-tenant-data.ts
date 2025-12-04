@@ -9,6 +9,7 @@ import { getTenantSettings, hasTenant } from "./get-tenant-settings";
 import { getCounties } from "./helpers/getCounties";
 import { makeShortAggregate } from "./helpers/makeShortAggregate";
 import { smartCase } from "./helpers/smartCase";
+import sortEntriesByValue from "./helpers/sort-entries";
 import { Adapter, IndexedCourseItem, ITenantData } from "./types";
 
 export function isValidTarget(target: string) {
@@ -146,22 +147,19 @@ async function getData(
   );
 
   // Sort curriculums alphabetically
-  const sortedCurriculumIds = Object.keys(curriculumIds).sort((a, b) =>
-    curriculumIds[a].localeCompare(curriculumIds[b], "nb"),
-  );
-  const curriculums = sortedCurriculumIds.map((key) =>
-    String(curriculumIds[key]),
-  );
+  const { sortedKeys: sortedCurriculumIds, sortedValues: curriculums } =
+    sortEntriesByValue(curriculumIds);
 
   // Sort organizers alphabetically
-  const sortedOrganizerIds = Object.keys(organizerIds).sort((a, b) =>
-    organizerIds[a].localeCompare(organizerIds[b], "nb"),
-  );
-  const organizers = sortedOrganizerIds.map((key) => String(organizerIds[key]));
+  const { sortedKeys: sortedOrganizerIds, sortedValues: organizers } =
+    sortEntriesByValue(organizerIds);
 
   // Sort organizations alphabetically
   const organizationParams = Array.from(organizationCodes).sort((a, b) =>
-    organizations[Number(a)].localeCompare(organizations[Number(b)], "nb"),
+    (organizations[Number(a)] || "?").localeCompare(
+      organizations[Number(b)] || "?",
+      "nb",
+    ),
   );
 
   const items: Array<IndexedCourseItem> = data.map((item) => {

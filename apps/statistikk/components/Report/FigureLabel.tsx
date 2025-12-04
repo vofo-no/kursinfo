@@ -1,5 +1,3 @@
-import { PropsWithChildren } from "react";
-
 interface FigureLabelProps {
   subtitle?: string;
 }
@@ -7,7 +5,7 @@ interface FigureLabelProps {
 function FigureLabel({
   children,
   subtitle,
-}: PropsWithChildren<FigureLabelProps>) {
+}: React.PropsWithChildren<FigureLabelProps>) {
   return (
     <div className="mb-3 mt-8">
       <h3

@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 
 import { AgeSet, MainSubjectWithKey } from "@/types/reports";
 import intl from "@/lib/intl";

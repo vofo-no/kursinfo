@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 
 import Container from "@/components/Containers/Container";
 import Footer from "@/components/Containers/Footer";

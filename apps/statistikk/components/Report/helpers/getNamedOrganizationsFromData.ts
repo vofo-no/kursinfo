@@ -24,6 +24,6 @@ export default function getNamedOrganizationsFromData(
 
   return associations.map((item) => ({
     ...item,
-    ...names[item.key],
+    ...(names[item.key] || { name: item.key }),
   }));
 }

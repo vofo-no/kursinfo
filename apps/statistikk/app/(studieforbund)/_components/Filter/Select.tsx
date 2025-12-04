@@ -8,7 +8,7 @@ import getHref from "@/app/(studieforbund)/_helpers/getHref";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
 interface SelectProps {
-  options?: (string[] | string)[];
+  options?: ([string, string] | string)[];
   propName: keyof CoursesParams;
 }
 

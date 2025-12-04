@@ -22,7 +22,7 @@ export function makeShortAggregate(data: ITenantData): ShortAggregate {
       .map((code) =>
         analyzeOrganization(
           code,
-          data.organizations[Number(code)],
+          data.organizations[Number(code)] || "Ukjent",
           data.items.filter((item) => item.organizationCode === code),
         ),
       )

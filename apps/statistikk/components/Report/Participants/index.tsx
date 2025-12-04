@@ -31,7 +31,7 @@ const Participants = ({
   year,
   courses,
 }: ParticipantsProps) => {
-  if (!participantsHistogram) return null;
+  if (!participantsHistogram || !participantsHistogram[0]) return null;
 
   return (
     <>

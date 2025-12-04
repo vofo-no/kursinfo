@@ -1,5 +1,3 @@
-import { PropsWithChildren, ReactNode, type JSX } from "react";
-
 interface TableProps {
   title: string;
   subtitle?: string;
@@ -8,8 +6,8 @@ interface TableProps {
 
 interface TableRowProps {
   index: number;
-  title: ReactNode;
-  children: JSX.Element[];
+  title: React.ReactNode;
+  children: React.ReactElement[];
   highlight?: boolean;
 }
 
@@ -48,7 +46,7 @@ function Table({
   title,
   subtitle,
   columns = [],
-}: PropsWithChildren<TableProps>) {
+}: React.PropsWithChildren<TableProps>) {
   return (
     <>
       <div className="mt-8 mb-3">

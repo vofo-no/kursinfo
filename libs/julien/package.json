@@ -8,14 +8,14 @@
     "@kursinfo/eapply-sdk": "workspace:*",
     "@vercel/blob": "^2.0.0",
     "chalk": "^4.1.2",
-    "compress-json": "^3.1.1"
+    "compress-json": "^3.4.0"
   },
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
     "@types/node": "^24.10.1",
-    "@types/papaparse": "^5.3.15",
-    "papaparse": "^5.5.2",
+    "@types/papaparse": "^5.5.1",
+    "papaparse": "^5.5.3",
     "typescript": "latest"
   },
   "exports": {

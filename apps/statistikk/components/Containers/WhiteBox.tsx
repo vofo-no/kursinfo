@@ -1,9 +1,7 @@
-import { PropsWithChildren } from "react";
-
 function WhiteBox({
   noPadding,
   children,
-}: PropsWithChildren<{ noPadding?: boolean }>) {
+}: React.PropsWithChildren<{ noPadding?: boolean }>) {
   return (
     <div
       className={`bg-white text-black shadow ${

@@ -10,7 +10,7 @@ interface Props {
 
 export default async function SelectOrganization({ year, tenant }: Props) {
   const organizations = await getOrganizations(tenant, year);
-  const organizationOptions = [
+  const organizationOptions: [string, string][] = [
     [DEFAULT_ORGANIZATION_PARAM, "Alle organisasjoner"],
     ...organizations,
   ];

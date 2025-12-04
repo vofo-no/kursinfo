@@ -19,15 +19,21 @@ export default function getCountiesFromData(
 ): Array<Counties> {
   const reportData = reports[reportKey];
 
+  if (!reportData) {
+    throw new Error(`Report data not found for report: ${reportKey}`);
+  }
+
   return regions
     .filter((key) => {
       const regionReport = reports[key];
-      return regionReport.type === REGION && !regionReport.isFuture;
+      return (
+        regionReport && regionReport.type === REGION && !regionReport.isFuture
+      );
     })
     .map((key) => {
       const regionReport = reports[key];
 
-      if (regionReport.type !== REGION) throw Error("Expected region type");
+      if (regionReport?.type !== REGION) throw Error("Expected region type");
       return regionReport;
     })
     .map(
@@ -44,7 +50,14 @@ export default function getCountiesFromData(
           case ASSOCIATION: {
             if ((reportData.key as string) !== reportData.key)
               throw new Error("Unexpected association key");
+
             const association = associations[reportData.key];
+            if (!association) {
+              throw new Error(
+                `Association data not found for key: ${reportData.key}`,
+              );
+            }
+
             return {
               name: name,
               courses: association.courses,
@@ -64,19 +77,19 @@ export default function getCountiesFromData(
             return {
               name,
               courses: aKeys.reduce(
-                (sum, a) => sum + associations[a].courses,
+                (sum, a) => sum + associations[a]!.courses,
                 0,
               ),
               participants: aKeys.reduce(
                 (sum, a) =>
                   sum +
-                  associations[a].participants.males +
-                  associations[a].participants.females,
+                  associations[a]!.participants.males +
+                  associations[a]!.participants.females,
                 0,
               ),
-              hours: aKeys.reduce((sum, a) => sum + associations[a].hours, 0),
+              hours: aKeys.reduce((sum, a) => sum + associations[a]!.hours, 0),
               coursesPerCapita: perCapita(
-                aKeys.reduce((sum, a) => sum + associations[a].courses, 0),
+                aKeys.reduce((sum, a) => sum + associations[a]!.courses, 0),
                 population,
               ),
               isCurrent: false,

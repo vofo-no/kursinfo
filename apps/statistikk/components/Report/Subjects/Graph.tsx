@@ -8,6 +8,8 @@ interface SubjectsGraphProps {
 }
 
 const Graph = ({ year, ages }: SubjectsGraphProps) => {
+  if (!ages[0]) return null;
+
   const minStartYear = year - 4;
   const calcStartYear = year + 1 - ages[0].length;
   const startYear = calcStartYear > minStartYear ? calcStartYear : minStartYear;
