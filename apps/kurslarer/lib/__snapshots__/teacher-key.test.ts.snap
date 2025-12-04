@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`teacher key generation 1`] = `"mts-krmskrt-wq7x"`;
+
+exports[`teacher key generation 2`] = `"mts-krmskrt-kvun"`;
