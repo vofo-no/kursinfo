@@ -12,7 +12,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-turbo": "latest",
     "typescript": "latest",
-    "typescript-eslint": "^8.48.1"
+    "typescript-eslint": "^8.49.0"
   },
   "exports": {
     ".": "./src/base.ts"
