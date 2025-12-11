@@ -16,7 +16,7 @@ export default function StudieforbundLayout({
   contactEmail,
   contactUrl,
 }: {
-  Header: () => React.ReactElement<any>;
+  Header: () => React.ReactElement;
   tenant: string;
   tenantName: string;
   contactEmail: string;

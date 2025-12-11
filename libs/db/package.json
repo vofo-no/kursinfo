@@ -6,11 +6,11 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "drizzle-orm": "^0.44.7"
+    "drizzle-orm": "^0.45.1"
   },
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.3",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "typescript": "latest"

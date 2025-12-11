@@ -31,11 +31,7 @@ export async function getTableData(
     );
   }
 
-  switch (
-    group
-    // TODO
-  ) {
-  }
+  // TODO /* switch (group) { }*/
 
   return data;
 }

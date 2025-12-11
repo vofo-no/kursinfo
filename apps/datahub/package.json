@@ -9,21 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@stackframe/stack": "^2.8.54",
-    "next": "16.0.8",
-    "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "@stackframe/stack": "^2.8.56",
+    "next": "16.0.9",
+    "react": "19.2.2",
+    "react-dom": "19.2.2"
   },
   "devDependencies": {
     "@kursinfo/eslint-config": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^20.19.25",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^24.10.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.0.8",
-    "tailwindcss": "^4.1.17",
+    "eslint-config-next": "16.0.9",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }
 }
