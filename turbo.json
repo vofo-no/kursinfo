@@ -11,7 +11,7 @@
         "EAPPLY_TOKEN",
         "EAPPLY_URL",
         "EAPPLY_USER",
-        "STACK_SECRET_SERVER_KEY"
+        "NEON_AUTH_BASE_URL"
       ],
       "outputs": [".next/**", "!.next/cache/**"],
       "inputs": [

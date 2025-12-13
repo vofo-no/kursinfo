@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { StackProvider, StackTheme } from "@stackframe/stack";
-
-import { stackClientApp } from "../stack/client";
 
 import "./globals.css";
+
+import {
+  OrganizationSwitcher,
+  SignedIn,
+  UserButton,
+} from "@neondatabase/neon-js/auth/react/ui";
+
+import { AuthProvider } from "@/components/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,17 +28,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StackProvider app={stackClientApp}>
-          <StackTheme>{children}</StackTheme>
-        </StackProvider>
+        <AuthProvider>
+          <SignedIn>
+            <header className="flex justify-end items-center p-4 gap-4 h-16">
+              <UserButton size="icon" />
+              <OrganizationSwitcher hidePersonal />
+            </header>
+          </SignedIn>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
