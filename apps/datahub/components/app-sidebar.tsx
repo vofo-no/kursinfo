@@ -21,12 +21,12 @@ import {
 const items = [
   {
     title: "Oversikt",
-    url: "/sf",
+    url: "/",
     icon: Home,
   },
   {
     title: "Kurslærere",
-    url: "/sf/kurslarere",
+    url: "/kurslarere",
     icon: UsersIcon,
   },
 ];

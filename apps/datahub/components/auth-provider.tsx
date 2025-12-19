@@ -18,7 +18,7 @@ export function AuthProvider({
       onSessionChange={() => {
         router.refresh();
       }}
-      redirectTo="/account/settings"
+      redirectTo="/"
       emailOTP
       signUp={false}
       organization
