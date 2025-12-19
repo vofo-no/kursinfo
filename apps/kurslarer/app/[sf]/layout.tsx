@@ -7,11 +7,9 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function SfLayout({
   children,
-  modal,
   params,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
   params: Promise<{ sf: string }>;
 }>) {
   const { sf } = await params;
@@ -31,10 +29,7 @@ export default async function SfLayout({
           </p>
         </div>
       </header>
-      <main className="container">
-        {children}
-        {modal}
-      </main>
+      <main className="container">{children}</main>
       <footer className="bg-accent text-accent-foreground py-6 mt-auto border-t">
         <div className="container flex justify-between items-center">
           <p className="text-sm flex items-center gap-2">

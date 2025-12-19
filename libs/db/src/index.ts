@@ -1,11 +1,19 @@
-import { and, between, desc, eq, gte, sql } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/neon-http";
+import {
+  and,
+  between,
+  countDistinct,
+  desc,
+  eq,
+  gte,
+  lt,
+  min,
+  sql,
+} from "drizzle-orm";
 
-import { courses, teachers } from "./schema";
+import { db } from "./db";
+import { courses, features, teachers } from "./schema";
 
-const db = drizzle(process.env.DATABASE_URL!);
-
-interface CourseSyncData {
+export interface CourseSyncData {
   courseId: number;
   title: string;
   curriculum: string;
@@ -17,7 +25,7 @@ interface CourseSyncData {
   teacherName: string;
 }
 
-export function syncCoursesForMonth(
+export async function syncCoursesForMonth(
   scope: string,
   year: number,
   month: number,
@@ -46,11 +54,11 @@ export function syncCoursesForMonth(
     name,
   }));
 
-  return db.transaction(async (tx) => {
-    const monthStart = new Date(Date.UTC(year, month - 1, 1));
-    const monthEnd = new Date(Date.UTC(year, month, 0));
+  const monthStart = new Date(Date.UTC(year, month - 1, 1));
+  const monthEnd = new Date(Date.UTC(year, month, 0));
 
-    // clear existing courses for the month and scope
+  await db.transaction(async (tx) => {
+    // delete all courses in the given month and scope
     await tx
       .delete(courses)
       .where(
@@ -67,7 +75,7 @@ export function syncCoursesForMonth(
     // upsert teachers
     await tx.insert(teachers).values(teachersData).onConflictDoNothing();
 
-    // insert new courses
+    // insert courses
     await tx.insert(courses).values(syncData);
   });
 }
@@ -94,8 +102,67 @@ export async function getTeachersMatchingQuery(
     .where(
       and(
         ...conditions,
-        sql`courses.content_search @@ plainto_tsquery('norwegian', ${query})`,
+        sql`websearch_to_tsquery('norwegian', ${query}) @@ ${courses.contentSearch}`,
       ),
     )
     .orderBy(courses.teacherId, desc(courses.date));
+}
+
+export async function getTeachersSyncedByMonthsLastFiveYears(
+  scope: string,
+): Promise<
+  {
+    month: string;
+    teacherCount: number;
+    syncedAt: Date | null;
+  }[]
+> {
+  const results = await db
+    .select({
+      month: sql<string>`TO_CHAR(${courses.date}, 'YYYY-MM') AS month`,
+      teacherCount: countDistinct(courses.teacherId),
+      syncedAt: min(courses.createdAt),
+    })
+    .from(courses)
+    .where(
+      and(
+        eq(courses.scope, scope),
+        gte(courses.date, sql`NOW() - INTERVAL '61 months'`),
+      ),
+    )
+    .groupBy(sql`month`)
+    .orderBy(sql`month DESC`);
+
+  return results;
+}
+
+export async function getFeatureSettings(
+  featureName: "kurslarer",
+  session: Record<string, unknown> | null,
+): Promise<{ dbScope: string; dataScope: string } | null>;
+export async function getFeatureSettings(
+  featureName: string,
+  session: Record<string, unknown> | null,
+) {
+  const organizationId = session?.["activeOrganizationId"] as string;
+  if (!organizationId) {
+    return null;
+  }
+
+  const result = await db
+    .select()
+    .from(features)
+    .where(
+      and(
+        eq(features.name, featureName),
+        eq(features.organizationId, organizationId),
+      ),
+    );
+
+  const settings = result[0]?.settings;
+  if (!settings) {
+    return null;
+  }
+
+  return settings;
 }

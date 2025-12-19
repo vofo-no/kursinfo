@@ -3,14 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
-import {
-  OrganizationSwitcher,
-  SignedIn,
-  UserButton,
-} from "@neondatabase/neon-js/auth/react/ui";
-
 import { AuthProvider } from "@/components/auth-provider";
-import { ModeToggle } from "@/components/mode-toggle";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
@@ -32,7 +25,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="nb" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -43,14 +36,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <SignedIn>
-              <header className="flex justify-end items-center p-4 gap-4 h-16">
-                <UserButton size="icon" />
-                <OrganizationSwitcher hidePersonal />
-              </header>
-            </SignedIn>
-            {children}
-            <ModeToggle />
+            <div className="relative flex min-h-svh flex-col bg-background">
+              {children}
+            </div>
           </AuthProvider>
         </ThemeProvider>
       </body>

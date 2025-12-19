@@ -1,61 +1,61 @@
+import { getTeachersMatchingQuery } from "@kursinfo/db";
+
 import { ItemGroup } from "@/components/ui/item";
 import { TeacherData, TeacherItem } from "@/components/teacher-item";
 
-export function Results({ query }: { query?: string }) {
+export async function Results({ sf, query }: { sf: string; query?: string }) {
   if (!query) return <p>Søk da!</p>;
 
-  const teachers: TeacherData[] = [
-    {
-      id: "123",
-      name: "Hipp Hurra",
-      avatar: "https://github.com/mgrim.png",
-      courses: 12,
-      studieplans: [
-        "11232 Pjoning på hesteryggen",
-        "123522 Hipp hopp hurra",
-        "12523 Organisasjon for alle penga",
-      ],
-    },
-    {
-      id: "233",
-      name: "Snurre Sprett Hurra",
-      avatar: "https://github.com/mgrim.png",
-      courses: 2,
-      studieplans: [
-        "11232 Pjoning på hesteryggen",
-        "123522 Hipp hopp hurra",
-        "12523 Organisasjon for alle penga",
-      ],
-    },
-    {
-      id: "333",
-      name: "Test Person",
-      avatar: "https://github.com/mgrim.png",
-      courses: 1224,
-      studieplans: [
-        "11232 Pjoning på hesteryggen",
-        "123522 Hipp hopp hurra",
-        "12523 Organisasjon for alle penga",
-        "0223 Dra meg nå baklengs inn i fuglekassa",
-      ],
-    },
-    {
-      id: "422",
-      name: "Jens!",
-      avatar: "https://github.com/mgrim.png",
-      courses: 42,
-      studieplans: [
-        "11232 Pjoning på hesteryggen",
-        "123522 Hipp hopp hurra",
-        "12523 Organisasjon for alle penga",
-      ],
-    },
-  ];
+  const data = await getTeachersMatchingQuery(sf, query);
+
+  // Transform data into TeacherData[]
+  // Group by teacher, counting courses and collecting studieplans
+  const teacherMap: Map<string, TeacherData> = new Map();
+
+  data.forEach(({ teachers, courses }) => {
+    const { id, name } = teachers;
+    if (!teacherMap.has(id)) {
+      teacherMap.set(id, {
+        id,
+        name,
+        courses: [
+          {
+            id: String(courses.id),
+            name: courses.title,
+            date: courses.date,
+            organizer: courses.organizer,
+            curriculum: courses.curriculum,
+            county: courses.county,
+          },
+        ],
+        studieplans: courses.curriculum ? [courses.curriculum] : [],
+      });
+    } else {
+      const entry = teacherMap.get(id)!;
+      entry.courses.push({
+        id: String(courses.id),
+        name: courses.title,
+        date: courses.date,
+        organizer: courses.organizer,
+        curriculum: courses.curriculum,
+        county: courses.county,
+      });
+      if (
+        courses.curriculum &&
+        !entry.studieplans?.includes(courses.curriculum)
+      ) {
+        entry.studieplans?.push(courses.curriculum);
+      }
+    }
+  });
+
+  const teachers = Array.from(teacherMap.values());
 
   return (
     <div className="space-y-6">
       <p>
-        Minst 1 000 resultater for <strong>{query}</strong>.
+        Fant {teachers.length.toLocaleString("no-NB")} resultater for{" "}
+        <strong>{query}</strong>.
       </p>
       <div className="flex w-full flex-col gap-6">
         <ItemGroup>

@@ -13,8 +13,8 @@
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.3",
-    "@types/papaparse": "^5.5.1",
+    "@types/node": "^24.10.4",
+    "@types/papaparse": "^5.5.2",
     "papaparse": "^5.5.3",
     "typescript": "latest"
   },

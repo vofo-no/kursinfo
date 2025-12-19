@@ -1,6 +1,8 @@
 import { AccountView } from "@neondatabase/neon-js/auth/react/ui";
 import { accountViewPaths } from "@neondatabase/neon-js/auth/react/ui/server";
 
+import { TypographyH1 } from "@/components/ui/typography";
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -15,8 +17,9 @@ export default async function AccountPage({
   const { path } = await params;
 
   return (
-    <main className="container p-4 md:p-6">
+    <>
+      <TypographyH1>Brukerinnstillinger</TypographyH1>
       <AccountView path={path} />
-    </main>
+    </>
   );
 }

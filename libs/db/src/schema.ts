@@ -4,7 +4,9 @@ import {
   date,
   index,
   integer,
+  jsonb,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -33,7 +35,7 @@ export const courses = pgTable(
     county: text("county").notNull(),
     contentSearch: tsVector("content_search").generatedAlwaysAs(
       (): SQL =>
-        sql`to_tsvector('norwegian', concat_ws(', ', ${courses.title}, ${courses.curriculum}, ${courses.organizer}))`,
+        sql`to_tsvector('norwegian', ${courses.title} || ' ' || ${courses.curriculum} || ' ' || ${courses.organizer})`,
     ),
     date: date("date").notNull(),
     scope: text("scope").notNull(),
@@ -46,4 +48,16 @@ export const courses = pgTable(
     index("idx_date").on(t.date),
     index("idx_scope").on(t.scope),
   ],
+);
+
+export const features = pgTable(
+  "features",
+  {
+    name: text("name").notNull(),
+    organizationId: text("organization_id").notNull(),
+    settings: jsonb("settings")
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+  },
+  (table) => [primaryKey({ columns: [table.name, table.organizationId] })],
 );

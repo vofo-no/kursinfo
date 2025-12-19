@@ -2,17 +2,21 @@
   "name": "@kursinfo/db",
   "version": "1.0.0",
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "drizzle-orm": "^0.45.1"
+    "drizzle-orm": "^0.45.1",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.3",
+    "@types/node": "^24.10.4",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0",
     "typescript": "latest"
   },
   "exports": {

@@ -1,6 +1,8 @@
 import { OrganizationView } from "@neondatabase/neon-js/auth/react/ui";
 import { organizationViewPaths } from "@neondatabase/neon-js/auth/react/ui/server";
 
+import { TypographyH1 } from "@/components/ui/typography";
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -15,8 +17,9 @@ export default async function OrganizationPage({
   const { path } = await params;
 
   return (
-    <main className="container p-4 md:p-6">
+    <>
+      <TypographyH1>Administrer organisasjon</TypographyH1>
       <OrganizationView path={path} />
-    </main>
+    </>
   );
 }
