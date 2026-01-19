@@ -9,12 +9,7 @@ export function getTenantDataUrl(tenant: string, year: string) {
 }
 
 export async function uncompressTenantData(data: string): Promise<ITenantData> {
-  const programExecutionTimer = "🕺 Uncompressing...";
-  console.time(programExecutionTimer);
-
   const result = decompress(await JSON.parse(data));
-
-  console.timeEnd(programExecutionTimer);
   return result;
 }
 
