@@ -29,6 +29,7 @@ export function StudieforbundPage({ tenant }: { tenant: string }) {
   }: {
     params: Promise<StudieforbundParams>;
   }) {
-    return <CoursesTableWrapper params={await params} tenant={tenant} />;
+    const { year, county, organization, group } = await params;
+    return <CoursesTableWrapper params={{year, county, organization, group}} tenant={tenant} />;
   };
 }
