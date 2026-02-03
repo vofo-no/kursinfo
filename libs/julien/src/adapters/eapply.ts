@@ -17,7 +17,7 @@ export class EapplyAdapter implements Adapter {
         .filter(
           (item) =>
             item.applicationStatus === "Granted" ||
-            item.applicationStatus === "Closed",
+            (item.applicationStatus === "Closed" && item.amountApproved),
         )
         .filter((item) => item.decision !== "Rejected")
         .map((i) => {
