@@ -6,10 +6,9 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
-  "dependencies": {
-    "@kursinfo/julien": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@kursinfo/julien": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
     "tsup": "^8.5.1",
     "typescript": "latest"
