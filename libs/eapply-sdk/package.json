@@ -2,6 +2,7 @@
   "name": "@kursinfo/eapply-sdk",
   "version": "1.0.1",
   "type": "module",
+  "private": true,
   "scripts": {
     "check-types": "tsc --noEmit",
     "dev": "tsc --watch",

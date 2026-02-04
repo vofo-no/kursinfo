@@ -1,3 +1,5 @@
 {
-  "name": "@kursinfo/typescript-config"
+  "name": "@kursinfo/typescript-config",
+  "version": "0.0.0",
+  "private": true
 }
