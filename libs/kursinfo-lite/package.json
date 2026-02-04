@@ -1,0 +1,20 @@
+{
+  "name": "@vofo-no/kursinfo-lite",
+  "version": "1.0.0",
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "dependencies": {
+    "@kursinfo/julien": "workspace:*"
+  },
+  "devDependencies": {
+    "@kursinfo/typescript-config": "workspace:*",
+    "tsup": "^8.5.1",
+    "typescript": "latest"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts"
+}
