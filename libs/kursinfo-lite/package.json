@@ -1,6 +1,6 @@
 {
   "name": "@vofo-no/kursinfo-lite",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "tsup src/index.ts --format cjs,esm --dts",
