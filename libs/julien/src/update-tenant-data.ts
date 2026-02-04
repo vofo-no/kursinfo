@@ -1,3 +1,4 @@
+import { IndexedCourseItem, ITenantData } from "@kursinfo/types";
 import { put } from "@vercel/blob";
 import chalk from "chalk";
 import { compress, trimUndefinedRecursively } from "compress-json";
@@ -10,7 +11,7 @@ import { getCounties } from "./helpers/getCounties";
 import { makeShortAggregate } from "./helpers/makeShortAggregate";
 import { smartCase } from "./helpers/smartCase";
 import sortEntriesByValue from "./helpers/sort-entries";
-import { Adapter, IndexedCourseItem, ITenantData } from "./types";
+import { Adapter } from "./types";
 
 export function isValidTarget(target: string) {
   return hasTenant(target);

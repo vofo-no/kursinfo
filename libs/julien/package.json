@@ -11,11 +11,13 @@
   "dependencies": {
     "@kursinfo/eapply-sdk": "workspace:*",
     "@vercel/blob": "^2.0.1",
+    "@vofo-no/kursinfo-lite": "workspace:*",
     "chalk": "^4.1.2",
     "compress-json": "^3.4.0"
   },
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
+    "@kursinfo/types": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
     "@types/node": "^24.10.10",
     "@types/papaparse": "^5.5.2",

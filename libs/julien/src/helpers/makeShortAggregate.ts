@@ -1,5 +1,4 @@
-import { CourseStatuses } from "../constants";
-import { ITenantData } from "../types";
+import { CourseStatus, ITenantData } from "@kursinfo/types";
 
 interface OrganizationAggregate {
   name: string;
@@ -47,7 +46,7 @@ function analyzeOrganization(
   };
 
   return items.reduce((result, item) => {
-    if (item.status === CourseStatuses.DONE) {
+    if (item.status === CourseStatus.DONE) {
       result.hours += item.hours;
       result.courses++;
     } else {
