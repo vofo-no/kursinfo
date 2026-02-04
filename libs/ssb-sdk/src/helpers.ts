@@ -13,7 +13,7 @@ export const COL = {
 
 const sumCols = (rows: number[][], ...cols: number[]): number =>
   rows.reduce(
-    (acc, row) => acc + cols.reduce((acc2, col) => acc2 + row[col], 0),
+    (acc, row) => acc + cols.reduce((acc2, col) => acc2 + (row[col] || 0), 0),
     0,
   );
 
