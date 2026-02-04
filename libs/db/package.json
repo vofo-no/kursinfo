@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.10",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
