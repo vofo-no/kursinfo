@@ -13,7 +13,7 @@
         "EAPPLY_USER",
         "NEON_AUTH_BASE_URL"
       ],
-      "outputs": [".next/**", "!.next/cache/**"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env.production.local",

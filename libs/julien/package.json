@@ -1,8 +1,11 @@
 {
   "name": "@kursinfo/julien",
-  "version": "2.0.0",
+  "version": "2.0.1",
+  "type": "module",
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "dev": "tsc --watch",
+    "build": "tsc"
   },
   "dependencies": {
     "@kursinfo/eapply-sdk": "workspace:*",
@@ -19,7 +22,13 @@
     "typescript": "latest"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./constants": "./src/constants.ts"
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./constants": {
+      "types": "./src/constants.ts",
+      "default": "./dist/constants.js"
+    }
   }
 }
