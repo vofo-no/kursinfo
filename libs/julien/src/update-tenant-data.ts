@@ -1,5 +1,5 @@
-import { IndexedCourseItem, ITenantData } from "@kursinfo/types";
 import { put } from "@vercel/blob";
+import { IndexedCourseItem, ITenantData } from "@vofo-no/kursinfo-lite";
 import chalk from "chalk";
 import { compress, trimUndefinedRecursively } from "compress-json";
 

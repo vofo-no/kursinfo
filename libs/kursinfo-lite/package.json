@@ -10,7 +10,6 @@
     "compress-json": "^3.4.0"
   },
   "devDependencies": {
-    "@kursinfo/types": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
     "tsup": "^8.5.1",
     "typescript": "latest"

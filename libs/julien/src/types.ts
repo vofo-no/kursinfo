@@ -1,4 +1,4 @@
-import { CourseStatus } from "@kursinfo/types";
+import { CourseStatus } from "@vofo-no/kursinfo-lite";
 
 export interface Course {
   curriculumCode?: string;

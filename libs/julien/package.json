@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
-    "@kursinfo/types": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
     "@types/node": "^24.10.10",
     "@types/papaparse": "^5.5.2",

@@ -433,9 +433,6 @@ importers:
       '@kursinfo/ssb-sdk':
         specifier: workspace:*
         version: link:../ssb-sdk
-      '@kursinfo/types':
-        specifier: workspace:*
-        version: link:../types
       '@kursinfo/typescript-config':
         specifier: workspace:*
         version: link:../tsconfig
@@ -458,9 +455,6 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
     devDependencies:
-      '@kursinfo/types':
-        specifier: workspace:*
-        version: link:../types
       '@kursinfo/typescript-config':
         specifier: workspace:*
         version: link:../tsconfig
@@ -484,18 +478,6 @@ importers:
         version: 5.9.3
 
   libs/tsconfig: {}
-
-  libs/types:
-    devDependencies:
-      '@kursinfo/typescript-config':
-        specifier: workspace:*
-        version: link:../tsconfig
-      '@types/node':
-        specifier: ^24.10.10
-        version: 24.10.10
-      typescript:
-        specifier: latest
-        version: 5.9.3
 
 packages:
 
@@ -10328,7 +10310,7 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.54.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 

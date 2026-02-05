@@ -1,4 +1,4 @@
-import { CourseStatus, ITenantData } from "@kursinfo/types";
+import { CourseStatus, ITenantData } from "@vofo-no/kursinfo-lite";
 
 interface OrganizationAggregate {
   name: string;

@@ -1,4 +1,4 @@
-import { ITenantData } from "@kursinfo/types";
+import { ITenantData } from "@vofo-no/kursinfo-lite";
 import { decompress } from "compress-json";
 
 import { getTenantSettings } from "./get-tenant-settings";
