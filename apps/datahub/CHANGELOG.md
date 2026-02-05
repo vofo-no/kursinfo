@@ -1,5 +1,11 @@
 # datahub
 
+## 0.1.2
+
+### Patch Changes
+
+- @kursinfo/julien@2.0.3
+
 ## 0.1.1
 
 ### Patch Changes

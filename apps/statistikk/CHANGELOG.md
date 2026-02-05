@@ -1,5 +1,11 @@
 # statistikk
 
+## 2.0.2
+
+### Patch Changes
+
+- @kursinfo/julien@2.0.3
+
 ## 2.0.1
 
 ### Patch Changes

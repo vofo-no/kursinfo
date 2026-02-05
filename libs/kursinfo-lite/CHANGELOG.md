@@ -1,5 +1,11 @@
 # @vofo-no/kursinfo-lite
 
+## 1.0.3
+
+### Patch Changes
+
+- 7bcc16a: dts not depending on internal lib
+
 ## 1.0.2
 
 ### Patch Changes
