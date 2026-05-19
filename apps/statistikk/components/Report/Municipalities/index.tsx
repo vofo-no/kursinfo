@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { ReportMunicipality } from "@/types/reports";
-import intl from "@/lib/intl";
+import { formatNumber } from "@/lib/intl";
 
 import ReportPage from "../ReportPage";
 import Table, { TableRow } from "../Table";
@@ -47,18 +47,11 @@ const Municipalities = ({
           ] = values;
           return (
             <TableRow key={name} title={name} index={i}>
-              <span key="courses">{intl.formatNumber(courses)}</span>
-              <span key="hours">
-                {intl.formatNumber(hours, {
-                  maximumFractionDigits: 0,
-                })}
-              </span>
-              <span key="participants">{intl.formatNumber(participants)}</span>
+              <span key="courses">{formatNumber(courses)}</span>
+              <span key="hours">{formatNumber(hours, 0)}</span>
+              <span key="participants">{formatNumber(participants)}</span>
               <span key="perCapita">
-                {intl.formatNumber(coursesPerCapita * 1000, {
-                  minimumFractionDigits: 1,
-                  maximumFractionDigits: 1,
-                })}
+                {formatNumber(coursesPerCapita * 1000, 1)}
               </span>
             </TableRow>
           );

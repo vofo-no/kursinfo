@@ -43,8 +43,6 @@ export function generateStaticParams(): { year: string }[] {
   return years.map((year) => ({ year }));
 }
 
-export const dynamicParams = false;
-
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
   return { title: `Statistikk ${params.year}` };

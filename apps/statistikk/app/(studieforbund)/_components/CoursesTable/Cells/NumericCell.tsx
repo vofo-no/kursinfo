@@ -1,13 +1,13 @@
 import classNames from "classnames";
 
-import intl from "@/lib/intl";
+import { formatNumber } from "@/lib/intl";
 
 interface PlannedNumProps {
   value: number;
   isMixed?: boolean;
 }
 
-export function PlannedNum({ value, isMixed }: PlannedNumProps) {
+function PlannedNum({ value, isMixed }: PlannedNumProps) {
   return (
     <>
       <span
@@ -16,7 +16,7 @@ export function PlannedNum({ value, isMixed }: PlannedNumProps) {
           "after:content-[')'] after:absolute",
         )}
       >
-        {intl.formatNumber(value, { maximumFractionDigits: 0 })}
+        {formatNumber(value, 0)}
       </span>
     </>
   );
@@ -33,7 +33,7 @@ export default function NumericCell({ value, isPlanned, isMixed }: Props) {
     return isPlanned ? (
       <PlannedNum value={value} isMixed={isMixed} />
     ) : (
-      intl.formatNumber(value, { maximumFractionDigits: 0 })
+      formatNumber(value, 0)
     );
   }
   return null;

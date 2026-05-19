@@ -3,13 +3,12 @@
 import { ChangeEvent, useCallback } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
-import { CoursesParams } from "@/types/courses";
 import getHref from "@/app/(studieforbund)/_helpers/getHref";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
 interface SelectProps {
   options?: ([string, string] | string)[];
-  propName: keyof CoursesParams;
+  propName: keyof StudieforbundParams;
 }
 
 export default function Select({

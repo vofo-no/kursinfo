@@ -1,4 +1,4 @@
-import { CourseStatus } from "@/types/courses";
+import { CourseStatus } from "@vofo-no/kursinfo-lite";
 
 import { ExtendedICourseItem } from "./constants";
 import ExportSchema from "./ExportSchema";

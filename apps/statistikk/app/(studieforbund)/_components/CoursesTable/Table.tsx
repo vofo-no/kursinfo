@@ -1,7 +1,7 @@
 import { flexRender, Table as ITable } from "@tanstack/react-table";
+import { CourseStatus, IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 import classNames from "classnames";
 
-import { CourseStatus, IndexedCourseItem } from "@/types/courses";
 import { Arrow } from "@/app/(studieforbund)/_components/CoursesTable/Arrow";
 import { cellRender } from "@/app/(studieforbund)/_components/CoursesTable/Cells/cellRender";
 import { getHeaderSortingProps } from "@/app/(studieforbund)/_helpers/getHeaderSortingProps";

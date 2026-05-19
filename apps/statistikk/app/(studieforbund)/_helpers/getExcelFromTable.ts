@@ -1,8 +1,7 @@
 import { Column, Row } from "@tanstack/react-table";
+import { IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 import { Column as ExcelColumn } from "exceljs";
 import FileSaver from "file-saver";
-
-import { IndexedCourseItem } from "@/types/courses";
 
 import { getColumnName } from "./getColumnName";
 

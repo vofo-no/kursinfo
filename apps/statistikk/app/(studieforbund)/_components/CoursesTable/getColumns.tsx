@@ -1,8 +1,8 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
+import { CourseStatus, IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 import { Info } from "react-feather";
 
-import { CourseStatus, IndexedCourseItem } from "@/types/courses";
 import remixISODate from "@/app/(studieforbund)/_helpers/remixISODate";
 import { SummableIndexedCourseItem } from "@/app/(studieforbund)/_utils/sumTableData";
 

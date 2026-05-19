@@ -1,5 +1,5 @@
 import { ParticipantsHistogramType } from "@/types/reports";
-import intl from "@/lib/intl";
+import { formatNumber, formatPercent } from "@/lib/intl";
 
 import ReportPage from "../ReportPage";
 import Graph from "./Graph";
@@ -54,14 +54,9 @@ const Participants = ({
               kurs.{" "}
               <span className="whitespace-nowrap">
                 <strong>
-                  {intl.formatNumber(participantsHistogram[0][0])} kurs
+                  {formatNumber(participantsHistogram[0][0])} kurs
                 </strong>{" "}
-                (
-                {intl.formatNumber(participantsHistogram[0][0] / courses, {
-                  style: "percent",
-                  minimumFractionDigits: 0,
-                })}
-                )
+                ({formatPercent(participantsHistogram[0][0] / courses)})
               </span>{" "}
               har fått dispensasjon fra kravet om minste antall deltakere.
             </p>

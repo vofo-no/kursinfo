@@ -1,7 +1,7 @@
 import { Clock, Layers, Map, Share2, UserCheck, Users } from "react-feather";
 
 import { SummaryProps } from "@/types/reports";
-import intl from "@/lib/intl";
+import { formatNumber, formatPercent } from "@/lib/intl";
 
 import Card from "./Card";
 
@@ -17,24 +17,19 @@ const Summary = ({
   <>
     <div className="grid grid-cols-2 tablet:grid-cols-3 gap-6 gap-y-10 my-12">
       <Card Icon={Layers} label="kurs">
-        {intl.formatNumber(courses)}
+        {formatNumber(courses)}
       </Card>
       <Card Icon={UserCheck} label="tilrettelagte kurs">
-        {intl.formatNumber(facilitatedCourses / courses, {
-          style: "percent",
-          minimumFractionDigits: 0,
-        })}
+        {formatPercent(facilitatedCourses / courses)}
       </Card>
       <Card Icon={Users} label="deltakere">
-        {intl.formatNumber(participants)}
+        {formatNumber(participants)}
       </Card>
       <Card Icon={Clock} label="kurstimer">
-        {intl.formatNumber(hours, {
-          maximumFractionDigits: 0,
-        })}
+        {formatNumber(hours, 0)}
       </Card>
       <Card Icon={Share2} label="frivillige og ideelle organisasjoner">
-        {intl.formatNumber(organizations)}
+        {formatNumber(organizations)}
       </Card>
       <Card Icon={Map} label="kommuner med kursvirksomhet">
         <>

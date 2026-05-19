@@ -5,7 +5,7 @@ import dataIndex from "@/data/index.json";
 
 import { ReportPropsType } from "@/types/reports";
 import Report from "@/components/Report";
-import getReportStaticData from "@/components/Report/getReportStaticData";
+import { getReportStaticData } from "@/components/Report/getReportStaticData";
 
 interface PageProps {
   params: Promise<{
@@ -27,8 +27,6 @@ export function generateStaticParams(): { year: string; report: string }[] {
   });
   return paths;
 }
-
-export const dynamicParams = false;
 
 function getTitleFromData({ type, name, year }: ReportPropsType) {
   switch (type) {

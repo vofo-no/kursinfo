@@ -151,5 +151,3 @@ export function getReportStaticData({
     }
   }
 }
-
-export default getReportStaticData;

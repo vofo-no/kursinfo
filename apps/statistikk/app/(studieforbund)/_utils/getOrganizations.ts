@@ -2,14 +2,10 @@ import "server-only";
 
 import { cache } from "react";
 
-import getTenantData from "@/lib/getTenantData";
-
-export const preload = (tenant: string, year: string) => {
-  void getOrganizations(tenant, year);
-};
+import getTenantDataCached from "@/lib/get-tenant-data-cached";
 
 export const getOrganizations = cache(async (tenant: string, year: string) => {
-  const { organizationParams, organizations } = (await getTenantData(
+  const { organizationParams, organizations } = (await getTenantDataCached(
     tenant,
     year,
   )) || { organizationParams: [], organizations: [] };

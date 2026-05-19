@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "react-feather";
 import ReactPaginate from "react-paginate";
 
 interface PaginationProps {
@@ -27,8 +28,8 @@ function Pagination({ pageCount, pageIndex }: PaginationProps) {
       marginPagesDisplayed={2}
       onPageChange={({ selected }) => gotoPage(selected)}
       forcePage={pageIndex}
-      nextLabel="🡪"
-      previousLabel="🡨"
+      nextLabel={<ChevronRight size={20} aria-label="Neste" />}
+      previousLabel={<ChevronLeft size={20} aria-label="Forrige" />}
       ariaLabelBuilder={(pageIndex, selected) =>
         `${selected ? "Gjeldende side, g" : "G"}å til side ${pageIndex}`
       }

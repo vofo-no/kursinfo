@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@kursinfo/eapply-sdk": "workspace:*",
-    "@vercel/blob": "^2.0.1",
+    "@vercel/blob": "^2.4.0",
     "@vofo-no/kursinfo-lite": "workspace:*",
     "chalk": "^4.1.2",
     "compress-json": "^3.4.0"
@@ -18,10 +18,10 @@
   "devDependencies": {
     "@kursinfo/ssb-sdk": "workspace:*",
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.10",
+    "@types/node": "^24.12.4",
     "@types/papaparse": "^5.5.2",
     "papaparse": "^5.5.3",
-    "typescript": "latest"
+    "typescript": "^5.9.3"
   },
   "exports": {
     ".": {

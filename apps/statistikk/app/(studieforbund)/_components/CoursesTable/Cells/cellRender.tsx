@@ -1,8 +1,7 @@
 import React from "react";
 import { Cell, flexRender, Row } from "@tanstack/react-table";
+import { IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 import { ChevronDown, ChevronRight } from "react-feather";
-
-import { IndexedCourseItem } from "@/types/courses";
 
 import LinkCell from "./LinkCell";
 

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 
 import { AgeSet, MainSubjectWithKey } from "@/types/reports";
-import intl from "@/lib/intl";
+import { formatNumber } from "@/lib/intl";
 
 import ReportPage from "../ReportPage";
 import Table, { TableRow } from "../Table";
@@ -49,9 +49,9 @@ const Subjects = ({
                 index={i}
                 title={key in names ? names[key as NameKey] : key}
               >
-                <span key="females">{intl.formatNumber(females)}</span>
-                <span key="males">{intl.formatNumber(males)}</span>
-                <span key="sum">{intl.formatNumber(females + males)}</span>
+                <span key="females">{formatNumber(females)}</span>
+                <span key="males">{formatNumber(males)}</span>
+                <span key="sum">{formatNumber(females + males)}</span>
               </TableRow>
             );
           })}
@@ -73,7 +73,7 @@ const Subjects = ({
                     index={i}
                     title={key in names ? names[key as NameKey] : key}
                   >
-                    {[<span key="value">{intl.formatNumber(value)}</span>]}
+                    {[<span key="value">{formatNumber(value)}</span>]}
                   </TableRow>
                 );
               })}

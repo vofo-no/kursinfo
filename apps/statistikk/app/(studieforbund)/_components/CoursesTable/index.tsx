@@ -1,19 +1,32 @@
-import React, { Suspense } from "react";
+import { notFound } from "next/navigation";
 
+import { getTableData } from "@/app/(studieforbund)/_utils/getTableData";
+import sumTableData from "@/app/(studieforbund)/_utils/sumTableData";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
-import CoursesTableSkeleton from "./CoursesTableSkeleton";
-import CoursesTableWrapper from "./CoursesTableWrapper";
+import ClientTableWithPagination from "./ClientTableWithPagination";
+import CoursesTableEmpty from "./CoursesTableEmpty";
 
 interface Props {
   params: StudieforbundParams;
   tenant: string;
 }
 
-export default function CoursesTable(props: Props) {
+export async function CoursesTable({ params, tenant }: Props) {
+  const data = await getTableData(
+    tenant,
+    params.year,
+    params.county,
+    params.organization,
+  );
+
+  if (!data) notFound();
+
+  if (!data.items.length) return <CoursesTableEmpty />;
+
+  const sums = sumTableData(data.items);
+
   return (
-    <Suspense fallback={<CoursesTableSkeleton />}>
-      <CoursesTableWrapper {...props} />
-    </Suspense>
+    <ClientTableWithPagination {...data} group={params.group} sums={sums} />
   );
 }

@@ -1,13 +1,11 @@
-import { IndexedCourseItem } from "@/types/courses";
+import { IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 
-export const GROUPS = [
-  "kurs",
-  "lag",
-  "organisasjoner",
-  "fylker",
-  "studieplaner",
-] as const;
-export type GroupType = (typeof GROUPS)[number];
+export type GroupType =
+  | "kurs"
+  | "lag"
+  | "organisasjoner"
+  | "fylker"
+  | "studieplaner";
 
 export interface ExtendedICourseItem extends IndexedCourseItem {
   curriculum: string;

@@ -4,7 +4,7 @@ import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
 } from "@/lib/constants";
-import getTenantData from "@/lib/getTenantData";
+import getTenantDataCached from "@/lib/get-tenant-data-cached";
 import { GroupType } from "@/app/(studieforbund)/_components/CoursesTable/constants";
 
 export async function getTableData(
@@ -14,7 +14,7 @@ export async function getTableData(
   organization: string = "",
   group: GroupType | undefined = undefined,
 ) {
-  const data = await getTenantData(tenant, year);
+  const data = await getTenantDataCached(tenant, year);
 
   if (!data) return undefined;
 

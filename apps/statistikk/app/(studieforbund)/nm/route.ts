@@ -5,8 +5,6 @@ import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
 import { config } from "./config";
 
-export const dynamic = "force-dynamic";
-
 export async function generateStaticParams() {
   return [];
 }

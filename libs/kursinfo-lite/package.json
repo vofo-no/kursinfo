@@ -12,7 +12,7 @@
   "devDependencies": {
     "@kursinfo/typescript-config": "workspace:*",
     "tsup": "^8.5.1",
-    "typescript": "latest"
+    "typescript": "^5.9.3"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

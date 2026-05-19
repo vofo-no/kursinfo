@@ -1,13 +1,14 @@
 import "server-only";
 
-import { getTenantYears } from "@kursinfo/julien";
+import { cacheLife } from "next/cache";
 
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_GROUP_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
 } from "./constants";
-import getTenantData from "./getTenantData";
+import getTenantDataCached from "./get-tenant-data-cached";
+import { getTenantYearsCached } from "./get-tenant-years-cached";
 
 interface getDefaultParamsProps {
   year?: string;
@@ -18,17 +19,21 @@ interface getDefaultParamsProps {
 }
 
 async function checkedTenantYear(tenant?: string) {
+  "use cache";
+  cacheLife("days");
+
   const year = new Date().getFullYear();
 
   if (!tenant) return year.toString();
 
-  const years = getTenantYears(tenant);
+  const years = await getTenantYearsCached(tenant);
 
   if (years.length < 3) return year.toString();
 
-  const hitCurrentYear = await getTenantData(tenant, year.toString()).then(
-    (data) => Boolean(data?.items.length),
-  );
+  const hitCurrentYear = await getTenantDataCached(
+    tenant,
+    year.toString(),
+  ).then((data) => Boolean(data?.items.length));
 
   return hitCurrentYear ? year.toString() : (year - 1).toString();
 }

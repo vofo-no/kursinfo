@@ -1,8 +1,8 @@
-import getTenantData from "@/lib/getTenantData";
-import intl from "@/lib/intl";
+import getTenantDataCached from "@/lib/get-tenant-data-cached";
+import { formatBuildDateTime } from "@/lib/intl";
 
 async function getBuildTime(tenant: string, year: string) {
-  const { buildTime } = (await getTenantData(tenant, year)) || {};
+  const { buildTime } = (await getTenantDataCached(tenant, year)) || {};
 
   return buildTime;
 }
@@ -17,14 +17,5 @@ export default async function BuildTime({ tenant, year }: Props) {
 
   if (!buildTime) return "";
 
-  return (
-    <>
-      Sist oppdatert{" "}
-      {intl.formatDate(Date.parse(buildTime), {
-        timeStyle: "short",
-        dateStyle: "medium",
-        timeZone: "Europe/Oslo",
-      })}
-    </>
-  );
+  return <>Sist oppdatert {formatBuildDateTime(Date.parse(buildTime))}</>;
 }

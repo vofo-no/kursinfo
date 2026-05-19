@@ -1,1 +1,1 @@
-export { GET, generateStaticParams } from "../route";
+export { GET } from "../route";

@@ -1,6 +1,5 @@
 import { Column } from "@tanstack/react-table";
-
-import { IndexedCourseItem } from "@/types/courses";
+import { IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 
 export function Arrow({
   column: { getIsSorted, getCanSort },

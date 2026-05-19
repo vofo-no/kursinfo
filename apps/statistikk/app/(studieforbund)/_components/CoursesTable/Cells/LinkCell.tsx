@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { CoursesParams } from "@/types/courses";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
 import getHref from "../../../_helpers/getHref";
@@ -11,7 +10,7 @@ import getHref from "../../../_helpers/getHref";
 export default function LinkCell({
   params,
   children,
-}: React.PropsWithChildren<{ params: Partial<CoursesParams> }>) {
+}: React.PropsWithChildren<{ params: Partial<StudieforbundParams> }>) {
   const oldParams = useParams<StudieforbundParams>();
   const prefix = usePathname()?.split("/", 2)[1] || "";
 

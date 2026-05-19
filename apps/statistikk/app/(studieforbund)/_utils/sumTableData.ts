@@ -1,4 +1,4 @@
-import { CourseStatus, IndexedCourseItem } from "@/types/courses";
+import { CourseStatus, IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 
 interface Sum {
   planned: number;

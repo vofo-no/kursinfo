@@ -1,3 +1,5 @@
+import { ParsedUrlQuery } from "querystring";
+
 export const ASSOCIATION = "ASSOCIATION";
 export const REGION = "REGION";
 export const COMBO = "COMBO";
@@ -7,8 +9,6 @@ export enum dataSource {
   SSB = "SSB",
   Vofo = "Vofo",
 }
-
-import { ParsedUrlQuery } from "querystring";
 
 export interface ReportParams extends ParsedUrlQuery {
   year: string;
@@ -91,7 +91,7 @@ export interface Association {
   facilitated: Facilitated;
 }
 
-export interface Facilitated {
+interface Facilitated {
   courses: number;
   hours: number;
   participants: Participants;
@@ -102,25 +102,25 @@ export interface Participants {
   females: number;
 }
 
-export interface ParticipantsWithAgeSetHistory extends Participants {
+interface ParticipantsWithAgeSetHistory extends Participants {
   ages: Array<AgeSet<number>>;
 }
 
-export interface ParticipantsWithAgeSet extends Participants {
+interface ParticipantsWithAgeSet extends Participants {
   ages: AgeSet<number>;
 }
 
-export interface Historical {
+interface Historical {
   courses: number[];
   hours: number[];
   participants: number[];
 }
 
-export interface MainSubject {
+interface MainSubject {
   participants: Participants;
 }
 
-export interface Subject {
+interface Subject {
   participants: ParticipantsWithAgeSet;
 }
 

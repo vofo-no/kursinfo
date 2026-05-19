@@ -8,7 +8,7 @@ import getHref from "@/app/(studieforbund)/_helpers/getHref";
 import { unsetSpecific } from "@/app/(studieforbund)/_helpers/unsetSpecific";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
 
-export const tabs: GroupType[] = [
+const tabs: GroupType[] = [
   "organisasjoner",
   "fylker",
   "lag",

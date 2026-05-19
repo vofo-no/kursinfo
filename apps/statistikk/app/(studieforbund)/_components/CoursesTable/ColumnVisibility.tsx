@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Column } from "@tanstack/react-table";
+import { IndexedCourseItem } from "@vofo-no/kursinfo-lite";
 import { Settings as SettingsIcon } from "react-feather";
 
-import { IndexedCourseItem } from "@/types/courses";
 import AlertDialog from "@/components/AlertDialog";
 
 import { getColumnName } from "../../_helpers/getColumnName";
