@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import dataIndex from "@/data/index.json";
 
 import { ASSOCIATION, COMBO, GLOBAL, REGION } from "@/types/reports";
@@ -10,7 +12,12 @@ import ListLinkItem from "@/components/ListLinkItem";
 
 type ArrayOfStringTuple = Array<[string, string]>;
 
-function getData(year: string) {
+async function getData(year: string) {
+  "use cache";
+  cacheLife("max");
+
+  if (!dataIndex.years.includes(year)) return notFound();
+
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
 
@@ -52,7 +59,7 @@ export default async function Page(props: PageProps) {
   const params = await props.params;
   const { year } = params;
   const { regionReports, globalReports, associationReports, comboReports } =
-    getData(year);
+    await getData(year);
 
   return (
     <>

@@ -43,7 +43,7 @@ function getTitleFromData({ type, name, year }: ReportPropsType) {
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
-  const data = getReportStaticData(params);
+  const data = await getReportStaticData(params);
 
   const title = getTitleFromData(data);
 
@@ -52,7 +52,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const data = getReportStaticData(params);
+  const data = await getReportStaticData(params);
 
   return <Report {...data} />;
 }

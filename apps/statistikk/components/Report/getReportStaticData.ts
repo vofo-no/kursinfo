@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { cacheLife } from "next/cache";
+import { notFound } from "next/navigation";
+import dataIndex from "@/data/index.json";
 import associationNames from "@/data/names/associations.json";
 
 import {
@@ -34,10 +37,15 @@ function recordToArray<T>(records: Record<string, T>) {
   return Object.entries(records).map(([key, value]) => ({ ...value, key }));
 }
 
-export function getReportStaticData({
+export async function getReportStaticData({
   year,
   report,
-}: ReportParams): ReportPropsType {
+}: ReportParams): Promise<ReportPropsType> {
+  "use cache";
+  cacheLife("max");
+
+  if (!dataIndex.years.includes(year)) return notFound();
+
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
   const data: IDataFile = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
   const reportData = data.reports[report];
