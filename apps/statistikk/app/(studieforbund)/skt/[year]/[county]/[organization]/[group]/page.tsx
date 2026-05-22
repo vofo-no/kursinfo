@@ -1,3 +1,4 @@
+import getDefaultParams from "@/lib/getDefaultParams";
 import { CoursesTable } from "@/app/(studieforbund)/_components/CoursesTable";
 import { makeTitle } from "@/app/(studieforbund)/_helpers/makeTitle";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
@@ -15,6 +16,10 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${title} - ${config.tenantName}`,
   };
+}
+
+export async function generateStaticParams() {
+  return [await getDefaultParams({ tenant: config.tenant })];
 }
 
 export default async function StudieforbundPage({ params }: Props) {
