@@ -1,7 +1,5 @@
 import "server-only";
 
-import { cacheLife } from "next/cache";
-
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_GROUP_PARAM,
@@ -19,9 +17,6 @@ interface getDefaultParamsProps {
 }
 
 async function checkedTenantYear(tenant?: string) {
-  "use cache";
-  cacheLife("days");
-
   const year = new Date().getFullYear();
 
   if (!tenant) return year.toString();

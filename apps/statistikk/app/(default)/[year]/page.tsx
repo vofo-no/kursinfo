@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { Metadata } from "next";
-import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import dataIndex from "@/data/index.json";
@@ -13,9 +12,6 @@ import ListLinkItem from "@/components/ListLinkItem";
 type ArrayOfStringTuple = Array<[string, string]>;
 
 async function getData(year: string) {
-  "use cache";
-  cacheLife("max");
-
   if (!dataIndex.years.includes(year)) return notFound();
 
   const dataPath = path.join(process.cwd(), `data/${year}.json`);
@@ -43,6 +39,8 @@ interface PageProps {
     year: string;
   }>;
 }
+
+export const dynamicParams = false;
 
 export function generateStaticParams(): { year: string }[] {
   const years = dataIndex.years;

@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
 
   await updateStatistics([target], years, (sf, year) => {
     revalidateTag(`sf:${sf}:${year}`, "max");
+    revalidateTag(`sf:${sf}`, "max");
   });
 
   return new Response("Success", { status: 200 });
