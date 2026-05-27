@@ -1,12 +1,10 @@
-import "server-only";
+import { getTenantYears } from "@kursinfo/julien";
 
 import {
   DEFAULT_COUNTY_PARAM,
   DEFAULT_GROUP_PARAM,
   DEFAULT_ORGANIZATION_PARAM,
 } from "./constants";
-import getTenantDataCached from "./get-tenant-data-cached";
-import { getTenantYearsCached } from "./get-tenant-years-cached";
 
 interface getDefaultParamsProps {
   year?: string;
@@ -16,21 +14,14 @@ interface getDefaultParamsProps {
   tenant?: string;
 }
 
-async function checkedTenantYear(tenant?: string) {
-  const year = new Date().getFullYear();
+function checkedTenantYear(tenant?: string) {
+  const year = new Date().getFullYear().toString();
 
-  if (!tenant) return year.toString();
+  if (!tenant) return year;
 
-  const years = await getTenantYearsCached(tenant);
-
-  if (years.length < 3) return year.toString();
-
-  const hitCurrentYear = await getTenantDataCached(
-    tenant,
-    year.toString(),
-  ).then((data) => Boolean(data?.items.length));
-
-  return hitCurrentYear ? year.toString() : (year - 1).toString();
+  const years = getTenantYears(tenant);
+  if (years.length < 3) return year;
+  return years.at(-2) || year;
 }
 
 export default async function getDefaultParams({
@@ -40,7 +31,7 @@ export default async function getDefaultParams({
   group,
   tenant,
 }: getDefaultParamsProps = {}) {
-  if (!year) year = await checkedTenantYear(tenant);
+  if (!year) year = checkedTenantYear(tenant);
   if (!county) county = DEFAULT_COUNTY_PARAM;
   if (!organization) organization = DEFAULT_ORGANIZATION_PARAM;
   if (!group) group = DEFAULT_GROUP_PARAM;

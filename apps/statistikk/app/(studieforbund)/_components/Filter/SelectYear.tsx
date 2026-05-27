@@ -1,4 +1,4 @@
-import { getTenantYearsCached } from "@/lib/get-tenant-years-cached";
+import { getTenantYears } from "@kursinfo/julien";
 
 import Select from "./Select";
 
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default async function SelectYear({ tenant }: Props) {
-  const options = await getTenantYearsCached(tenant);
+  const options = getTenantYears(tenant);
 
   return <Select aria-label="Velg årstall" options={options} propName="year" />;
 }

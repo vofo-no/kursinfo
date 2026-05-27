@@ -1,12 +1,11 @@
-import { getTenantYearsCached } from "@/lib/get-tenant-years-cached";
+import { getTenantYears } from "@kursinfo/julien";
+
 import StudieforbundLayout from "@/app/(studieforbund)/_components/StudieforbundLayout";
 
 import { config } from "../config";
 
-export async function generateStaticParams() {
-  const years = await getTenantYearsCached(config.tenant);
-
-  return years.map((year) => ({ year }));
+export function generateStaticParams() {
+  return getTenantYears(config.tenant).map((year) => ({ year }));
 }
 
 export default async function Layout({

@@ -19,7 +19,6 @@
     "@headlessui/react": "^2.2.10",
     "@kursinfo/julien": "workspace:*",
     "@tanstack/react-table": "^8.21.3",
-    "@vercel/blob": "^2.4.0",
     "@vofo-no/kursinfo-lite": "workspace:*",
     "@vofo-no/ui": "^0.4.0",
     "chalk": "^4.1.2",

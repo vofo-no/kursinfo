@@ -7,9 +7,10 @@ import SelectYear from "./SelectYear";
 interface FilterProps {
   year: string;
   tenant: string;
+  organizations: [string, string][];
 }
 
-const Filter = async ({ tenant, year }: FilterProps) => {
+const Filter = async ({ tenant, year, organizations }: FilterProps) => {
   return (
     <fieldset className="my-3">
       <legend className="sr-only">Filter</legend>
@@ -25,7 +26,7 @@ const Filter = async ({ tenant, year }: FilterProps) => {
           <div className="h-7 w-[72px] bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 inline-block"></div>
         }
       >
-        <SelectOrganization year={year} tenant={tenant} />
+        <SelectOrganization organizations={organizations} />
       </Suspense>
       <Suspense
         fallback={

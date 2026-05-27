@@ -1,15 +1,12 @@
 import { DEFAULT_ORGANIZATION_PARAM } from "@/lib/constants";
-import { getOrganizations } from "@/app/(studieforbund)/_utils/getOrganizations";
 
 import Select from "./Select";
 
 interface Props {
-  year: string;
-  tenant: string;
+  organizations: [string, string][];
 }
 
-export default async function SelectOrganization({ year, tenant }: Props) {
-  const organizations = await getOrganizations(tenant, year);
+export default async function SelectOrganization({ organizations }: Props) {
   const organizationOptions: [string, string][] = [
     [DEFAULT_ORGANIZATION_PARAM, "Alle organisasjoner"],
     ...organizations,
