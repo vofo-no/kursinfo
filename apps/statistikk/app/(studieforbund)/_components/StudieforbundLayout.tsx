@@ -1,15 +1,12 @@
 import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
 
-import { getTenantData } from "@/lib/get-tenant-data";
-import { formatBuildDateTime } from "@/lib/intl";
 import Container from "@/components/Containers/Container";
 import Footer from "@/components/Containers/Footer";
 import WhiteBox from "@/components/Containers/WhiteBox";
 import PageHeading from "@/components/PageHeading";
 
-import { mergeOrganizationParams } from "../_utils/merge-organization-params";
-import Filter from "./Filter";
+import { Filter } from "./Filter";
+import { LastUpdated } from "./LastUpdated";
 import NavigationTabs from "./NavigationTabs";
 
 interface StudieforbundLayoutProps {
@@ -31,15 +28,6 @@ export default async function StudieforbundLayout({
   children,
   year,
 }: StudieforbundLayoutProps) {
-  const data = await getTenantData(tenant, year);
-  if (!data) notFound();
-
-  const { buildTime } = data;
-  const organizations = mergeOrganizationParams(
-    data.organizations,
-    data.organizationParams,
-  );
-
   return (
     <section>
       <Header />
@@ -49,11 +37,7 @@ export default async function StudieforbundLayout({
             <div className="overflow-x-auto print:overflow-x-visible relative">
               <Container>
                 <PageHeading>Kursstatistikk {year}</PageHeading>
-                <Filter
-                  year={year}
-                  tenant={tenant}
-                  organizations={organizations}
-                />
+                <Filter year={year} tenant={tenant} />
                 <Suspense>
                   <NavigationTabs />
                 </Suspense>
@@ -62,7 +46,9 @@ export default async function StudieforbundLayout({
             </div>
           </WhiteBox>
           <div className="text-right ml-auto mt-2 mr-2 text-xs">
-            Sist oppdatert {formatBuildDateTime(Date.parse(buildTime))}
+            <Suspense>
+              <LastUpdated tenant={tenant} />
+            </Suspense>
           </div>
         </Container>
       </main>

@@ -1,13 +1,12 @@
+import React from "react";
+
 import { DEFAULT_COUNTY_PARAM } from "@/lib/constants";
 import getCounties from "@/lib/getCounties";
 
+import { FilterProps } from ".";
 import Select from "./Select";
 
-interface Props {
-  year: string;
-}
-
-export default function SelectCounty({ year }: Props) {
+export function SelectCounty({ year }: Pick<FilterProps, "year">) {
   const counties: [string, string][] = getCounties(year).map((c) => [
     c.param,
     c.region,

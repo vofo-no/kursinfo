@@ -1,4 +1,3 @@
-import getDefaultParams from "@/lib/getDefaultParams";
 import { CoursesTable } from "@/app/(studieforbund)/_components/CoursesTable";
 import { makeTitle } from "@/app/(studieforbund)/_helpers/makeTitle";
 import { StudieforbundParams } from "@/app/(studieforbund)/types";
@@ -18,16 +17,6 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export async function generateStaticParams() {
-  return [await getDefaultParams({ tenant: config.tenant })];
-}
-
-export default async function StudieforbundPage({ params }: Props) {
-  const { year, county, organization, group } = await params;
-  return (
-    <CoursesTable
-      params={{ year, county, organization, group }}
-      tenant={config.tenant}
-    />
-  );
+export default function StudieforbundPage() {
+  return <CoursesTable tenant={config.tenant} />;
 }

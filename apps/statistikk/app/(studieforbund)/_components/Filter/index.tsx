@@ -1,42 +1,29 @@
 import React, { Suspense } from "react";
+import { getTenantFirstYear } from "@kursinfo/julien";
 
-import SelectCounty from "./SelectCounty";
-import SelectOrganization from "./SelectOrganization";
-import SelectYear from "./SelectYear";
+import { SelectCounty } from "./select-county";
+import { SelectOrganization } from "./select-org";
+import { SelectYear } from "./select-year";
 
-interface FilterProps {
+export interface FilterProps {
   year: string;
   tenant: string;
-  organizations: [string, string][];
 }
 
-const Filter = async ({ tenant, year, organizations }: FilterProps) => {
+export function Filter({ tenant, year }: FilterProps) {
+  const firstYear = getTenantFirstYear(tenant);
   return (
     <fieldset className="my-3">
       <legend className="sr-only">Filter</legend>
-      <Suspense
-        fallback={
-          <div className="h-7 w-[72px] bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 inline-block"></div>
-        }
-      >
-        <SelectYear tenant={tenant} />
+      <Suspense>
+        <SelectYear firstYear={firstYear} />
       </Suspense>
-      <Suspense
-        fallback={
-          <div className="h-7 w-[72px] bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 inline-block"></div>
-        }
-      >
-        <SelectOrganization organizations={organizations} />
+      <Suspense>
+        <SelectOrganization tenant={tenant} />
       </Suspense>
-      <Suspense
-        fallback={
-          <div className="h-7 w-[72px] bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5 inline-block"></div>
-        }
-      >
+      <Suspense>
         <SelectCounty year={year} />
       </Suspense>
     </fieldset>
   );
-};
-
-export default Filter;
+}

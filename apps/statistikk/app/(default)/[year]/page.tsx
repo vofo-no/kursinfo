@@ -40,8 +40,6 @@ interface PageProps {
   }>;
 }
 
-export const dynamicParams = false;
-
 export function generateStaticParams(): { year: string }[] {
   const years = dataIndex.years;
 

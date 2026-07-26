@@ -1,32 +1,24 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import ReactPaginate from "react-paginate";
 
 interface PaginationProps {
   pageCount: number;
   pageIndex: number;
+  onPageChange: (pageIndex: number) => void;
 }
 
-function Pagination({ pageCount, pageIndex }: PaginationProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  function gotoPage(index: number) {
-    if (index) {
-      router.push(`${pathname}?page=${index + 1}`);
-    } else {
-      router.push(`${pathname}`);
-    }
-  }
-
+function Pagination({ pageCount, pageIndex, onPageChange }: PaginationProps) {
   return (
     <ReactPaginate
       pageCount={pageCount}
       pageRangeDisplayed={3}
       marginPagesDisplayed={2}
-      onPageChange={({ selected }) => gotoPage(selected)}
+      onPageChange={({ selected }) => {
+        onPageChange(selected);
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }}
       forcePage={pageIndex}
       nextLabel={<ChevronRight size={20} aria-label="Neste" />}
       previousLabel={<ChevronLeft size={20} aria-label="Forrige" />}

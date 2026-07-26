@@ -2,6 +2,8 @@ import { Lato, Open_Sans } from "next/font/google";
 
 import "@/styles/globals.css";
 
+import Providers from "./providers";
+
 const openSans = Open_Sans({
   weight: ["600"],
   style: ["normal", "italic"],
@@ -25,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="nb" className={`${openSans.variable} ${lato.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

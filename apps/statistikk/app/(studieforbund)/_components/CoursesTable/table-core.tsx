@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   ColumnDef,
   ExpandedState,
   functionalUpdate,
   getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
   getGroupedRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   GroupingState,
-  OnChangeFn,
   PaginationState,
   SortingState,
   useReactTable,
@@ -27,6 +23,7 @@ import { ExtendedICourseItem } from "@/app/(studieforbund)/_components/CoursesTa
 import Item from "@/app/(studieforbund)/_components/CoursesTable/Item";
 import Pagination from "@/app/(studieforbund)/_components/Pagination";
 import getExcelFromTable from "@/app/(studieforbund)/_helpers/getExcelFromTable";
+import { useTableState } from "@/app/(studieforbund)/_hooks/use-table-state";
 
 import ColumnVisibility from "./ColumnVisibility";
 import Table from "./Table";
@@ -82,7 +79,6 @@ function getColumnVisibilityFromGroupingStateAndExpanded(
 interface TableCoreProps {
   items: ITenantData["items"];
   columns: ColumnDef<ITenantData["items"][number]>[];
-  page: string | null;
   group: string;
   reportSchema: ITenantData["reportSchema"];
   useTitleColumn?: boolean;
@@ -93,43 +89,29 @@ interface TableCoreProps {
 export default function TableCore({
   items,
   columns,
-  page,
   group,
   reportSchema,
   useTitleColumn,
   modal,
   onCloseModal,
 }: TableCoreProps) {
+  const defaultGrouping = groupGroupingStates[group] || [];
+  const defaultSorting = getSortingStateFromGroup(group);
+  const defaultVisibility = getColumnVisibilityFromGroupingStateAndExpanded(
+    defaultGrouping,
+    {},
+    useTitleColumn,
+  );
+
+  const [tableState, setTableState] = useTableState({
+    defaultSorting,
+    defaultGrouping,
+    defaultVisibility,
+  });
+
   const pagination: PaginationState = {
-    pageIndex: (Number(page) || 1) - 1,
+    pageIndex: tableState.page - 1,
     pageSize: 100,
-  };
-
-  const initialGrouping = groupGroupingStates[group] || [];
-
-  const [grouping, setGrouping] = useState<GroupingState>(initialGrouping);
-  const [sorting, setSorting] = useState<SortingState>(
-    getSortingStateFromGroup(group),
-  );
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    getColumnVisibilityFromGroupingStateAndExpanded(
-      initialGrouping,
-      {},
-      useTitleColumn,
-    ),
-  );
-  const [expanded, setExpanded] = useState<ExpandedState>({});
-
-  const expandedChangeHandler: OnChangeFn<ExpandedState> = (updater) => {
-    const nextExpanded = functionalUpdate(updater, expanded);
-    setExpanded(nextExpanded);
-    setColumnVisibility(
-      getColumnVisibilityFromGroupingStateAndExpanded(
-        grouping,
-        nextExpanded,
-        useTitleColumn,
-      ),
-    );
   };
 
   const table = useReactTable({
@@ -140,20 +122,52 @@ export default function TableCore({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onGroupingChange: setGrouping,
-    // TODO: watch https://github.com/TanStack/table/issues/5026
-    onPaginationChange: () => undefined,
-    onSortingChange: setSorting,
-    onExpandedChange: expandedChangeHandler,
+    onColumnVisibilityChange: (updater) => {
+      setTableState((prev) => ({
+        visibility: functionalUpdate(updater, prev.visibility),
+      }));
+    },
+    onGroupingChange: (updater) => {
+      setTableState((prev) => {
+        const nextGrouping = functionalUpdate(updater, prev.grouping);
+        const nextVisibility = getColumnVisibilityFromGroupingStateAndExpanded(
+          nextGrouping,
+          prev.expanded,
+          useTitleColumn,
+        );
+        return { grouping: nextGrouping, visibility: nextVisibility, page: 1 };
+      });
+    },
+    onSortingChange: (updater) => {
+      setTableState((prev) => ({
+        sort: functionalUpdate(updater, prev.sort),
+      }));
+    },
+    onExpandedChange: (updater) => {
+      setTableState((prev) => {
+        const nextExpanded = functionalUpdate(updater, prev.expanded);
+        const nextVisibility = getColumnVisibilityFromGroupingStateAndExpanded(
+          prev.grouping,
+          nextExpanded,
+          useTitleColumn,
+        );
+        return { expanded: nextExpanded, visibility: nextVisibility };
+      });
+    },
+    onPaginationChange: (updater) => {
+      setTableState((prev) => {
+        const nextPagination = functionalUpdate(updater, {
+          pageIndex: prev.page - 1,
+          pageSize: 100,
+        });
+        return { page: nextPagination.pageIndex + 1 };
+      });
+    },
     state: {
-      grouping,
-      columnVisibility,
-      sorting,
-      expanded,
+      grouping: tableState.grouping,
+      columnVisibility: tableState.visibility,
+      sorting: tableState.sort,
+      expanded: tableState.expanded,
       pagination,
     },
   });
@@ -179,6 +193,9 @@ export default function TableCore({
             <Pagination
               pageCount={table.getPageCount()}
               pageIndex={table.getState().pagination.pageIndex}
+              onPageChange={(newPageIndex) => {
+                table.setPageIndex(newPageIndex);
+              }}
             />
           </nav>
         </div>
