@@ -1,5 +1,6 @@
 export {
   getTenantDataUrl,
+  getTenantFirstYear,
   getTenantYears,
   uncompressTenantData,
 } from "./get-tenant-data";

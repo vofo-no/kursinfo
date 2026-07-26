@@ -17,6 +17,12 @@ function arrayRange(start: number, stop: number) {
   return Array.from({ length: stop - start + 1 }, (_, index) => start + index);
 }
 
+export function getTenantFirstYear(tenant: string) {
+  const { firstYear } = getTenantSettings(tenant) || {};
+
+  return firstYear;
+}
+
 export function getTenantYears(tenant: string) {
   const { firstYear } = getTenantSettings(tenant) || {};
 
