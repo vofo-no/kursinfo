@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+import { head, put } from "@vercel/blob";
 import { IndexedCourseItem, ITenantData } from "@vofo-no/kursinfo-lite";
 import chalk from "chalk";
 import { compress, trimUndefinedRecursively } from "compress-json";
@@ -38,36 +38,82 @@ export async function updateStatistics(
     ),
   );
 
-  const tasks: Promise<void>[] = [];
-
-  args.targets.map((sf) => {
+  // Group task execution by tenant so manifest can be updated per tenant
+  const tenantPromises = args.targets.map(async (sf) => {
     const tenant = getTenantSettings(sf);
 
     if (!tenant) {
       console.log(`Unknown tenant ${sf}. Skipping.`);
-    } else {
-      const adapterName = tenant.adapter;
-      const adapter = adapters[adapterName];
+      return;
+    }
 
-      if (!adapter) {
-        console.log(`Unknown adapter ${adapterName}. Skipping.`);
-      } else {
-        args.years.map((year) => {
-          tasks.push(
-            fetchTask({ tenant, year }, adapter).then(() => {
-              if (typeof cb === "function") {
-                cb(sf, year);
-              }
-            }),
-          );
-        });
+    const adapterName = tenant.adapter;
+    const adapter = adapters[adapterName];
+
+    if (!adapter) {
+      console.log(`Unknown adapter ${adapterName}. Skipping.`);
+      return;
+    }
+
+    // Process all years for this tenant
+    const updatedYears: string[] = [];
+
+    for (const year of args.years) {
+      await fetchTask({ tenant, year }, adapter);
+      updatedYears.push(year);
+
+      if (typeof cb === "function") {
+        cb(sf, year);
       }
+    }
+
+    // Update manifest if any years were successfully processed
+    if (updatedYears.length > 0) {
+      await updateTenantManifest(tenant.dataTarget, updatedYears);
     }
   });
 
-  await Promise.all(tasks);
+  await Promise.all(tenantPromises);
 
   console.timeEnd(programExecutionTimer);
+}
+
+async function updateTenantManifest(
+  dataTarget: string,
+  updatedYears: string[],
+) {
+  const manifestPath = `sf-data/v1/${dataTarget}/manifest.json`;
+  let currentManifest: Record<string, number> = {};
+
+  // Try fetching the existing manifest first
+  try {
+    const blobDetails = await head(manifestPath);
+    if (blobDetails?.url) {
+      const res = await fetch(blobDetails.url, { cache: "no-store" });
+      if (res.ok) {
+        currentManifest = (await res.json()) as Record<string, number>;
+      }
+    }
+  } catch {
+    // If manifest doesn't exist yet, start with a clean object
+    currentManifest = {};
+  }
+
+  // Stamp current Unix timestamp (in milliseconds) for updated years
+  const now = Date.now();
+  for (const year of updatedYears) {
+    currentManifest[year] = now;
+  }
+
+  console.log(`=> Updating manifest at [${chalk.blue(manifestPath)}]...`);
+
+  // Put updated manifest back to Blob
+  await put(manifestPath, JSON.stringify(currentManifest), {
+    access: "public",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 0, // Ensure clients receive fresh manifest metadata
+  });
 }
 
 function stripISODate(raw: unknown) {
