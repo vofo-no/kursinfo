@@ -11,7 +11,7 @@ export async function GET(
     const targetBlobUrl = getTenantDataUrl(tenant, year);
 
     const blobResponse = await fetch(targetBlobUrl, {
-      next: { revalidate: false },
+      next: { revalidate: 300 },
     });
 
     if (!blobResponse.ok || !blobResponse.body) {
@@ -22,7 +22,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "public, max-age=300, stale-while-revalidate=60",
       },
     });
   } catch (error) {
