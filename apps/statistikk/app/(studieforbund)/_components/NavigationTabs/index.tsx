@@ -40,6 +40,7 @@ export default function NavigationTabs() {
               group: tab,
               ...unsetSpecific(tab, { organization, county }),
             })}
+            prefetch={false}
             className={
               tab === params.group
                 ? "inline-block p-2 -mb-px font-bold text-brand-blue rounded-t-lg border-b-2 border-brand-blue active"

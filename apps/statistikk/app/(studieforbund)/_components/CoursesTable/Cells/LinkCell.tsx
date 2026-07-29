@@ -14,5 +14,9 @@ export default function LinkCell({
   const oldParams = useParams<StudieforbundParams>();
   const prefix = usePathname()?.split("/", 2)[1] || "";
 
-  return <Link href={getHref(prefix, oldParams, params)}>{children}</Link>;
+  return (
+    <Link href={getHref(prefix, oldParams, params)} prefetch={false}>
+      {children}
+    </Link>
+  );
 }
