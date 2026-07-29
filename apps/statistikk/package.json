@@ -20,6 +20,7 @@
     "@kursinfo/julien": "workspace:*",
     "@tanstack/react-query": "^5.101.4",
     "@tanstack/react-table": "^8.21.3",
+    "@vercel/blob": "^2.6.1",
     "@vofo-no/kursinfo-lite": "workspace:*",
     "@vofo-no/ui": "^0.4.0",
     "chalk": "^4.1.2",

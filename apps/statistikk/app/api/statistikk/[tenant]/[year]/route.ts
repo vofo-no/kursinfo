@@ -1,28 +1,40 @@
-import { NextResponse } from "next/server";
-import { getTenantDataUrl } from "@vofo-no/kursinfo-lite";
+import { NextResponse, type NextRequest } from "next/server";
+import { get } from "@vercel/blob";
 
 export async function GET(
-  _request: Request,
+  request: NextRequest,
   { params }: RouteContext<"/api/statistikk/[tenant]/[year]">,
 ) {
   const { tenant, year } = await params;
 
   try {
-    const targetBlobUrl = getTenantDataUrl(tenant, year);
+    const targetBlobUrl = `sf-data/v1/${tenant}/${year}.json`;
 
-    const blobResponse = await fetch(targetBlobUrl, {
-      next: { revalidate: 300 },
+    const result = await get(targetBlobUrl, {
+      access: "public",
+      useCache: false,
+      ifNoneMatch: request.headers.get("if-none-match") ?? undefined,
     });
 
-    if (!blobResponse.ok || !blobResponse.body) {
+    if (!result) {
       return NextResponse.json({ error: "Dataset missing" }, { status: 404 });
     }
 
-    return new Response(blobResponse.body, {
-      status: 200,
+    if (result.statusCode === 304) {
+      return new NextResponse(null, {
+        status: 304,
+        headers: {
+          ETag: result.blob.etag,
+          "Cache-Control": "public, no-cache",
+        },
+      });
+    }
+
+    return new NextResponse(result.stream, {
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=300, stale-while-revalidate=60",
+        ETag: result.blob.etag,
+        "Cache-Control": "public, no-cache",
       },
     });
   } catch (error) {
