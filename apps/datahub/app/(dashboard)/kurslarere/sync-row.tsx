@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useReducer } from "react";
-import { CourseSyncData } from "@kursinfo/db";
+import { CourseSyncData } from "@kursinfo/db/sync";
 import { RefreshCcwIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

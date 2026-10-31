@@ -15,6 +15,13 @@
       "when": 1766004098787,
       "tag": "0001_mean_madrox",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793345417686,
+      "tag": "0002_lumpy_multiple_man",
+      "breakpoints": true
     }
   ]
 }

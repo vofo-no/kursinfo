@@ -33,9 +33,11 @@ export const courses = pgTable(
     curriculum: text("curriculum").notNull(),
     organizer: text("organizer").notNull(),
     county: text("county").notNull(),
+    organization: text("organization").notNull(),
+    teacherName: text("teacher_name").notNull(),
     contentSearch: tsVector("content_search").generatedAlwaysAs(
       (): SQL =>
-        sql`to_tsvector('norwegian', ${courses.title} || ' ' || ${courses.curriculum} || ' ' || ${courses.organizer})`,
+        sql`to_tsvector('norwegian', ${courses.title} || ' ' || ${courses.curriculum} || ' ' || ${courses.organizer} || ' ' || ${courses.organization} || ' ' || ${courses.teacherName})`,
     ),
     date: date("date").notNull(),
     scope: text("scope").notNull(),
@@ -46,6 +48,7 @@ export const courses = pgTable(
     index("idx_content_search").using("gin", t.contentSearch),
     index("idx_county").on(t.county),
     index("idx_date").on(t.date),
+    index("idx_organization").on(t.organization),
     index("idx_scope").on(t.scope),
   ],
 );

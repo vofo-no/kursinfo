@@ -1,32 +1,33 @@
 {
   "name": "@kursinfo/db",
   "version": "1.0.1",
-  "type": "module",
   "private": true,
   "scripts": {
     "check-types": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "dev": "tsc --watch",
-    "build": "tsc"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.1.0",
-    "drizzle-orm": "^0.45.2",
-    "ws": "^8.21.1"
+    "@neondatabase/serverless": "^1.2.0",
+    "drizzle-orm": "^0.45.4",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.13",
     "@kursinfo/typescript-config": "workspace:*",
-    "@types/node": "^24.13.3",
+    "@types/node": "^24.19.2",
     "dotenv": "^17.4.2",
-    "drizzle-kit": "^0.31.10",
-    "tsx": "^4.23.1",
-    "typescript": "^5.9.3"
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.12"
   },
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./dist/index.js"
-    }
+    ".": "./src/index.ts",
+    "./sync": "./src/sync/index.ts",
+    "./client": "./src/db.ts"
   }
 }

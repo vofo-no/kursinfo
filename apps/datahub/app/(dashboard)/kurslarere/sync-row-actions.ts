@@ -1,10 +1,8 @@
 "use server";
 
-import {
-  CourseSyncData,
-  getFeatureSettings,
-  syncCoursesForMonth,
-} from "@kursinfo/db";
+import { getFeatureSettings } from "@kursinfo/db";
+import { db } from "@kursinfo/db/client";
+import { CourseSyncData, syncCoursesForMonth } from "@kursinfo/db/sync";
 import eapply from "@kursinfo/eapply-sdk";
 import {
   getTenantDataUrl,
@@ -38,6 +36,7 @@ export async function fetchCoursesAction(
       courseId: Number(item.ID),
       title: item.title,
       curriculum: data.curriculums[item.curriculumIndex] || "",
+      organization: data.organizations[Number(item.organizationCode)] || "",
       organizer: data.organizers[item.organizerIndex] || "",
       county: data.counties[item.countyIndex] || "",
       date: item.endDate || "",
@@ -154,6 +153,7 @@ export async function syncDataToDbAction(
   }
 
   await syncCoursesForMonth(
+    db,
     settings.dbScope,
     Number(month.substring(0, 4)),
     Number(month.substring(5, 7)),

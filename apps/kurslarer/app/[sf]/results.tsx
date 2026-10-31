@@ -6,7 +6,7 @@ import { TeacherData, TeacherItem } from "@/components/teacher-item";
 export async function Results({ sf, query }: { sf: string; query?: string }) {
   if (!query) return <p>Søk da!</p>;
 
-  const data = await getTeachersMatchingQuery(sf, query);
+  const data = await getTeachersMatchingQuery(sf, { query });
 
   // Transform data into TeacherData[]
   // Group by teacher, counting courses and collecting studieplans

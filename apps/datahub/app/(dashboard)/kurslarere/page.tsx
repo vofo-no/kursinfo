@@ -1,7 +1,6 @@
-import {
-  getFeatureSettings,
-  getTeachersSyncedByMonthsLastFiveYears,
-} from "@kursinfo/db";
+import { getFeatureSettings } from "@kursinfo/db";
+import { db } from "@kursinfo/db/client";
+import { getSyncStatus } from "@kursinfo/db/sync";
 import { neonAuth } from "@neondatabase/neon-js/auth/next";
 
 import {
@@ -41,9 +40,7 @@ export default async function TeachersPage() {
     return <div>Feature not enabled</div>;
   }
 
-  const existingData = await getTeachersSyncedByMonthsLastFiveYears(
-    featureSettings.dbScope,
-  );
+  const existingData = await getSyncStatus(db, featureSettings.dbScope);
   return (
     <>
       <TypographyH1>Kurslærere</TypographyH1>
