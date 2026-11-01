@@ -161,9 +161,9 @@ describe("getTeachersMatchingQuery: result shape", () => {
     );
     const rows = await getTeachersMatchingQuery("s1");
     expect(rows.map((r) => [r.teachers.id, r.courses.date])).toEqual([
-      ["s1-a", "2026-03-01"],
-      ["s1-t1", "2026-04-01"],
-      ["s1-t1", "2026-02-01"],
+      ["a", "2026-03-01"],
+      ["t1", "2026-04-01"],
+      ["t1", "2026-02-01"],
     ]);
   });
 });

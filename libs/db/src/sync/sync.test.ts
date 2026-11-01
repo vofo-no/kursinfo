@@ -4,7 +4,7 @@ import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { courses, teachers } from "../schema";
 import { baseCourse, seed } from "../test/seed";
 import { createTestDb } from "../test/test-db";
-import { getSyncStatus, syncCoursesForMonth } from "./index";
+import { getSyncStatus, syncCoursesForMonth } from "./sync";
 
 let db: Awaited<ReturnType<typeof createTestDb>>;
 
@@ -55,10 +55,10 @@ describe("syncCoursesForMonth", () => {
     expect(await titles()).toEqual(["Apr", "Feb"]);
   });
 
-  it("prefixes teacher ids with the scope", async () => {
+  it("stores the bare teacher key together with its scope", async () => {
     await seed(db, {});
     const [teacher] = await db.select().from(teachers);
-    expect(teacher!.id).toBe("s1-t1");
+    expect(teacher).toMatchObject({ scope: "s1", id: "t1" });
   });
 
   it("does not mutate its input, so the same array can be synced twice", async () => {
@@ -66,9 +66,7 @@ describe("syncCoursesForMonth", () => {
     await syncCoursesForMonth(db, "s1", 2026, 3, input);
     await syncCoursesForMonth(db, "s1", 2026, 3, input);
     expect(input[0]!.teacherId).toBe("t1");
-    expect((await db.select().from(teachers)).map((t) => t.id)).toEqual([
-      "s1-t1",
-    ]);
+    expect((await db.select().from(teachers)).map((t) => t.id)).toEqual(["t1"]);
     expect(await db.select().from(courses)).toHaveLength(1);
   });
 
@@ -129,5 +127,46 @@ describe("getSyncStatus", () => {
       { date: monthsAgo(3), teacherId: "t2" },
     );
     expect(await getSyncStatus(db, "s1")).toHaveLength(1);
+  });
+});
+
+describe("scope isolation in the schema", () => {
+  const course = {
+    courseId: 1,
+    title: "X",
+    curriculum: "X",
+    organizer: "X",
+    organization: "X",
+    county: "Oslo",
+    date: "2026-03-10",
+    teacherName: "Kari",
+  };
+
+  it("rejects a course that references a teacher in another scope", async () => {
+    await db.insert(teachers).values({ scope: "s1", id: "t1", name: "Kari" });
+    await expect(
+      db.insert(courses).values({ ...course, scope: "s2", teacherId: "t1" }),
+    ).rejects.toThrow();
+  });
+
+  it("keeps the same key in two scopes as two separate teachers", async () => {
+    await seed(db, {}, { scope: "s2", teacherName: "Someone Else" });
+    expect(await db.select().from(teachers)).toHaveLength(2);
+  });
+
+  it("has the intended indexes", async () => {
+    const { rows } = await db.execute(
+      sql`SELECT indexname FROM pg_indexes WHERE tablename = 'courses'`,
+    );
+    const names = rows.map((r) => String(r.indexname));
+    expect(names).toEqual(
+      expect.arrayContaining([
+        "idx_scope_date",
+        "idx_scope_teacher",
+        "idx_content_search",
+      ]),
+    );
+    expect(names).not.toContain("idx_scope");
+    expect(names).not.toContain("idx_date");
   });
 });

@@ -37,7 +37,13 @@ export async function getTeachersMatchingQuery(
   return db
     .select()
     .from(courses)
-    .innerJoin(teachers, eq(courses.teacherId, teachers.id))
+    .innerJoin(
+      teachers,
+      and(
+        eq(courses.scope, teachers.scope),
+        eq(courses.teacherId, teachers.id),
+      ),
+    )
     .where(and(...conditions))
     .orderBy(courses.teacherId, desc(courses.date));
 }

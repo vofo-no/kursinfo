@@ -2,6 +2,7 @@ import { SQL, sql } from "drizzle-orm";
 import {
   customType,
   date,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -18,11 +19,27 @@ const tsVector = customType<{ data: string }>({
   },
 });
 
-export const teachers = pgTable("teachers", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const teachers = pgTable(
+  "teachers",
+  {
+    scope: text("scope").notNull(),
+    id: text("id").notNull(),
+    name: text("name").notNull(),
+    redactedAt: timestamp("redacted_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.scope, t.id] })],
+);
+
+export const teacherAliases = pgTable(
+  "teacher_aliases",
+  {
+    scope: text("scope").notNull(),
+    aliasId: text("alias_id").notNull(),
+    teacherId: text("teacher_id").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.scope, t.aliasId] })],
+);
 
 export const courses = pgTable(
   "courses",
@@ -41,15 +58,22 @@ export const courses = pgTable(
     ),
     date: date("date").notNull(),
     scope: text("scope").notNull(),
-    teacherId: text("teacher_id").references(() => teachers.id),
+    teacherId: text("teacher_id")
+      .notNull()
+      .references(() => teachers.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [
+    foreignKey({
+      name: "courses_teacher_fk",
+      columns: [t.scope, t.teacherId],
+      foreignColumns: [teachers.scope, teachers.id],
+    }),
+    index("idx_scope_date").on(t.scope, t.date),
+    index("idx_scope_teacher").on(t.scope, t.teacherId),
     index("idx_content_search").using("gin", t.contentSearch),
     index("idx_county").on(t.county),
-    index("idx_date").on(t.date),
     index("idx_organization").on(t.organization),
-    index("idx_scope").on(t.scope),
   ],
 );
 

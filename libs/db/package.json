@@ -13,10 +13,10 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
-    "ws": "^8.22.0"
+    "ws": "^8.22.1"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.13",
+    "@electric-sql/pglite": "^0.5.14",
     "@kursinfo/typescript-config": "workspace:*",
     "@types/node": "^24.19.2",
     "dotenv": "^17.4.2",

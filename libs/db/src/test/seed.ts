@@ -1,8 +1,5 @@
-import {
-  syncCoursesForMonth,
-  type CourseSyncData,
-  type Database,
-} from "../sync";
+import { syncCoursesForMonth } from "../sync/sync";
+import { type CourseSyncData, type Database } from "../sync/types";
 
 export const baseCourse: CourseSyncData = {
   courseId: 1,
