@@ -11,7 +11,8 @@
         "EAPPLY_TOKEN",
         "EAPPLY_URL",
         "EAPPLY_USER",
-        "NEON_AUTH_BASE_URL"
+        "NEON_AUTH_BASE_URL",
+        "TEACHER_KEY_SECRET"
       ],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "inputs": [

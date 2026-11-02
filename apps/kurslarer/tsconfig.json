@@ -4,7 +4,11 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": [
+      "@digdir/designsystemet-react/react-types",
+      "@digdir/designsystemet-css/theme"
+    ]
   },
   "include": [
     "next-env.d.ts",

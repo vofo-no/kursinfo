@@ -1,25 +1,20 @@
-"use client";
-
 import React from "react";
-import { ChevronRightIcon } from "lucide-react";
+import {
+  Card,
+  Details,
+  DetailsContent,
+  DetailsSummary,
+  Heading,
+  Paragraph,
+  Tag,
+} from "@digdir/designsystemet-react";
+import {
+  ChartBarIcon,
+  GraduationCapIcon,
+  MapPinAreaIcon,
+} from "@phosphor-icons/react/ssr";
 
-import { formatList } from "@/lib/format-list";
 import { formatNumber } from "@/lib/format-number";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemSeparator,
-  ItemTitle,
-} from "@/components/ui/item";
 
 export interface TeacherData {
   id: string;
@@ -34,60 +29,63 @@ export interface TeacherData {
   }[];
   studieplans?: string[];
 }
-export function TeacherItem({
-  data,
-  index,
-}: {
-  data: TeacherData;
-  index: number;
-}) {
-  const [open, setOpen] = React.useState(false);
+
+function getTeacherCounties(teacher: Pick<TeacherData, "courses">): string[] {
+  const counties = new Set<string>();
+  for (const { county } of teacher.courses) {
+    if (county) counties.add(county);
+  }
+  return [...counties].sort((a, b) => a.localeCompare(b, "nb"));
+}
+
+export function TeacherItem({ data }: { data: TeacherData }) {
   return (
-    <React.Fragment key={data.id}>
-      {index !== 0 && <ItemSeparator />}
-      <Collapsible open={open} onOpenChange={setOpen}>
-        <Item>
-          <ItemContent className="gap-1">
-            <ItemTitle>
-              <CollapsibleTrigger asChild>
-                <Button variant="secondary" size="sm" className="text-sm">
-                  <ChevronRightIcon
-                    className={cn("transition-transform", open && "rotate-90")}
-                  />
-                  {formatNumber(data.courses.length)} kurs
-                </Button>
-              </CollapsibleTrigger>
-              {data.name}
-            </ItemTitle>
-            <ItemDescription>
-              <span className="text-sm text-muted-foreground">
-                {formatList(data.studieplans || [])}
-              </span>
-            </ItemDescription>
-            <CollapsibleContent>
-              <ul>
-                {data.courses.map((course) => (
-                  <li key={course.id} className="flex gap-4 mt-2">
-                    <Badge variant="secondary">
-                      {new Date(course.date).toLocaleDateString("no", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </Badge>
-                    <strong>{course.name}</strong>
-                    <span className="text-sm text-muted-foreground">
-                      {course.organizer}
-                      {course.curriculum && ` • ${course.curriculum}`}
-                      {course.county && ` • ${course.county}`}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </CollapsibleContent>
-          </ItemContent>
-        </Item>
-      </Collapsible>
-    </React.Fragment>
+    <Card>
+      <Details>
+        <DetailsSummary>
+          <div>
+            <Heading level={2}>{data.name}</Heading>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 mt-2">
+              <div className="flex gap-2">
+                <ChartBarIcon className="shrink-0 mt-1" />{" "}
+                {formatNumber(data.courses.length)} kurs
+              </div>
+              <div className="flex gap-2">
+                <MapPinAreaIcon className="shrink-0 mt-1" />{" "}
+                {getTeacherCounties(data).join(", ")}
+              </div>
+              {data.studieplans?.length && (
+                <div className="flex gap-2">
+                  <GraduationCapIcon className="shrink-0 mt-1" />{" "}
+                  {data.studieplans.join(", ")}
+                </div>
+              )}
+            </div>
+          </div>
+        </DetailsSummary>
+        <DetailsContent>
+          <ul className="flex flex-col gap-4">
+            {data.courses.map((course) => (
+              <li key={course.id} className="flex gap-2 items-start">
+                <Tag data-size="lg">
+                  {new Date(course.date).toLocaleDateString("no", {
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </Tag>
+                <div data-size="sm">
+                  <Heading level={3}>{course.name}</Heading>
+                  <Paragraph>
+                    {course.organizer}
+                    {course.curriculum && ` • ${course.curriculum}`}
+                    {course.county && ` • ${course.county}`}
+                  </Paragraph>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </DetailsContent>
+      </Details>
+    </Card>
   );
 }

@@ -2,7 +2,11 @@
 
 import { getFeatureSettings } from "@kursinfo/db";
 import { db } from "@kursinfo/db/client";
-import { CourseSyncData, syncCoursesForMonth } from "@kursinfo/db/sync";
+import {
+  CourseSyncData,
+  getTeacherKey,
+  syncCoursesForMonth,
+} from "@kursinfo/db/sync";
 import eapply from "@kursinfo/eapply-sdk";
 import {
   getTenantDataUrl,
@@ -12,20 +16,58 @@ import {
 import { CourseStatuses } from "@kursinfo/julien/constants";
 import { neonAuth } from "@neondatabase/neon-js/auth/next";
 
-import { getTeacherKey } from "@/lib/teacher-key";
-
 import { SyncRowDataItem } from "./types";
+
+const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+function assertMonth(month: string) {
+  if (!MONTH_PATTERN.test(month)) throw new Error("Invalid month.");
+}
+
+function teacherKeySecret() {
+  const secret = process.env.TEACHER_KEY_SECRET;
+  if (!secret || secret.length < 32) {
+    throw new Error("TEACHER_KEY_SECRET is missing or too short.");
+  }
+  return secret;
+}
+
+async function requireFeatureSettings() {
+  const { session } = await neonAuth();
+  const featureSettings = await getFeatureSettings("kurslarer", session);
+  if (!featureSettings) {
+    throw new Error(
+      "Feature 'kurslarer' is not enabled for this organization.",
+    );
+  }
+  return featureSettings;
+}
+
+// null for names without usable letters (the key function throws for those)
+function tryTeacherKey(secret: string, name: string, ...parts: string[]) {
+  try {
+    return getTeacherKey(secret, name, ...parts);
+  } catch {
+    return null;
+  }
+}
 
 export async function fetchCoursesAction(
   dataScope: string,
   month: string,
 ): Promise<SyncRowDataItem[]> {
+  const featureSettings = await requireFeatureSettings();
+  if (dataScope !== featureSettings.dataScope) {
+    throw new Error("Invalid dataScope provided.");
+  }
+  assertMonth(month);
+
   const dataUrl = getTenantDataUrl(dataScope, month.substring(0, 4));
   const data = await fetch(dataUrl)
     .then((res) => res.text())
     .then(uncompressTenantData);
 
-  const dataItems = data.items
+  return data.items
     .filter(
       (item) =>
         item.hasTeacher &&
@@ -41,34 +83,23 @@ export async function fetchCoursesAction(
       county: data.counties[item.countyIndex] || "",
       date: item.endDate || "",
     }));
-
-  return dataItems;
 }
 
 export async function getSyncDataAction(
   settings: { dbScope: string; dataScope: string },
   dataItems: SyncRowDataItem[],
 ): Promise<CourseSyncData[]> {
-  const { session } = await neonAuth();
-  const featureSettings = await getFeatureSettings("kurslarer", session);
-
-  if (!featureSettings) {
-    throw new Error(
-      "Feature 'kurslarer' is not enabled for this organization.",
-    );
-  }
-
+  const featureSettings = await requireFeatureSettings();
   if (settings.dataScope !== featureSettings.dataScope) {
     throw new Error("Invalid dataScope provided.");
   }
 
   const tenantId = getTenantId(settings.dataScope);
-
   if (!tenantId) throw "Missing configuration";
 
-  const syncData: CourseSyncData[] = [];
-
+  const secret = teacherKeySecret();
   const client = eapply(tenantId);
+  const syncData: CourseSyncData[] = [];
 
   await Promise.all(
     dataItems.map(async (item) => {
@@ -84,7 +115,7 @@ export async function getSyncDataAction(
           prev && prev.revisionNumber > current.revisionNumber ? prev : current,
         );
 
-      if (!report) return Promise.resolve();
+      if (!report) return;
       // Ensure the course is owned by current tenant
       if (report.course?.tenantId !== tenantId) return;
 
@@ -109,13 +140,15 @@ export async function getSyncDataAction(
           )
             return;
 
-          const teacherKey = getTeacherKey(
-            name[0] || "",
-            name[name.length - 1] || "",
+          const fullName = name.join(" ");
+          const teacherKey = tryTeacherKey(
+            secret,
+            fullName,
             String(teacher.yearOfBirth),
             teacher.gender.substring(0, 1),
             teacher.zip,
           );
+          if (!teacherKey) return;
 
           syncData.push({
             ...item,
@@ -139,17 +172,14 @@ export async function syncDataToDbAction(
   teacherCount: number;
   syncedAt: Date;
 }> {
-  const { session } = await neonAuth();
-  const featureSettings = await getFeatureSettings("kurslarer", session);
-
-  if (!featureSettings) {
-    throw new Error(
-      "Feature 'kurslarer' is not enabled for this organization.",
-    );
-  }
-
+  const featureSettings = await requireFeatureSettings();
   if (settings.dbScope !== featureSettings.dbScope) {
     throw new Error("Invalid dbScope provided.");
+  }
+  assertMonth(month);
+
+  if (syncData.some((row) => !row.date.startsWith(`${month}-`))) {
+    throw new Error("Rows outside the synced month.");
   }
 
   await syncCoursesForMonth(
