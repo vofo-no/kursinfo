@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { Tag } from "@digdir/designsystemet-react";
 import { HeartIcon } from "@phosphor-icons/react/ssr";
@@ -9,6 +10,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 export function generateStaticParams() {
   return [...sfNames.keys()].map((sf) => ({ sf }));
 }
+
+export const metadata: Metadata = {
+  title: "Kurslærer-katalog",
+  description: "Finn kurslærer med riktig erfaring og kompetanse",
+};
 
 export default function SfLayout({
   children,
